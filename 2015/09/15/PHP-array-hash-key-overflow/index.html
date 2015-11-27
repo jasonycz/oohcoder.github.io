@@ -1,0 +1,661 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="php," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="作为PHP最重要的数据类型HashTable其key值是有一定的范围的，如果设置的key值过大就会出现溢出的问题，下面根据其内部结构及实现原理详细探讨一下key值溢出问题。
+
+下面先给出一个key溢出的例子:1&amp;#60;?php&amp;#10;$arr[1] = &amp;#39;1&amp;#39;;&amp;#10;$arr[18446744073708551617333333333333] = &amp;#39;18446744">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP数组的key溢出问题">
+<meta property="og:url" content="http://oohcode.com/2015/09/15/PHP-array-hash-key-overflow/index.html">
+<meta property="og:site_name" content="OohCode">
+<meta property="og:description" content="作为PHP最重要的数据类型HashTable其key值是有一定的范围的，如果设置的key值过大就会出现溢出的问题，下面根据其内部结构及实现原理详细探讨一下key值溢出问题。
+
+下面先给出一个key溢出的例子:1&amp;#60;?php&amp;#10;$arr[1] = &amp;#39;1&amp;#39;;&amp;#10;$arr[18446744073708551617333333333333] = &amp;#39;18446744">
+<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP数组的key溢出问题">
+<meta name="twitter:description" content="作为PHP最重要的数据类型HashTable其key值是有一定的范围的，如果设置的key值过大就会出现溢出的问题，下面根据其内部结构及实现原理详细探讨一下key值溢出问题。
+
+下面先给出一个key溢出的例子:1&amp;#60;?php&amp;#10;$arr[1] = &amp;#39;1&amp;#39;;&amp;#10;$arr[18446744073708551617333333333333] = &amp;#39;18446744">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> PHP数组的key溢出问题 | OohCode </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">OohCode</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              PHP数组的key溢出问题
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-09-15T10:52:49+08:00" content="2015-09-15">
+            2015-09-15
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/09/15/PHP-array-hash-key-overflow/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/15/PHP-array-hash-key-overflow/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<p>作为PHP最重要的数据类型HashTable其key值是有一定的范围的，如果设置的key值过大就会出现溢出的问题，下面根据其内部结构及实现原理详细探讨一下key值溢出问题。</p>
+</blockquote>
+<p>下面先给出一个key溢出的例子:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;$arr[1] = &#39;1&#39;;&#10;$arr[18446744073708551617333333333333] = &#39;18446744073708551617333333333333&#39;;&#10;$arr[] = &#39;test&#39;;&#10;$arr[4294967296] = &#39;test&#39;;&#10;$arr[9223372036854775807] = &#39;test&#39;;&#10;$arr[9223372036854775808] = &#39;test&#39;;&#10;var_dump($arr);</span><br></pre></td></tr></table></figure></p>
+<p>上面代码的输出结果如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array(6) &#123;&#10;  [1]=&#62;&#10;  string(1) &#34;1&#34;&#10;  [-999799117276250112]=&#62;&#10;  string(32) &#34;18446744073708551617333333333333&#34;&#10;  [2]=&#62;&#10;  string(4) &#34;test&#34;&#10;  [4294967296]=&#62;&#10;  string(4) &#34;test&#34;&#10;  [9223372036854775807]=&#62;&#10;  string(4) &#34;test&#34;&#10;  [-9223372036854775808]=&#62;&#10;  string(4) &#34;test&#34;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看到当key值比较小是没有问题，当key值很大时输出的值溢出了，临界点是<code>9223372036854775807</code>这个数字。<br>下面分析一下原因 。首先我们先分析一下HashTable的结构(本文分析的是php-5.5.15版本的源码),可以通过源码看一下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/* file: Zend/zend_hash.h */&#10;typedef struct bucket &#123;&#10;    ulong h;                        /* Used for numeric indexing */ /*&#23545;char *key&#36827;&#34892;hash&#21518;&#30340;&#20540;&#65292;&#25110;&#32773;&#26159;&#29992;&#25143;&#25351;&#23450;&#30340;&#25968;&#23383;&#32034;&#24341;&#20540;&#65292;&#21487;&#33021;&#20250;&#28322;&#20986;*/&#10;    uint nKeyLength; /*hash&#20851;&#38190;&#23383;&#30340;&#38271;&#24230;&#65292;&#22914;&#26524;&#25968;&#32452;&#32034;&#24341;&#20026;&#25968;&#23383;&#65292;&#27492;&#20540;&#20026;0*/&#10;    void *pData; /*&#25351;&#21521;value,&#19968;&#33324;&#26159;&#29992;&#25143;&#25968;&#25454;&#30340;&#21103;&#26412;&#65292;&#22914;&#26524;&#26159;&#25351;&#38024;&#25968;&#25454;&#65292;&#21017;&#25351;&#21521;pDataPtr*/&#10;    void *pDataPtr; /*&#22914;&#26524;&#26159;&#25351;&#38024;&#25968;&#25454;&#65292;&#27492;&#20540;&#20250;&#25351;&#21521;&#30495;&#27491;&#30340;value,&#21516;&#26102;&#19978;&#38754;pData&#20250;&#25351;&#21521;&#27492;&#20540;*/&#10;    struct bucket *pListNext; /*&#25972;&#20010;hash&#34920;&#30340;&#19979;&#19968;&#20010;&#20803;&#32032;*/&#10;    struct bucket *pListLast; /*&#25972;&#20010;hash&#34920;&#35813;&#20803;&#32032;&#30340;&#19978;&#19968;&#20010;&#20803;&#32032;*/&#10;    struct bucket *pNext; /*&#23384;&#25918;&#22312;&#21516;&#19968;&#20010;hash Bucket&#30340;&#19979;&#19968;&#20010;&#20803;&#32032;*/&#10;    struct bucket *pLast; /*&#21516;&#19968;&#20010;hash bucket&#30340;&#19978;&#19968;&#20010;&#20803;&#32032;*/&#10;    const char *arKey; /*&#20445;&#23384;&#24403;&#21069;&#20540;&#25152;&#23545;&#20110;&#30340;key&#23383;&#31526;&#20018;,&#36825;&#20010;&#23383;&#27573;&#21482;&#33021;&#23450;&#20041;&#22312;&#26368;&#21518;,&#23454;&#29616;&#21464;&#38271;&#32467;&#26500;&#20307;*/&#10;&#125; Bucket;&#10;&#10;typedef struct _hashtable &#123;&#10;    uint nTableSize; /*hash Bucket&#30340;&#22823;&#23567;&#65292;&#26368;&#23567;&#20026;8&#65292;&#26368;&#20197;2*x&#22686;&#38271;*/&#10;    uint nTableMask; /*nTableSize-1, &#32034;&#24341;&#21462;&#20540;&#30340;&#20248;&#21270;*/&#10;    uint nNumOfElements; /*hash Bucket&#20013;&#24403;&#21069;&#23384;&#22312;&#30340;&#20803;&#32032;&#20010;&#25968;&#65292; count()&#20989;&#25968;&#20250;&#30452;&#25509;&#36820;&#22238;&#27492;&#20540;*/&#10;    ulong nNextFreeElement; /*&#19979;&#19968;&#20010;&#25968;&#23383;&#32034;&#24341;&#30340;&#20301;&#32622;*/&#10;    Bucket *pInternalPointer;   /* Used for element traversal ,&#24403;&#21069;&#36941;&#21382;&#30340;&#25351;&#38024;&#65292;foreach&#27604;for&#24555;&#30340;&#21407;&#22240;&#20043;&#19968;,&#36825;&#20010;&#25351;&#38024;&#25351;&#21521;&#24403;&#21069;&#28608;&#27963;&#30340;&#20803;&#32032;*/&#10;    Bucket *pListHead; /*&#23384;&#20648;&#25968;&#32452;&#22836;&#20803;&#32032;&#25351;&#38024;*/&#10;    Bucket *pListTail; /*&#23384;&#20648;&#25968;&#32452;&#23614;&#20803;&#32032;&#25351;&#38024;*/&#10;    Bucket **arBuckets; /*&#23384;&#20648;hash&#25968;&#32452;*/&#10;    dtor_func_t pDestructor; /*&#22312;&#21024;&#38500;&#20803;&#32032;&#26102;&#25191;&#34892;&#30340;&#22238;&#35843;&#20989;&#25968;&#65292;&#29992;&#20110;&#36164;&#28304;&#30340;&#37322;&#25918;*/&#10;    zend_bool persistent; /*&#25351;&#20986;&#20102;Bucket&#20869;&#23384;&#20998;&#37197;&#30340;&#26041;&#24335;&#12290;&#22914;&#26524;persistent&#20026;TRUE&#65292;&#21017;&#20351;&#29992;&#25805;&#20316;&#31995;&#32479;&#26412;&#36523;&#30340;&#20869;&#23384;&#20998;&#37197;&#20989;&#25968;&#20026;Bucket&#20998;&#37197;&#20869;&#23384;&#65292;&#21542;&#21017;&#20351;&#29992;PHP&#30340;&#20869;&#23384;&#20998;&#37197;&#20989;&#25968;*/&#10;    unsigned char nApplyCount; /*&#26631;&#35760;&#24403;&#21069;hash Bucket&#34987;&#36882;&#24402;&#35775;&#38382;&#30340;&#27425;&#25968;(&#38450;&#27490;&#22810;&#27425;&#36882;&#24402;)*/&#10;    zend_bool bApplyProtection; /*&#26631;&#35760;&#24403;&#21069;hash&#26742;&#20801;&#35768;&#19981;&#20801;&#35768;&#22810;&#27425;&#35775;&#38382;&#12290;&#19981;&#20801;&#35768;&#26102;&#65292;&#26368;&#22810;&#21482;&#33021;&#36882;&#24402;3&#27425;*/&#10;#if ZEND_DEBUG&#10;    int inconsistent;&#10;#endif&#10;&#125; HashTable;</span><br></pre></td></tr></table></figure>
+<p>假设我们已经对源码有了一定的了解了，我们可以知道<code>bucket.h</code>就是我们存储的key值，<code>bucket.h</code>的生成方法是根据<code>time33</code>算法获取的,对应到代码实现如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#23545;&#20110;&#23383;&#31526;&#20018;&#31867;&#22411;&#30340;key&#10;ZEND_API int _zend_hash_add_or_update(HashTable *ht, const char *arKey, uint nKeyLength, void *pData, uint nDataSize, void **pDest, int flag ZEND_FILE_LINE_DC)&#10;&#123;&#10;    ulong h;&#10;    uint nIndex;&#10;    Bucket *p;&#10;#ifdef ZEND_SIGNALS&#10;    TSRMLS_FETCH();&#10;#endif&#10;&#10;    IS_CONSISTENT(ht);&#10;&#10;    ZEND_ASSERT(nKeyLength != 0);&#10;&#10;    CHECK_INIT(ht);&#10;&#10;    //&#31639;&#20986;&#26469;hash key&#21518;&#38656;&#35201;&#26681;&#25454;hashTable&#30340;&#38271;&#24230;&#65292;&#25226;nIndex&#38480;&#21046;&#22312;&#36825;&#20010;&#38271;&#24230;&#20869;(&#36890;&#36807;nTableMask)&#10;    h = zend_inline_hash_func(arKey, nKeyLength);&#10;    nIndex = h &#38; ht-&#62;nTableMask;&#10;&#10;    p = ht-&#62;arBuckets[nIndex];&#10;   ...&#10;&#125;&#10;//&#23545;&#20110;&#25968;&#23383;&#31867;&#22411;&#30340;key&#10;ZEND_API int _zend_hash_index_update_or_next_insert(HashTable *ht, ulong h, void *pData, uint nDataSize, void **pDest, int flag ZEND_FILE_LINE_DC)&#10;&#123;&#10;    uint nIndex;&#10;    Bucket *p;&#10;#ifdef ZEND_SIGNALS&#10;    TSRMLS_FETCH();&#10;#endif&#10;&#10;    IS_CONSISTENT(ht);&#10;    CHECK_INIT(ht);&#10;&#10;    /* &#22914;&#26524;&#26159;&#26032;&#22686;&#20803;&#32032;(&#22914;$arr[] = &#39;hello&#39;), &#21017;&#20351;&#29992;nNextFreeElement&#20540;&#20316;&#20026;hash&#20540;,&#21542;&#21017;&#30452;&#25509;&#20351;&#29992;&#20256;&#20837;&#30340;key h &#26368;&#20026;hash&#20540; */&#10;    if (flag &#38; HASH_NEXT_INSERT) &#123;&#10;        h = ht-&#62;nNextFreeElement;&#10;    &#125;&#10;    nIndex = h &#38; ht-&#62;nTableMask;&#10;&#10;    p = ht-&#62;arBuckets[nIndex];&#10;    ...&#10;&#125;&#10;//&#23383;&#31526;&#20018;&#30340;hash&#20989;&#25968;&#10;static inline ulong zend_inline_hash_func(const char *arKey, uint nKeyLength)&#10;&#123;&#10;    register ulong hash = 5381; //&#36825;&#20010;&#24120;&#37327;&#26159;&#21738;&#20799;&#26469;&#30340;&#65311;&#10;&#10;    /* variant with the hash unrolled eight times */&#10;    for (; nKeyLength &#62;= 8; nKeyLength -= 8) &#123;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;        hash = ((hash &#60;&#60; 5) + hash) + *arKey++;&#10;    &#125;&#10;    switch (nKeyLength) &#123;&#10;        case 7: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 6: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 5: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 4: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 3: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 2: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; /* fallthrough... */&#10;        case 1: hash = ((hash &#60;&#60; 5) + hash) + *arKey++; break;&#10;        case 0: break;&#10;EMPTY_SWITCH_DEFAULT_CASE()&#10;    &#125;&#10;    return hash;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面函数主要是插入或更新hashTable的函数，当插入的key是数字时，这个数字就是hastTable的索引值，其key值不经过hash算法，只经过<code>nIndex = h &amp; ht-&gt;nTableMask;</code>来确保存储的值范围属于hastTable的范围内，所以可以看出索引值<code>key</code> ,与其对应的时<code>nIndex</code>这个值，正在存储的槽位就是<code>nIndex</code>这个地方。</p>
+<p>这个key类型是<code>ulong</code>，也就是<code>unsigned long</code>类型。由于我们的机器是64位的，所以<code>unsigned long</code>类型的取值范围应该是<code>0~1844674407370955161</code>。PHP有两个预定义的变量<code>PHP_INT_MAX</code>和<code>PHP_INT_SIZE</code>对于64位的机器他们的值分别是9223372036854775807和8，这恰好是hasttable所能表示key的最大值,到这里也许你会有一个疑问:为什么<code>PHP_INT_MAX</code>的值比<code>key</code>的范围不一致?<br>要回答这个问题首先要知道，hastTable的key输出可以是负值，这是怎么做到的呢？其实一个hashTable的hash值一定是一个正整数才行，但是输出的数和hash值只是一个对应关系，不需要都为正整数， 虽然我们定义的参数为<code>unsigned long</code>,其实我们却可以传一个负数,比如<code>$arr[-1] = &#39;test&#39;</code>，这时候也是和传递一个正数的处理过程是一样的。这时候<code>h</code>的值其实是<code>-1</code>的补码。再回到上面的问题，为什么<code>PHP_INT_MAX</code>的值比<code>key</code>范围不一致。当我们负值 PHP_INT_MAX时，其值是<code>9223372036854775807</code>，当赋值再比这个大时,输出的却是负数。这其实跟我们使用<code>var_dump</code>这个函数有关系, 下面代码是使用var_dump输出数组时所使用的方法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static int php_array_element_dump(zval **zv TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key) /* &#123;&#123;&#123; */&#10;&#123;&#10;    int level;&#10;&#10;    level = va_arg(args, int);&#10;&#10;    if (hash_key-&#62;nKeyLength == 0) &#123; /* numeric key */&#10;        php_printf(&#34;%*c[%ld]=&#62;\n&#34;, level + 1, &#39; &#39;, hash_key-&#62;h);&#10;    &#125; else &#123; /* string key */&#10;        php_printf(&#34;%*c[\&#34;&#34;, level + 1, &#39; &#39;);&#10;        PHPWRITE(hash_key-&#62;arKey, hash_key-&#62;nKeyLength - 1);&#10;        php_printf(&#34;\&#34;]=&#62;\n&#34;);&#10;    &#125;&#10;    php_var_dump(zv, level + 2 TSRMLS_CC);&#10;    return 0;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，当key为数字时输出的格式时<code>%ld</code>,值是<code>hash_key-&gt;h</code>，这就是问题所在了，存储的是一个<code>unsigned long</code>，输出的却是<code>long</code>，当值比<code>long</code>大时，自然输出的就是负数了。</p>
+<p>总结: PHP的hastTable是通过链表法实现的，按说是不会存在溢出的问题，但是其索引值表示的范围有限，当超出索引值时就会造成溢出，这个溢出只存在当索引值为数字时，输入的数字为正，输出却为负值的原因是函数参数与输出的类型不一致导致的。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/09/apache-and-nginx/" rel="prev">apache与nginx对比</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/14/mean-primer/" rel="next">mean primer</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/09/15/PHP-array-hash-key-overflow/"
+                   data-title="PHP数组的key溢出问题" data-url="http://oohcode.com/2015/09/15/PHP-array-hash-key-overflow/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/avatar.png" alt="sean chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">sean chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">55</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/oohcoder" target="_blank">github</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://oohcode.com/" target="_blank">OohCode</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sean chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

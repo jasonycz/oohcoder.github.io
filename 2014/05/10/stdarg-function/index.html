@@ -1,0 +1,708 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。
+
+##可变参数参数简介
+##使用方法可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：
+
+在函数原型中使用省略号。
+在函数定义中创建一个va_list类型的变量。
+用宏将改变量初始化为一个参数列表。
+用宏访问这个参数列表。
+用宏完成清理工作。
+
+##函数原">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言：可变参数函数">
+<meta property="og:url" content="http://oohcode.com/2014/05/10/stdarg-function/index.html">
+<meta property="og:site_name" content="OohCode">
+<meta property="og:description" content="函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。
+
+##可变参数参数简介
+##使用方法可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：
+
+在函数原型中使用省略号。
+在函数定义中创建一个va_list类型的变量。
+用宏将改变量初始化为一个参数列表。
+用宏访问这个参数列表。
+用宏完成清理工作。
+
+##函数原">
+<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言：可变参数函数">
+<meta name="twitter:description" content="函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。
+
+##可变参数参数简介
+##使用方法可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：
+
+在函数原型中使用省略号。
+在函数定义中创建一个va_list类型的变量。
+用宏将改变量初始化为一个参数列表。
+用宏访问这个参数列表。
+用宏完成清理工作。
+
+##函数原">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> C语言：可变参数函数 | OohCode </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">OohCode</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              C语言：可变参数函数
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2014-05-10T00:00:00+08:00" content="2014-05-10">
+            2014-05-10
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/C/" itemprop="url" rel="index">
+                  <span itemprop="name">C</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2014/05/10/stdarg-function/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/10/stdarg-function/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<p>函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。</p>
+</blockquote>
+<p>##可变参数参数简介</p>
+<p>##使用方法<br>可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：</p>
+<ol>
+<li>在函数原型中使用省略号。</li>
+<li>在函数定义中创建一个va_list类型的变量。</li>
+<li>用宏将改变量初始化为一个参数列表。</li>
+<li>用宏访问这个参数列表。</li>
+<li>用宏完成清理工作。</li>
+</ol>
+<p>##函数原型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void f1(int n, ...); //&#21512;&#27861;&#10;int f2(int n, const char *s, ...);  //&#21512;&#27861;&#10;char f3(char c1, ..., char c2); //&#26080;&#25928;&#65292;&#30465;&#30053;&#21495;&#24517;&#39035;&#26159;&#26368;&#21518;&#19968;&#20010;&#21442;&#37327;&#10;doubel f3(); //&#26080;&#25928;&#65292;&#27809;&#26377;&#20219;&#20309;&#21442;&#37327;</span><br></pre></td></tr></table></figure></p>
+<p>##程序举例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &#60;stdio.h&#62;&#10;#include &#60;stdarg.h&#62;&#10;&#10;double sum(int , ...);&#10;void printSth(int, const char *, ...);&#10;&#10;int main(void)&#10;&#123;&#10;    double s, t;&#10;&#10;    s = sum(3, 1.1, 2.5, 13.3);&#10;    t = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    u = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(3, 1.1, 2.5, 13.3):    %g\n&#34;,s);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1)  %g\n&#34;, t); &#10;    &#10;    return 0;&#10;&#125;&#10;&#10;&#10;double sum(int lim, ...)&#10;&#123;&#10;    va_list ap; //&#22768;&#26126;&#29992;&#25143;&#23384;&#25918;&#21442;&#25968;&#30340;&#21464;&#37327;&#10;    double tot = 0;&#10;    int i;&#10;    va_start(ap, lim);  //&#25226;ap&#21021;&#22987;&#21270;&#20026;&#21442;&#25968;&#21015;&#34920;&#10;    for(i = 0; i &#60; lim; i++)&#10;        tot += va_arg(ap, double); //&#35775;&#38382;&#21442;&#25968;&#21015;&#34920;&#20013;&#30340;&#27599;&#19968;&#20010;&#39033;&#30446;&#10;    va_end(ap); //&#28165;&#29702;&#24037;&#20316;&#10;    return tot;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>##程序分析</p>
+<ul>
+<li>具有可变参数的函数<code>sum</code>的第一个参数是表示一共有多少个不确定的参数，在调用的时候传递。这个参数主要是高数<code>var_arg</code>能够取多少次传递的参数。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm" target="_blank" rel="external"><code>va_start()</code></a>第一个参数是va_list类型的，第二个参数是这个函数确定的参数中最有一个参数，var_start()函数的作用就是把最有一个确定参数后面的所有不确定参数做一个参数列表存储到va_list类型的变量中。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_arg.htm" target="_blank" rel="external"><code>va_arg</code></a>的目的是从未知参数列表中取出参数，每次调用取一个，按照参数顺序取。第一个参数是存储参数列表的变量，第二个参数标识要去的参数的类型，类型决定了要从内存栈中读取多少位。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_end.htm" target="_blank" rel="external"><code>va_end</code></a>函数主要是做清理工作,主要是释放动态分配的用于存放参数的内存。</li>
+</ul>
+<p>##运用<br>我在学了《C Primer Plus》这本书之后打算看看redis源码的时候发现redis的源码中，所有的系统log的记录都是通过这中函数来实现的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void redisLog(int level, const char *fmt, ...) &#123;&#10;    va_list ap;                &#10;    char msg[REDIS_MAX_LOGMSG_LEN]; &#10;    &#10;    if ((level&#38;0xff) &#60; server.verbosity) return;&#10;    &#10;    va_start(ap, fmt);         &#10;    vsnprintf(msg, sizeof(msg), fmt, ap);&#10;    va_end(ap);                &#10;    &#10;    redisLogRaw(level,msg);    &#10;&#125;</span><br></pre></td></tr></table></figure></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/13/coreseek-install-doc/" rel="prev">中文搜索引擎coreseek的安装使用</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/22/linux-shell-command-line-control-key/" rel="next">linux命令行控制字符汇总</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2014/05/10/stdarg-function/"
+                   data-title="C语言：可变参数函数" data-url="http://oohcode.com/2014/05/10/stdarg-function/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/avatar.png" alt="sean chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">sean chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">55</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/oohcoder" target="_blank">github</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://oohcode.com/" target="_blank">OohCode</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sean chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

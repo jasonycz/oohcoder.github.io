@@ -1,0 +1,723 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
+
+##资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：
+
+
+
+
+GET
+HEA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter3:REST式服务有什么特别不同">
+<meta property="og:url" content="http://oohcode.com/2013/11/29/restful-web-services-chapter3/index.html">
+<meta property="og:site_name" content="OohCode">
+<meta property="og:description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
+
+##资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：
+
+
+
+
+GET
+HEA">
+<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter3:REST式服务有什么特别不同">
+<meta name="twitter:description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
+
+##资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：
+
+
+
+
+GET
+HEA">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> chapter3:REST式服务有什么特别不同 | OohCode </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">OohCode</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              chapter3:REST式服务有什么特别不同
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2013-11-29T00:00:00+08:00" content="2013-11-29">
+            2013-11-29
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/restful-web-services/" itemprop="url" rel="index">
+                  <span itemprop="name">restful web services</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2013/11/29/restful-web-services-chapter3/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/29/restful-web-services-chapter3/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<p><em>前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。</em></p>
+</blockquote>
+<p>##资源<br>Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>HEAD</th>
+<th>PUT</th>
+<th>DELETE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>桶列表</td>
+<td>列出所有桶</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>一个桶</td>
+<td>列出桶里的对象</td>
+<td>-</td>
+<td>创建桶</td>
+<td>删除桶</td>
+</tr>
+<tr>
+<td>一个对象</td>
+<td>获取对象的值及元数据</td>
+<td>获取对象的元数据</td>
+<td>设置对象的值及元数据</td>
+<td>删除对象</td>
+</tr>
+</tbody>
+</table>
+<p>从表中可以看出每个方法的作用都是名副其实的。</p>
+<p>##HTTP相应代码<br>利用HTTP响应代码是REST架构的另一个标志象征。程序根据HTTP响应代码来判断响应的内容是正确的还是错误的。</p>
+<p>##一个S3客户端<br>下面我们根据S3客户端编写的代码来剖析REST服务。</p>
+<p>####对桶的操作<br><strong>获取桶的列表(GET方法):</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#26742;&#21015;&#34920;&#10;class BucketList&#10;    inlcude Authorized&#10;&#10;    #&#33719;&#21462;&#35813;&#29992;&#25143;&#30340;&#25152;&#26377;&#26742;&#10;    def get&#10;        buckets = []&#10;        #&#21521;&#26742;&#21015;&#34920;&#30340;URI&#21457;&#36865;GET&#35831;&#27714;&#65292;&#24182;&#35835;&#21462;&#36820;&#22238;&#30340;XML&#25991;&#26723;&#10;        doc = REXML::Document.new(open(HOST).read)&#10;        &#10;        #&#23545;&#20110;&#27599;&#20010;&#26742;...&#10;        REXML::XPath.each(doc, &#34;//Bucket/Name&#34;) do |e|  &#10;            #...&#21019;&#24314;&#19968;&#20010;Bucket&#23545;&#35937;&#65292;&#24182;&#25226;&#23427;&#28155;&#21152;&#21040;&#21015;&#34920;&#20013;&#10;            bucket &#60;&#60; Bucket.new(e.text) if e.text&#10;        end&#10;        return buckets&#10;    end&#10;end</span><br></pre></td></tr></table></figure><br><strong>保存或更新桶(PUT方法)和删除桶(DELETE方法):</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#19968;&#20010;S3&#26742;&#10;class Bucket&#10;    include Authorized&#10;    attr_accessor   :name&#10;&#10;    def initialize(name)&#10;        @name = name&#10;    end&#10;&#10;    #&#26742;&#30340;URI&#31561;&#20110;&#26381;&#21153;&#30340;&#26681;URI&#21152;&#19978;&#26742;&#21517;&#10;    def uri&#10;        HOST + URI.escape(name)&#10;    end&#10;&#10;    #&#22312;S3&#19978;&#20445;&#23384;&#36825;&#20010;&#26742;&#10;    #&#31867;&#20284;&#20110;&#22312;&#25968;&#25454;&#24211;&#37324;&#20445;&#23384;&#23545;&#35937;&#30340;ActiveRecord::Base#save.&#10;    def put(acl_policy=nil)&#10;        #&#35774;&#32622;HTTP&#26041;&#27861;&#65292;&#20316;&#20026;open()&#30340;&#21442;&#25968;&#10;        #&#21516;&#26102;&#20026;&#35813;&#26742;&#35774;&#32622;S3&#35775;&#38382;&#31574;&#30053;&#65288;&#22914;&#26524;&#26377;&#25552;&#20379;&#30340;&#35805;&#65289;&#10;        args = &#123;:method=&#62; :put&#125;&#10;        args[&#34;x-amz-acl&#34;] =acl_policy if acl_policy&#10;        &#10;        #&#21521;&#35813;&#26742;&#30340;URI&#21457;&#36865;PUT&#35831;&#27714;&#10;        open(uri, args)&#10;        return self&#10;    end&#10;&#10;    #&#21024;&#38500;&#35813;&#26742;&#10;    #&#22914;&#26524;&#35813;&#26742;&#19981;&#20026;&#31354;&#30340;&#35805;&#65292;&#25913;&#21024;&#38500;&#25805;&#20316;&#23558;&#22833;&#36133;&#10;    #&#24182;&#36820;&#22238;HTTP&#21709;&#24212;&#20195;&#30721;409&#65288;&#34;Conflict&#34;)&#10;    def delete&#10;        open(uri, :method =&#62; :delete)&#10;    end</span><br></pre></td></tr></table></figure></p>
+<p>####对对象的操作<br><strong>获取对象(GET方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#33719;&#21462;&#26742;&#37324;&#30340;&#20840;&#37096;&#25110;&#37096;&#20998;&#23545;&#35937;&#10;def get(options=&#123;&#125;)&#10;    #&#33719;&#21462;&#35813;&#26742;&#30340;&#22522;&#20934;URI&#65292;&#24182;&#25226;&#23376;&#38598;&#36873;&#39033;&#10;    #&#38468;&#21152;&#21040;&#26597;&#35810;&#23383;&#31526;&#20018;&#19978;&#10;    uri = uri()&#10;    suffix = &#39;?&#39;&#10;&#10;    #&#23545;&#20110;&#29992;&#25143;&#25552;&#20379;&#30340;&#27599;&#20010;&#36873;&#39033;...&#10;    options.each do |param, value|&#10;        #...&#22914;&#26524;&#23646;&#20110;&#26576;&#20010;S3&#23376;&#38598;&#36873;&#39033;...&#10;        if [:Prefix, :Maker, :Delimiter, :MaxKeys].member? :param&#10;            #...&#25226;&#23427;&#38468;&#21152;&#21040;URI&#19978;&#10;            uri &#60;&#60; suffix &#60;&#60; param.to_s &#60;&#60; &#39;=&#39; &#60;&#60; URI.escape(value)&#10;            suffix = &#39;&#38;&#39;&#10;        end&#10;    end&#10;    &#10;    #&#29616;&#22312;&#25105;&#20204;&#24050;&#32463;&#26500;&#36896;&#22909;&#20102;URI,&#21521;&#35813;URI&#21457;&#36865;GET&#35831;&#27714;&#65292;&#10;    #&#24182;&#35835;&#21462;&#21547;&#26377;S3&#23545;&#35937;&#20449;&#24687;&#30340;XML&#25991;&#26723;&#10;    doc = REXML::Document.new(open(uri).read)&#10;    there_are_more = REXML::XPath.first(doc, &#34;//IsTruncated&#34;).text == &#34;true&#34;&#10;&#10;    #&#26500;&#24314;&#19968;&#20010;S3::Object&#23545;&#35937;&#30340;&#21015;&#34920;&#10;    objects = []&#10;    #&#23545;&#20110;&#26742;&#37324;&#30340;&#27599;&#20010;S3&#23545;&#35937;...&#10;    REXML::XPath.each(doc, &#34;//Contents/Key&#34;) do |e|&#10;        #...&#26500;&#24314;&#19968;&#20010;S3:Object&#23545;&#35937;&#65292;&#24182;&#25226;&#23427;&#28155;&#21152;&#21040;&#21015;&#34920;&#20013;&#10;        objects &#60;&#60; Object.new(self, e.text) if e.text&#10;    end&#10;    return objects, there_are_more&#10;end</span><br></pre></td></tr></table></figure></p>
+<p><strong>获取对象数据(GET方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#36319;&#26576;&#20010;&#26742;&#20851;&#32852;&#30340;&#19968;&#20010;&#20855;&#26377;&#20540;&#21644;&#20803;&#25968;&#25454;&#30340;S3&#23545;&#35937;&#10;class Object&#10;    include Authorized&#10;    &#10;    #&#23458;&#25143;&#31471;&#21487;&#20197;&#30693;&#36947;&#23545;&#35937;&#22312;&#21738;&#20010;&#26742;&#37324;&#10;    attr_reader :bucket&#10;    &#10;    #&#23458;&#25143;&#31471;&#21487;&#20197;&#35835;&#20889;&#23545;&#35937;&#30340;&#21517;&#31216;&#10;    attr_accessor :name&#10;&#10;    #&#23458;&#25143;&#31471;&#21487;&#20197;&#20889;&#23545;&#35937;&#30340;&#20803;&#25968;&#25454;&#21644;&#20540;&#10;    attr_writer :metadata, :value&#10;    &#10;    def initialize(bucket, name, value=nil, metadata=nil)&#10;        @bucket, @name, @value, @metadata = bucket, name, value, metadata&#10;    end&#10;&#10;    #&#23545;&#35937;&#30340;URI&#31561;&#20110;&#25152;&#22312;&#26742;&#30340;URI&#21152;&#19978;&#35813;&#23545;&#35937;&#30340;&#21517;&#31216;&#10;    def uri&#10;        @bucket.uri + &#39;/&#39; + URI.escape(name)&#10;    end</span><br></pre></td></tr></table></figure></p>
+<p><strong>获取对象元数据(HEAD方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#33719;&#21462;&#23545;&#35937;&#30340;&#20803;&#25968;&#25454;hash&#10;def metadata&#10;    #&#22914;&#26524;&#27809;&#26377;&#20803;&#25968;&#25454;...&#10;    unless @metadata&#10;        #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;&#19968;&#20010;HEAD&#35831;&#27714;&#65292;&#24182;&#20174;&#21709;&#24212;&#30340;HTTP&#25253;&#22836;&#37324;&#35835;&#21462;&#20803;&#25968;&#25454;&#10;        begin&#10;            store_metadata(open(uri, :method =&#62; :head).meta)&#10;        rescue OpenURI::HTTPError =&#62; e&#10;            if e.io.status == [&#34;404&#34;, &#34;Not Found&#34;]&#10;                #&#20551;&#22914;&#27809;&#26377;&#20803;&#25968;&#25454;&#26159;&#22240;&#20026;&#23545;&#35937;&#19981;&#23384;&#22312;&#65292;&#36825;&#19981;&#31639;&#38169;&#35823;&#10;                @metadata = &#123;&#125;&#10;            else&#10;                #&#20854;&#20182;&#24773;&#20917;&#65292;&#20570;&#38169;&#35823;&#22788;&#29702;&#10;                raise e&#10;            end&#10;        end&#10;    end&#10;    return @metadata&#10;end</span><br></pre></td></tr></table></figure><br><strong>获取对象数据(GET方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#33719;&#21462;&#23545;&#35937;&#30340;&#20540;&#21644;&#20803;&#25968;&#25454;&#10;def value&#10;    #&#22914;&#26524;&#27809;&#26377;&#20540;...&#10;    unless @value&#10;        #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;GET&#35831;&#27714;&#10;        response = opne(uri)&#10;        #&#20174;&#30456;&#24212;&#30340;HTTP&#25253;&#22836;&#37324;&#35835;&#21462;&#20803;&#25968;&#25454;&#10;        store_metadata(respons.meta) unless @metadata&#10;        #&#20174;&#23454;&#20307;&#20027;&#20307;&#37324;&#35835;&#21462;&#20540;&#10;        @value = response.read&#10;    end&#10;    return @value&#10;end</span><br></pre></td></tr></table></figure><br><strong>保存对象数据(PUT方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#22312;S3&#19978;&#20445;&#23384;&#23545;&#35937;&#10;def put(acl_policy=nil)&#10;    #&#20197;&#21407;&#22987;&#20803;&#25968;&#25454;&#30340;&#21103;&#26412;&#24320;&#22987;&#65292;&#25110;&#32773;&#10;    #&#22914;&#26524;&#27809;&#26377;&#20803;&#25968;&#25454;&#30340;&#35805;&#65292;&#23601;&#20197;&#31354;hash&#24320;&#22987;&#12290;&#10;    args = @metadata ? @metadata.cloen &#65306;&#123;&#125;&#10;    #&#35774;&#32622;HTTP&#26041;&#27861;&#12289;&#23454;&#20307;&#20027;&#20307;&#21450;&#19968;&#20123;&#21478;&#22806;&#30340;HTTP&#25253;&#22836;&#10;    args[:method] = :put&#10;    args[&#34;x-amz-acl&#34;] = acl_policy if acl_policy&#10;    if @value&#10;        args[&#34;Content-Lenght&#34;] = @value.size.to_s&#10;        args[:body] = @value&#10;    end&#10;&#10;    #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;PUT&#35831;&#27714;&#10;    open(uri, args)&#10;    return self&#10;end</span><br></pre></td></tr></table></figure><br><strong>删除对象数据(DELETE方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#21024;&#38500;&#23545;&#35937;&#10;def delete&#10;    #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;DELETE&#35831;&#27714;&#10;    open(uri,:method =&#62; :delete)&#10;end</span><br></pre></td></tr></table></figure><br>通过上面这些例子的介绍，我们对每个方法的使用都有了一个大致的印象，知道每个方法对应的应用场景。实际的使用过程中是如何把他们关联起来的呢？下面再对它们的应用通过一个例子做一个综合的介绍。</p>
+<p>##使用S3客户端<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/ruby -w&#10;# s3-sample-client.rb&#10;require &#39;S3lib&#39;&#10;&#10;#&#25910;&#38598;&#21629;&#20196;&#34892;&#21442;&#25968;&#10;bucket_name, object_name, object_value = ARGV&#10;unless bucket_name&#10;    puts &#34;Usage: #&#123;0&#125; [bucket name] [object name] [object value]&#34;&#10;    exit&#10;end&#10;&#10;#&#25214;&#21040;&#25110;&#21019;&#24314;&#26742;&#10;buckets = S3::BucketList.new.get    #GET /&#10;bucket = buckets.detect&#123; |b| b.name == bucket_name &#125;&#10;if bucket&#10;    puts &#34;Found bucket #(bucket_name).&#34;&#10;else&#10;    puts &#34;Could not find bucket #&#123;bucket_name&#125;, creating it&#34;&#10;    bucket = S3::Bucket.new(bucket_name)&#10;    bucket.put&#10;end&#10;&#10;#&#21019;&#24314;&#23545;&#35937;&#10;object = S3:Object.new(bucket, object_name)&#10;object.metadata[&#39;content-type&#39;] = &#39;text/plain&#39;&#10;object.value = object_value&#10;object.put                              #PUT /&#123;bucket&#125;/&#123;object&#125;&#10;&#10;#&#23545;&#26742;&#37324;&#30340;&#27599;&#20010;&#23545;&#35937;...&#10;bucket.get[0].each do |o|               #GET /&#123;bucket&#125;&#10;    #...&#25171;&#21360;&#20986;&#26377;&#20851;&#35813;&#23545;&#35937;&#30340;&#20449;&#24687;&#10;    puts &#34;Name: #&#123;o.name&#125;&#34;&#10;    puts &#34;Value: #&#123;o.value&#125;&#34;            #GET /&#123;bucket&#125;/&#123;object&#125;&#10;    puts &#34;Metadata hash: #&#123;o.metadata.inspect&#125;&#34;&#10;    puts&#10;end</span><br></pre></td></tr></table></figure></p>
+<p>##用ActiveResource创建透明的客户端<br>安装ruby on rails，然后利用rails生成一个创建一个自己的app，根据书里的过程并参考《Ruby On Ralis 3 Toturial》中的例子就可以完成。建立完成后可以在页面中看到notes的操作了，可以增加，编辑，删除note,可以到在views里可以看到这么一段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;td&#62;&#60;%= link_to &#39;Destroy&#39;, note, method: :delete, data: &#123; confirm: &#39;Are you sure?&#39; &#125; %&#62;&#60;/td&#62;</span><br></pre></td></tr></table></figure><br>ruby中前端是通过method来指定HTTP请求的发送类型的，但是我在web端看到的请求是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Request Method:POST&#10;Form Data:&#10;_method:delete</span><br></pre></td></tr></table></figure><br>从这里来看ruby并没有在HTTP请求的方法中就变为DELETE，而是在from里传了一个参数，这并不是符合标准的REST架构的。鉴于我对ROR还不了解，现在可能有些不太明白，先看着后面的章节，等了解后再完善本章内容。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/12/04/restful-web-services-chapter4/" rel="prev">chapter4:面向资源的架构</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/11/27/restful-web-services-chapter2/" rel="next">chapter2:编写Web服务客户端</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2013/11/29/restful-web-services-chapter3/"
+                   data-title="chapter3:REST式服务有什么特别不同" data-url="http://oohcode.com/2013/11/29/restful-web-services-chapter3/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/avatar.png" alt="sean chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">sean chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">55</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/oohcoder" target="_blank">github</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://oohcode.com/" target="_blank">OohCode</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sean chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
