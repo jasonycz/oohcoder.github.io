@@ -1,11 +1,16 @@
 <!doctype html>
-<html class="theme-next use-motion ">
-<head>
+
+
+
   
 
-<meta charset="UTF-8"/>
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
 
 
 <meta http-equiv="Cache-Control" content="no-transform" />
@@ -18,14 +23,22 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
 
 
-<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
 
 
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="apache,nginx," />
@@ -34,7 +47,14 @@
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
 
 
 <meta name="description" content="##apache工作原理apache httpd通过模块化的设计来适应各种环境，模块化的使用使其变得功能强大而且灵活。最基本的web服务器功能也是通过可选择的多处理模块(MPM)，用来绑定到网络端口上，以及调度子程序处理请求。这样做可以带来两个重要的好处:
@@ -49,7 +69,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apache httpd 的 Windows 版本现在更有效率了，因为">
 <meta property="og:image" content="http://dl.iteye.com/upload/attachment/385428/e0714d6e-1c19-3f2b-9f0a-0592eee7c3ec.png">
 <meta property="og:image" content="http://tengine.taobao.org/book/_images/chapter-2-1.PNG">
-<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
+<meta property="og:updated_time" content="2015-12-21T07:49:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="apache与nginx对比">
 <meta name="twitter:description" content="##apache工作原理apache httpd通过模块化的设计来适应各种环境，模块化的使用使其变得功能强大而且灵活。最基本的web服务器功能也是通过可选择的多处理模块(MPM)，用来绑定到网络端口上，以及调度子程序处理请求。这样做可以带来两个重要的好处:
@@ -57,10 +77,18 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apache httpd 的 Windows 版本现在更有效率了，因为">
 
 
+
 <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: '',
-    sidebar: 'post'
+    scheme: 'Muse',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
   };
 </script>
 
@@ -69,33 +97,34 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
   
 
 
 
-  <div class="container one-column page-post-detail">
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
-      </span>
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
       <span class="site-title">OohCode</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好奇的码农~</p>
+</div>
 
 <div class="site-nav-toggle">
   <button>
@@ -114,7 +143,9 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
         
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
-            <i class="menu-item-icon icon-next-home"></i> <br />
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
             首页
           </a>
         </li>
@@ -122,7 +153,9 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
         
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
-            <i class="menu-item-icon icon-next-archives"></i> <br />
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
             归档
           </a>
         </li>
@@ -130,12 +163,15 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
         
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
-            <i class="menu-item-icon icon-next-tags"></i> <br />
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
             标签
           </a>
         </li>
       
 
+      
       
       
     </ul>
@@ -149,62 +185,83 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
     <main id="main" class="main">
       <div class="main-inner">
-        <div id="content" class="content"> 
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
 
   <div id="posts" class="posts-expand">
     
 
+  
+  
+
+  
+  
+  
+
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
 
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              apache与nginx对比
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2015-10-09T15:09:38+08:00" content="2015-10-09">
-            2015-10-09
-          </time>
-        </span>
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2015/10/09/apache-and-nginx/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/09/apache-and-nginx/" itemprop="commentsCount"></span>
-              </a>
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                apache与nginx对比
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
             </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-09T15:09:38+08:00" content="2015-10-09">
+              2015-10-09
+            </time>
+          </span>
+
           
-        
-      </div>
-    </header>
 
-    <div class="post-body">
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/09/apache-and-nginx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/09/apache-and-nginx/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <span itemprop="articleBody"><p>##apache工作原理<br>apache httpd通过模块化的设计来适应各种环境，模块化的使用使其变得功能强大而且灵活。最基本的web服务器功能也是通过可选择的多处理模块(MPM)，用来绑定到网络端口上，以及调度子程序处理请求。这样做可以带来两个重要的好处:</p>
+        <p>##apache工作原理<br>apache httpd通过模块化的设计来适应各种环境，模块化的使用使其变得功能强大而且灵活。最基本的web服务器功能也是通过可选择的多处理模块(MPM)，用来绑定到网络端口上，以及调度子程序处理请求。这样做可以带来两个重要的好处:</p>
 <ul>
 <li>Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apache httpd 的 Windows 版本现在更有效率了，因为 <a href="http://httpd.apache.org/docs/2.4/zh-cn/mod/mpm_winnt.html" target="_blank" rel="external">mpm_winnt</a> 能使用原生网络特性取代在 Apache httpd 1.3 中使用的 POSIX 层。它也可以扩展到其它平台 来使用专用的 MPM。</li>
 <li>Apache httpd 能更好的为有特殊要求的站点定制。例如，要求 更高伸缩性的站点可以选择使用线程的 MPM，即 <a href="http://httpd.apache.org/docs/2.4/zh-cn/mod/worker.html" target="_blank" rel="external">worker</a> 或 <a href="http://httpd.apache.org/docs/2.4/zh-cn/mod/event.html" target="_blank" rel="external">event</a>； 需要可靠性或者与旧软件兼容的站点可以使用 <a href="http://httpd.apache.org/docs/2.4/zh-cn/mod/prefork.html" target="_blank" rel="external">prefork</a>。</li>
 </ul>
 <p>下面主要介绍常用的两个MPM工作原理。</p>
-<p>###perfork<br>一个单独的控制进程(父进程)负责产生子进程，这些子进程用于监听请求并作出应答。Apache总是试图保持一些备用的 (spare)或是空闲的子进程用于迎接即将到来的请求。这样客户端就无需在得到服务前等候子进程的产生。在Unix系统中，父进程通常以root身份运行以便邦定80端口(注意这里是先绑定再fork的，所以意味着所有的子进程都监听了80端口)，而 Apache产生的子进程通常以一个低特权的用户运行。User和Group指令用于配置子进程的低特权用户。运行子进程的用户必须要对他所服务的内容有读取的权限，但是对服务内容之外的其他资源必须拥有尽可能少的权限。<br>子进程的个数会随着请求量的大小动态调整。调整的策略与perfork的配置息息相关，httpd.conf的配置文件有以下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;IfModule prefork.c&#62;&#10;StartServers 5&#10;MinSpareServers 5&#10;MaxSpareServers 10&#10;MaxClients 150&#10;MaxRequestsPerChild 0&#10;&#60;/IfModule&#62;</span><br></pre></td></tr></table></figure></p>
+<p>###perfork<br>一个单独的控制进程(父进程)负责产生子进程，这些子进程用于监听请求并作出应答。Apache总是试图保持一些备用的 (spare)或是空闲的子进程用于迎接即将到来的请求。这样客户端就无需在得到服务前等候子进程的产生。在Unix系统中，父进程通常以root身份运行以便邦定80端口(注意这里是先绑定再fork的，所以意味着所有的子进程都监听了80端口)，而 Apache产生的子进程通常以一个低特权的用户运行。User和Group指令用于配置子进程的低特权用户。运行子进程的用户必须要对他所服务的内容有读取的权限，但是对服务内容之外的其他资源必须拥有尽可能少的权限。<br>子进程的个数会随着请求量的大小动态调整。调整的策略与perfork的配置息息相关，httpd.conf的配置文件有以下配置:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule prefork.c&gt;</span><br><span class="line">StartServers 5</span><br><span class="line">MinSpareServers 5</span><br><span class="line">MaxSpareServers 10</span><br><span class="line">MaxClients 150</span><br><span class="line">MaxRequestsPerChild 0</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
 <p>具体的流程这里直接copy<a href="http://blog.csdn.net/hguisu/article/details/7395181" target="_blank" rel="external">Apache运行机制剖析</a>这篇博文的介绍。</p>
 <ol>
 <li>控制进程先建立’StartServers’个子进程;</li>
@@ -226,7 +283,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 <li><code>MaxClients</code> 设定Apache可以同时处理的请求，是对性能影响最大的参数。如果请求数达到这个限制，那么后来的请求就需要排队，直到某个请求处理完毕。</li>
 </ul>
 <p>###worker<br>每个进程能够拥有的线程数量是固定的。服务器会根据负载情况增加或减少进程数量。一个单独的控制进程(父进程)负责子进程的建立。每个子进程能够建立ThreadsPerChild数量的服务线程和一个监听线程，该监听线程监听接入请求并将其传递给服务线程处理和应答。Apache总是试图维持一个备用(spare)或是空闲的服务线程池。这样，客户端无须等待新线程或新进程的建立即可得到处理。在Unix中，为了能够绑定80端口，父进程一般都是以root身份启动，随后，Apache以较低权限的用户建立子进程和线程。User和Group指令用于配置Apache子进程的权限。虽然子进程必须对其提供的内容拥有读权限，但应该尽可能给予他较少的特权。另外，除非使用了suexec ，否则，这些指令配置的权限将被CGI脚本所继承。<br>  相对于prefork，worker是2.0 版中全新的支持多线程和多进程混合模型的MPM。由于使用线程来处理，所以可以处理相对海量的请求，而系统资源的开销要小于基于进程的服务器。但是，worker也使用了多进程，每个进程又生成多个线程，以获得基于进程服务器的稳定性。这种MPM的工作方式将是Apache 2.0的发展趋势。</p>
-<p>http.conf中也有关于worker的配置项:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;IfModule worker.c&#62;&#10;StartServers 3&#10;MaxClients 2000&#10;ServerLimit 25&#10;MinSpareThreads 50&#10;MaxSpareThreads 200&#10;ThreadLimit 200&#10;ThreadsPerChild 100&#10;MaxRequestsPerChild 0&#10;&#60;/IfModule&#62;</span><br></pre></td></tr></table></figure></p>
+<p>http.conf中也有关于worker的配置项:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule worker.c&gt;</span><br><span class="line">StartServers 3</span><br><span class="line">MaxClients 2000</span><br><span class="line">ServerLimit 25</span><br><span class="line">MinSpareThreads 50</span><br><span class="line">MaxSpareThreads 200</span><br><span class="line">ThreadLimit 200</span><br><span class="line">ThreadsPerChild 100</span><br><span class="line">MaxRequestsPerChild 0</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
 <p>由主控制进程生成“StartServers”个子进程，每个子进程中包含固定的ThreadsPerChild线程数，各个线程独立地处理请求。同样，为了不在请求到来时再生成线程，MinSpareThreads和MaxSpareThreads设置了最少和最多的空闲线程数；而MaxClients设置了所有子进程中的线程总数。如果现有子进程中的线程总数不能满足负载，控制进程将派生新的子进程。<br>参数介绍:<br><code>StartServer</code> 服务器启动时建立的子进程数。<br><code>ServerLimit</code> 服务器允许配置的进程数上限。这个指令和ThreadLimit结合使用配置了MaxClients最大允许配置的数值。<br><code>MinSpareThreads</code> 最小空闲线程数。这个MPM将基于整个服务器监控空闲线程数。如果服务器中的总线程数太少，子进程将产生新的空闲线程。<br><code>MaxSpareThreads</code> 最大空闲线程数。这个MPM将基于整个服务器监控空闲线程数。如果服务器总的线程数太多，子进程将kill掉多余的空闲线程。MaxSpareThreads的取值范围是有限制的。<br><code>ThreadLimit</code> 每个子进程可配置的线程数上限。这个指令配置了每个子进程可配置的线程数ThreadsPerChild上限。<br><code>ThreadsPerChild</code> 每个子进程建立的常驻的执行线程数。子进程在启动时建立这些线程后就不再建立新的线程了。<br><code>MaxRequestsPerChild</code> 每个子进程在其生存期间允许执行的最大请求数量。到达这个限制后子进程将会结束，如果为0则永不结束( 注意，对于KeepAlive链接，只有第一个请求会被计数)。这样做的好处是:</p>
 <ul>
 <li>能够防止内存泄露无限进行，从而耗尽内存。</li>
@@ -242,7 +299,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 <p>###nginx”惊群”现象与解决方案<br>worker进程之间是平等的，每个进程，处理请求的机会也是一样的。当我们提供80端口的http服务时，一个连接请求过来，每个进程都有可能处理这个连接，怎么做到的呢？首先，每个worker进程都是从master进程fork过来，在master进程里面，先建立好需要listen的socket（listenfd）之后，然后再fork出多个worker进程。所有worker进程的listenfd会在新连接到来时变得可读，为保证只有一个进程处理该连接，所有worker进程在注册listenfd读事件前抢accept_mutex，抢到互斥锁的那个进程注册listenfd读事件，在读事件里调用accept接受该连接。当一个worker进程在accept这个连接之后，就开始读取请求，解析请求，处理请求，产生数据后，再返回给客户端，最后才断开连接，这样一个完整的请求就是这样的了。我们可以看到，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。</p>
 <p>因为这里主要是对比apache与nginx的原理的不同，所以更深入的探讨nginx这里先不做介绍更深入的探讨nginx这里先不做介绍，以后有机会学习nginx源码的时候再写。</p>
 <p>##参考文献<br><a href="http://httpd.apache.org/docs/2.4/zh-cn/mpm.html" target="_blank" rel="external">多处理模块(MPM)</a><br><a href="http://blog.csdn.net/hguisu/article/details/7395181" target="_blank" rel="external">Apache运行机制剖析</a><br><a href="http://tengine.taobao.org/book/chapter_02.html" target="_blank" rel="external">nginx平台初探</a><br><a href="http://alicsd.iteye.com/blog/865531" target="_blank" rel="external">客户/服务器程序设计范式</a><br><a href="http://blog.csdn.net/russell_tao/article/details/7204260" target="_blank" rel="external">“惊群”，看看nginx是怎么解决它的</a><br><a href="http://blog.csdn.net/zbszhangbosen/article/details/7982402" target="_blank" rel="external">web服务器nginx和apache的对比分析</a></p>
-</span>
+
       
     </div>
 
@@ -259,15 +316,19 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
       
         <div class="post-nav">
-          <div class="post-nav-prev post-nav-item">
+          <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/10/14/InnoDB-Key-Features/" rel="prev">InnoDB关键特性</a>
+              <a href="/2015/09/15/PHP-array-hash-key-overflow/" rel="next" title="PHP数组的key溢出问题">
+                <i class="fa fa-chevron-left"></i> PHP数组的key溢出问题
+              </a>
             
           </div>
 
-          <div class="post-nav-next post-nav-item">
+          <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/09/15/PHP-array-hash-key-overflow/" rel="next">PHP数组的key溢出问题</a>
+              <a href="/2015/10/14/InnoDB-Key-Features/" rel="prev" title="InnoDB关键特性">
+                InnoDB关键特性 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -285,22 +346,24 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
     </div>
   </div>
 
- </div>
 
-        
-
-        
-          <div class="comments" id="comments">
-            
-              <div class="ds-thread" data-thread-key="2015/10/09/apache-and-nginx/"
-                   data-title="apache与nginx对比" data-url="http://oohcode.com/2015/10/09/apache-and-nginx/">
-              </div>
-            
           </div>
-        
-      </div>
+          
 
-      
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/10/09/apache-and-nginx/"
+           data-title="apache与nginx对比" data-url="http://oohcode.com/2015/10/09/apache-and-nginx/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
   
   <div class="sidebar-toggle">
     <div class="sidebar-toggle-line-wrap">
@@ -314,6 +377,8 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
     <div class="sidebar-inner">
 
       
+
+      
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
             文章目录
@@ -324,12 +389,14 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
         </ul>
       
 
-      <section class="site-overview">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="/avatar.png" alt="sean chen" itemprop="image"/>
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="sean chen" />
           <p class="site-author-name" itemprop="name">sean chen</p>
+          <p class="site-description motion-element" itemprop="description"></p>
         </div>
-        <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
@@ -358,12 +425,6 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
         <div class="links-of-author motion-element">
           
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/oohcoder" target="_blank">github</a>
-              </span>
-            
-          
         </div>
 
         
@@ -374,7 +435,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
             <p class="site-author-name">Links</p>
             
               <span class="links-of-author-item">
-              <a href="http://oohcode.com/" target="_blank">OohCode</a>
+                <a href="http://oohcode.com/" target="_blank">OohCode</a>
               </span>
             
           
@@ -383,15 +444,21 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
       </section>
 
       
-        <section class="post-toc-wrap sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator"></div>
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
           <div class="post-toc">
+            
+              
             
             
               <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
         </section>
       
 
@@ -399,15 +466,18 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
   </aside>
 
 
+        
+      </div>
     </main>
 
     <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
+      <div class="footer-inner">
+        <div class="copyright" >
   
-  &copy; &nbsp; 
+  &copy; 
   <span itemprop="copyrightYear">2015</span>
   <span class="with-love">
-    <i class="icon-next-heart"></i>
+    <i class="icon-next-heart fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">sean chen</span>
 </div>
@@ -419,67 +489,53 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT
+    NexT.Muse
   </a>
 </div>
 
 
- </div>
+
+      </div>
     </footer>
 
     <div class="back-to-top"></div>
   </div>
 
+  
+
+
+  
+
+
+
   <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
 
-  
-  
-  
-    
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"oohcode"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-    
-     
-
-    
-  
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
-
-
-  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
-  
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
-
-
-
-
-  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
   <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
-  
-  
-<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
 
 <script type="text/javascript" id="sidebar.toc.highlight">
   $(document).ready(function () {
@@ -559,7 +615,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
     function tocOverflowIndicator (indicator, action) {
       var $indicator = $(indicator);
-      var opacity = action === 'show' ? 0.4 : 0;
+      var opacity = action === 'show' ? 1 : 0;
       $indicator.velocity ?
         $indicator.velocity('stop').velocity({
           opacity: opacity
@@ -613,7 +669,7 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
 
     $('.post-toc a').on('click', function (e) {
       e.preventDefault();
-      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
       var offset = $(targetSelector).offset().top;
       hasVelocity ?
         html.velocity('stop').velocity('scroll', {
@@ -626,43 +682,61 @@ Apache httpd 能更优雅，更高效率的支持不同的平台。尤其是 Apa
     });
 
     // Expand sidebar on post detail page by default, when post has a toc.
-    var $tocContent = $('.post-toc-content');
-    if (isDesktop() && CONFIG.sidebar === 'post') {
-      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-        displaySidebar();
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
       }
-    }
+    };
   });
 </script>
 
 
 
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
   <script type="text/javascript">
-    $(document).ready(function () {
-      if (CONFIG.sidebar === 'always') {
-        displaySidebar();
-      }
-      if (isMobile()) {
-        FastClick.attach(document.body);
-      }
-    });
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
   </script>
 
   
+    
+  
+
+
+
+
 
   
   
 
   
-  <script type="text/javascript" src="/js/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "/images/loading.gif",
-        effect: "fadeIn"
-      });
-    });
-  </script>
+  
+
+
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
