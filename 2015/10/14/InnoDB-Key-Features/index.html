@@ -1,286 +1,195 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 
-
-
-  
-
-
-<html class="theme-next muse use-motion">
+<!-- Head tag -->
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.
+
+工作方式首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。
+体系架构InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="sean chen">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="InnoDB关键特性"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="OohCode"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>InnoDB关键特性 - OohCode</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="mysql," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
-
-
-
-
-
-
-<meta name="description" content="本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.
-
-##工作方式首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。
-###体系架构InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。
-  
-####后台线程上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他">
-<meta property="og:type" content="article">
-<meta property="og:title" content="InnoDB关键特性">
-<meta property="og:url" content="http://oohcode.com/2015/10/14/InnoDB-Key-Features/index.html">
-<meta property="og:site_name" content="OohCode">
-<meta property="og:description" content="本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.
-
-##工作方式首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。
-###体系架构InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。
-  
-####后台线程上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/AqfDBadCIyz9LNWshVt9xcqArLmAG92IM9AOb5YSgg044JPKWeZNOfKrmYkR1vUjvIg2M_UqhVNfsXbGwn32Iaydz3tjt_1yr_xdAxgLeD8Qled59Qb52Y4PHQc9APeGCKz_L7v1QL5wAgfGG29Gn3adDJ4FJNCjkgsUUNdvBav01prjMl5qpzHda_iWxdksSO4IqDdGiB7HjOEw6m00">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlUpgHkUzQwpvifCKz20i9_EMV5yp-IdRPkURLoWgL2IaPgde56PMgp9fG04LY_sJtawUnvCLsfESQg2Hbu-LFB9xhxdYnkVpvu1DFXf_pIOAh2SafjdXDBJZWrmiwsn6fYNafd6LLoINm00">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlVJzbtFfcvurhlEcYilloHLeIWpFQF4Ik75_fdFfczxsZ0J8lbaHyFJTREUpbdnVC_afssRdcrSy6J7sYUxshYiditUycpQ1cJXvxDQO2PQFTkzyCMspS_cBdooUzlxFJrFExO35J-TFU_vuiRdisTOSnMNv1S00000">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/TP31IiD048RlVOeX9tqDyU8x2CkskmcBszsoZI1AmGXfFLW4sneH15FiHQYrKg5AeI_ZnEOjZDbMH9CvVz_yCx_XDPygJtBOKqhlxc0xnF5DCdXEkayuULjDOpYfG3Rc1tJIJXU3soGQuJBwNFIm_GBx2hOCPngazaZrq7MvsNRWdpYymuVhTSJqFhT45ikgX38cVA4LbQJEwwIXjIHDSSmBjjZ8pD-uDYztCjoU-pr_HVjL6h_cmOpw51hKAuoO3N4ns912CNvKXYQNLnYEVjKWL9CR7yfBw0SVopW99ZajTUq0X79r0RdgFAQdP_ZUnzuvpY_iKKx9MpYEC9pRpMkcLMbz0G00">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/LKvB2e906DxFAMPfLz1TkuuHD98G5iwqQ5U14j6Bx06zo22em5wOA5YdyH_r5WtOfc_vlIah6mp9V3m5yyXx2xxs-EAk84t5KhRTfPrLjhOIxm3HF7DUi3abaGtMap_sSU0MCAiI7KijGWi82yY9Y8-EUPk2I8qIBEdrdyXd7q77GJiEBYMT4eFXObDLYG6tC7queb39ZN1TyQN_RvaEqey9_NF-1SO-k9Eqtqsw8Knw4FhS7iRlZTZKAvgAAAitlW00">
-<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="InnoDB关键特性">
-<meta name="twitter:description" content="本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.
-
-##工作方式首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。
-###体系架构InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。
-  
-####后台线程上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Muse',
-    sidebar: '[object Object]',
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> InnoDB关键特性 | OohCode </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  
+<body>
 
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">OohCode</a>
+        </div>
 
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">OohCode</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">好奇的码农~</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-      
-      
-    </ul>
-  
-
-  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/oohcoder">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
 </nav>
 
- </div>
-    </header>
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                InnoDB关键特性
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-14T22:10:14+08:00" content="2015-10-14">
-              2015-10-14
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/14/InnoDB-Key-Features/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/14/InnoDB-Key-Features/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
+<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>InnoDB关键特性</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        2015-10-14
+                    </span>
+                </div>
+            </div>
         </div>
-      </header>
-    
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
 
 
-    <div class="post-body" itemprop="articleBody">
+<a href="/tags/mysql/">#mysql</a>
 
-      
-      
 
-      
-        <blockquote>
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <blockquote>
 <p>本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.</p>
 </blockquote>
-<p>##工作方式<br>首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。</p>
-<p>###体系架构<br>InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。</p>
+<h2 id="工作方式">工作方式</h2><p>首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。</p>
+<h3 id="体系架构">体系架构</h3><p>InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。</p>
 <img src="http://www.plantuml.com/plantuml/svg/AqfDBadCIyz9LNWshVt9xcqArLmAG92IM9AOb5YSgg044JPKWeZNOfKrmYkR1vUjvIg2M_UqhVNfsXbGwn32Iaydz3tjt_1yr_xdAxgLeD8Qled59Qb52Y4PHQc9APeGCKz_L7v1QL5wAgfGG29Gn3adDJ4FJNCjkgsUUNdvBav01prjMl5qpzHda_iWxdksSO4IqDdGiB7HjOEw6m00">  
-<p>####后台线程<br>上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他们的分工如下:</p>
+<h4 id="后台线程">后台线程</h4><p>上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他们的分工如下:</p>
 <ul>
 <li><code>Master Thread</code>: 是最核心的线程，主要负责将缓冲池中的数据异步刷新的磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲(INSERT BUFFER),UNDO页的回收等。下面几个线程其实是为了分担主线程的压力而在最新的版本中添加的。</li>
 <li><code>IO Thread</code>: InnoDB使用大量的异步IO来处理请求。IO Thread的主要工作就是负责IO请求的回调(call back)处理。异步IO可以分为4个，分别是:write, read, insert buffer 和 log IO thread。</li>
 <li><code>Purge Thread</code>: undo log是用来保证事务的，当一个事务正常提交后，这个undo log可能就不再使用了。purge thread就是用来清除这部分log已经分配的undo页的。 </li>
 <li><code>Page Cleaner Thread</code>: 主要是把脏页的刷新从主线程中拿到单独的线程，减轻主线程的压力，减少用户查询线程的阻塞，提高整体性能。</li>
 </ul>
-<p>####内存<br>由于InnoDB是基于磁盘存储的，为了使CPU与磁盘能够快的交互，提升整体性能而采用了缓冲池技术。<br>读数据简单的说可以用下面的流程图<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlUpgHkUzQwpvifCKz20i9_EMV5yp-IdRPkURLoWgL2IaPgde56PMgp9fG04LY_sJtawUnvCLsfESQg2Hbu-LFB9xhxdYnkVpvu1DFXf_pIOAh2SafjdXDBJZWrmiwsn6fYNafd6LLoINm00"><br>更新数据的流程则如下:<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlVJzbtFfcvurhlEcYilloHLeIWpFQF4Ik75_fdFfczxsZ0J8lbaHyFJTREUpbdnVC_afssRdcrSy6J7sYUxshYiditUycpQ1cJXvxDQO2PQFTkzyCMspS_cBdooUzlxFJrFExO35J-TFU_vuiRdisTOSnMNv1S00000"><br>由缓冲池的作用可以看到，缓冲池越大所容纳的数据就越多，与磁盘的交互就会越少，性能也就越高。所以缓冲池的大小直接影响着数据库的整体性能。<br>InnoDB在内存中主要有以下几部分组成:<br><img src="http://www.plantuml.com/plantuml/svg/TP31IiD048RlVOeX9tqDyU8x2CkskmcBszsoZI1AmGXfFLW4sneH15FiHQYrKg5AeI_ZnEOjZDbMH9CvVz_yCx_XDPygJtBOKqhlxc0xnF5DCdXEkayuULjDOpYfG3Rc1tJIJXU3soGQuJBwNFIm_GBx2hOCPngazaZrq7MvsNRWdpYymuVhTSJqFhT45ikgX38cVA4LbQJEwwIXjIHDSSmBjjZ8pD-uDYztCjoU-pr_HVjL6h_cmOpw51hKAuoO3N4ns912CNvKXYQNLnYEVjKWL9CR7yfBw0SVopW99ZajTUq0X79r0RdgFAQdP_ZUnzuvpY_iKKx9MpYEC9pRpMkcLMbz0G00"><br>具体来看缓冲池中缓存的数据页类型有:</p>
+<h4 id="内存">内存</h4><p>由于InnoDB是基于磁盘存储的，为了使CPU与磁盘能够快的交互，提升整体性能而采用了缓冲池技术。<br>读数据简单的说可以用下面的流程图<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlUpgHkUzQwpvifCKz20i9_EMV5yp-IdRPkURLoWgL2IaPgde56PMgp9fG04LY_sJtawUnvCLsfESQg2Hbu-LFB9xhxdYnkVpvu1DFXf_pIOAh2SafjdXDBJZWrmiwsn6fYNafd6LLoINm00"><br>更新数据的流程则如下:<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlVJzbtFfcvurhlEcYilloHLeIWpFQF4Ik75_fdFfczxsZ0J8lbaHyFJTREUpbdnVC_afssRdcrSy6J7sYUxshYiditUycpQ1cJXvxDQO2PQFTkzyCMspS_cBdooUzlxFJrFExO35J-TFU_vuiRdisTOSnMNv1S00000"><br>由缓冲池的作用可以看到，缓冲池越大所容纳的数据就越多，与磁盘的交互就会越少，性能也就越高。所以缓冲池的大小直接影响着数据库的整体性能。<br>InnoDB在内存中主要有以下几部分组成:<br><img src="http://www.plantuml.com/plantuml/svg/TP31IiD048RlVOeX9tqDyU8x2CkskmcBszsoZI1AmGXfFLW4sneH15FiHQYrKg5AeI_ZnEOjZDbMH9CvVz_yCx_XDPygJtBOKqhlxc0xnF5DCdXEkayuULjDOpYfG3Rc1tJIJXU3soGQuJBwNFIm_GBx2hOCPngazaZrq7MvsNRWdpYymuVhTSJqFhT45ikgX38cVA4LbQJEwwIXjIHDSSmBjjZ8pD-uDYztCjoU-pr_HVjL6h_cmOpw51hKAuoO3N4ns912CNvKXYQNLnYEVjKWL9CR7yfBw0SVopW99ZajTUq0X79r0RdgFAQdP_ZUnzuvpY_iKKx9MpYEC9pRpMkcLMbz0G00"><br>具体来看缓冲池中缓存的数据页类型有:</p>
 <ul>
 <li><code>索引页</code>: 缓存数据表索引</li>
 <li><code>数据页</code>: 缓存数据页，占缓冲池的绝大部分</li>
@@ -303,7 +212,7 @@
 <li>为了保证new列表的不经常使用时能够淘汰，设置了一个超时时间:innodb_old_blocks_time，当数据在midpoint(我理解应该是在old列表中，不然这个点的页就一个，变化也比较频繁)的时间超过找个时间时就会被提升到表头，new列表的表尾页则被置换到old列表中。</li>
 </ol>
 <p>这么做的原因主要是因为常见的索引或数据的扫描操作会连续读取大量的页，甚至是全表扫描。如果采用原来的LRU算法就会更新全部的缓冲池，其他查询需要的热点数据就会被冲走，导致更多的磁盘读取操作，降低数据库的性能。<br>LRU是用来管理已经读取的页，当数据库启动时LRU是空列表,既只有表头，没有内容。这时页都放在Free List中。当需要有数据读写时要进行需要获取分页，这时要从Free List中删除分页，然后添加到LRU list中。到一定时间Free List中的分页就会被分配完毕，这时候就正常使用上面的LRU策略。<br>LRU列表中的页被修改后，称该页为脏页(dirty page),既缓冲池中的数据和磁盘上的数据产生了不一致，这时脏页会被加入到一个Flush 列表中(注意，同时存在两个列表中)。然后根据刷新的机制定时的刷新到磁盘中。</p>
-<p>###Checkpoint技术<br>checkpoint其实就是一个刷新缓冲到磁盘的触发机制，当满足一定的条件时就会刷新缓冲到磁盘，这样做可以解决以下几个问题:</p>
+<h3 id="Checkpoint技术">Checkpoint技术</h3><p>checkpoint其实就是一个刷新缓冲到磁盘的触发机制，当满足一定的条件时就会刷新缓冲到磁盘，这样做可以解决以下几个问题:</p>
 <ul>
 <li>缩短数据库的恢复时间: 数据库恢复可以使用redo log，但是如果要恢复的数据很多就会很慢。如果使用checkpoint刷新到磁盘，只需要从checkpoint开始恢复就可以了，所以速度会变快。</li>
 <li>缓冲池不够用时，将脏页刷新到磁盘。我们知道缓冲池的大小是由限制的，为了能够高效的使用缓冲池需要把一部分数据刷新到磁盘。</li>
@@ -314,14 +223,13 @@
 <li><code>sharp checkpoint</code>:刷新所有的脏页到磁盘。一般发生在数据库关闭时，为了保证所有的数据能够正常持久化。</li>
 <li><code>fuzzy checkpoint</code>:只刷新部分脏页。运行时使用这种可以保证系统的性能。<h3 id="Master_Thread的工作方式">Master Thread的工作方式</h3></li>
 </ul>
-<p>##关键特性</p>
-<p>###插入缓存<br>这里所说的插入缓存也是Insert Buffer, 区别是这个插入缓存不是缓冲池中的插入缓存,这里的插入缓存和数据页一样，业务物理页的组成部分。在介绍插入缓存之前先了解<a href="http://www.cnblogs.com/lwzz/archive/2012/08/05/2620824.html" target="_blank" rel="external">聚集索引和非聚集索引</a>，他们之间最重要的区别就是:聚集索引的叶子节点存储的是数据，而且是按照物理顺序存储的;非聚集索引叶子节点是地址(也就是聚集索引键地址)，是按照逻辑顺序存储的(以上言论是从网上了解到的，但是本书P194特别指出，聚集索引也不是按照物理地址连续的，而是逻辑上连续的)。<br>知道这个差别后就知道，当不停的插入数据时，如果是聚集索引的数据，按照物理顺序(这个应该是一般情况下，因为是一般聚集索引是主键，顺序递增的，所以这时候地址就是顺序的)连续插入，代价比较小。而如果是非聚集索引的插入则物理地址是离散的，会导致很大的系统开销，所以对于非聚集索引InnoDB开创性设计了Insert Buffer。使用InnoDB的Insert Buffer需要以下两个条件:</p>
+<h2 id="关键特性">关键特性</h2><h3 id="插入缓存">插入缓存</h3><p>这里所说的插入缓存也是Insert Buffer, 区别是这个插入缓存不是缓冲池中的插入缓存,这里的插入缓存和数据页一样，业务物理页的组成部分。在介绍插入缓存之前先了解<a href="http://www.cnblogs.com/lwzz/archive/2012/08/05/2620824.html" target="_blank" rel="external">聚集索引和非聚集索引</a>，他们之间最重要的区别就是:聚集索引的叶子节点存储的是数据，而且是按照物理顺序存储的;非聚集索引叶子节点是地址(也就是聚集索引键地址)，是按照逻辑顺序存储的(以上言论是从网上了解到的，但是本书P194特别指出，聚集索引也不是按照物理地址连续的，而是逻辑上连续的)。<br>知道这个差别后就知道，当不停的插入数据时，如果是聚集索引的数据，按照物理顺序(这个应该是一般情况下，因为是一般聚集索引是主键，顺序递增的，所以这时候地址就是顺序的)连续插入，代价比较小。而如果是非聚集索引的插入则物理地址是离散的，会导致很大的系统开销，所以对于非聚集索引InnoDB开创性设计了Insert Buffer。使用InnoDB的Insert Buffer需要以下两个条件:</p>
 <ul>
 <li>索引是辅助索引(非聚集索引 secondary index);</li>
 <li>索引不是唯一(unique)的。</li>
 </ul>
 <p>Insert Buffer的使用流程是:<br><img src="http://www.plantuml.com/plantuml/svg/LKvB2e906DxFAMPfLz1TkuuHD98G5iwqQ5U14j6Bx06zo22em5wOA5YdyH_r5WtOfc_vlIah6mp9V3m5yyXx2xxs-EAk84t5KhRTfPrLjhOIxm3HF7DUi3abaGtMap_sSU0MCAiI7KijGWi82yY9Y8-EUPk2I8qIBEdrdyXd7q77GJiEBYMT4eFXObDLYG6tC7queb39ZN1TyQN_RvaEqey9_NF-1SO-k9Eqtqsw8Knw4FhS7iRlZTZKAvgAAAitlW00"><br>要求索引不是唯一的是因为如果索引是唯一的，那么每次更新都要坚持是不是已经存在，每次还是要访问数据页，这就失去了使用Insert Buffer的优势。<br>后面还提到了Update buffer以及Merge的过程和Insert Buffer的实现，这里就不再一一说了。</p>
-<p>###两次写<br>上面提到的Insert Buffer是提高了数据库的性能，doublewrite则是提高了数据库的可靠性。一个场景是当一个16k的数据页只写了一部分,比如4k,这时候突然断电，就会导致这个页的数据不全。所以就会导致这个页的数据丢失。我们知道重做日志是用来恢复数据的，但是重做日志记录的是对页的物理操作，如果这个页已经发生了损坏在对其进行重做是没有意义的。</p>
+<h3 id="两次写">两次写</h3><p>上面提到的Insert Buffer是提高了数据库的性能，doublewrite则是提高了数据库的可靠性。一个场景是当一个16k的数据页只写了一部分,比如4k,这时候突然断电，就会导致这个页的数据不全。所以就会导致这个页的数据丢失。我们知道重做日志是用来恢复数据的，但是重做日志记录的是对页的物理操作，如果这个页已经发生了损坏在对其进行重做是没有意义的。</p>
 <blockquote>
 <p>上面这段话，其实我并没有看懂，因为对页操作之前是先写重做日志的，当发生宕机时正在写数据页，证明这时候重做日志已经写完了。这时重做日志的记录的完整的，当用这个记录去恢复数据时，不管页是不是损坏，重做日志直接覆盖不就行了么？为什么不行呢？等到后面我更加深入的了解后再来补充。</p>
 </blockquote>
@@ -330,470 +238,79 @@
 <blockquote>
 <p>这个地方也有一个疑问，当doublewrite写入的过程中发生了崩溃，这时候数据该怎么办呢？</p>
 </blockquote>
-<p>###自适应哈希索引<br>对于缓冲池中的页，为了能够快速的查找，InnoDB跟情况对其建立了一个hash index。这样对于等值查询就能够利用这个索引更加快速的查找，提高了查找的性能。</p>
-<p>###异步IO<br>为了提高磁盘的操作性能，当前的数据库系统都采用异步IO的方式处理磁盘操作。用户可以在发出一个IO请求胡立即再发出另一个IO请求，当全部IO请求发送完毕后，等待所有IO操作完成，这就是AIO。<br>AIO的另一个优势是可以进行IO Merge操作，也就是将多个IO合并为1个IO, 这样可以提高IOPS的性能。</p>
-<p>###刷新临近页<br>Flush Neighbor Page(刷新临近页)是当刷新一个脏页时，InnoDB会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。</p>
+<h3 id="自适应哈希索引">自适应哈希索引</h3><p>对于缓冲池中的页，为了能够快速的查找，InnoDB跟情况对其建立了一个hash index。这样对于等值查询就能够利用这个索引更加快速的查找，提高了查找的性能。</p>
+<h3 id="异步IO">异步IO</h3><p>为了提高磁盘的操作性能，当前的数据库系统都采用异步IO的方式处理磁盘操作。用户可以在发出一个IO请求胡立即再发出另一个IO请求，当全部IO请求发送完毕后，等待所有IO操作完成，这就是AIO。<br>AIO的另一个优势是可以进行IO Merge操作，也就是将多个IO合并为1个IO, 这样可以提高IOPS的性能。</p>
+<h3 id="刷新临近页">刷新临近页</h3><p>Flush Neighbor Page(刷新临近页)是当刷新一个脏页时，InnoDB会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。</p>
 
-      
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
     </div>
+</article>
 
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag">#mysql</a>
-          
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/oohcoder" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/10/09/apache-and-nginx/" rel="next" title="apache与nginx对比">
-                <i class="fa fa-chevron-left"></i> apache与nginx对比
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
     </div>
-  </div>
+</footer>
 
 
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
+    <!-- After footer scripts -->
     
-      <div class="ds-thread" data-thread-key="2015/10/14/InnoDB-Key-Features/"
-           data-title="InnoDB关键特性" data-url="http://oohcode.com/2015/10/14/InnoDB-Key-Features/">
-      </div>
-    
-  </div>
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
+<!-- Disqus Comments -->
 
-      
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/default_avatar.jpg"
-               alt="sean chen" />
-          <p class="site-author-name" itemprop="name">sean chen</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">55</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            
-              <span class="site-state-item-count">19</span>
-              <span class="site-state-item-name">分类</span>
-              
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">22</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-            <p class="site-author-name">Links</p>
-            
-              <span class="links-of-author-item">
-                <a href="http://oohcode.com/" target="_blank">OohCode</a>
-              </span>
-            
-          
-        </div>
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator">
-            <i class="fa fa-angle-double-up"></i>
-          </div>
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Master_Thread的工作方式"><span class="nav-number">1.</span> <span class="nav-text">Master Thread的工作方式</span></a></li></ol></div>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator">
-            <i class="fa fa-angle-double-down"></i>
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2015</span>
-  <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">sean chen</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  
-
-
-  
-
-
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
-
-
-
-  
-  
-
-  
-  
-<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 1 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    NexT.motion.middleWares.sidebar = function () {
-      var $tocContent = $('.post-toc-content');
-
-      if (CONFIG.sidebar === 'post') {
-        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-          NexT.utils.displaySidebar();
-        }
-      }
-    };
-  });
-</script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
-
-
-
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"oohcode"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-  
-
-
-
-
-
-  
-  
-
-  
-  
-
-
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 </body>
+
 </html>

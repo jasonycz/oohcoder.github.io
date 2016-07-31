@@ -1,309 +1,189 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 
-
-
-  
-
-
-<html class="theme-next muse use-motion">
+<!-- Head tag -->
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="本书主要讲的是UML的设计方法及如何把UML运用到实际的工作当中
+
+第一部分：准备篇——需要了解1. 为什么需要UML简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="sean chen">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Think in UML"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="OohCode"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Think in UML - OohCode</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
-
-
-
-
-
-
-<meta name="description" content="本书主要讲的是UML的设计方法及如何把UML运用到实际的工作当中
-
-#第一部分：准备篇——需要了解
-##1. 为什么需要UML
-简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出来的，对象世界的不容易理解等，要想更好的解决这些问题，我们就需要：
-
-一种把现实世界映射到">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Think in UML">
-<meta property="og:url" content="http://oohcode.com/2013/12/30/think-in-uml/index.html">
-<meta property="og:site_name" content="OohCode">
-<meta property="og:description" content="本书主要讲的是UML的设计方法及如何把UML运用到实际的工作当中
-
-#第一部分：准备篇——需要了解
-##1. 为什么需要UML
-简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出来的，对象世界的不容易理解等，要想更好的解决这些问题，我们就需要：
-
-一种把现实世界映射到">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/IogDVzem_-MCrYUxTYdebXResYbe9C74dixUzsJdCask91oAkkOzdz06aNcnlb4J0000">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/IogDVzem_-MCrYUxTYdebXResYbe9C74dixUzsJdCaqkeC3pTGkVJsXxEd46aYAe64GH0000">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/IoejYd--T-AJ7LrF6-Q_dD7wTFQ-9pkNAUZQAMWabSOZYsbo9G7LGjWlbxKHL0u0">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/AyalK2Z9LqZABod9prL8oInAJIx9pC_ZIagEVzem_-MCrYUxTYdOs2Wav-SbfnQKADZPGQMUjkzwEdlVavtBiCZkdVHY_mnSiiyMDpoRlnHY-8lrZPWAdknQydpNPgY2BJlH5PH27GOrNxUqGDTEGGFDKPeALa1zcNd9EQKfgVXr8JcMU5redY2eiIWpFQC4gXVDVn2zgHKbgNafTdO0">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/AyalK2Z9LqZABod9prL8oInAJIx9pC_ZAguiZdywUz-JdSkUDin_EQFroQvT2hgb1Rfs2XhFvYzziNuHH58JdyAdUoUzs3-368LTyvvFQ8C8F-liVhvxBJ7AmQRZLLwKcPvH0jBnPDUIvxislzYoy_cK5JZKvgIcbUZMs2aabSR3HG40">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/AwuiZdywUz-JdSkUhrluV4BRquap57IBCjCpIdJj53IUBMvuDdyfH5wJgnYlskSpTxzOj-5fm_oNCrf1ZBrJSUZ8IKqhqQsnKqWgZOUB0W00">
-<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Think in UML">
-<meta name="twitter:description" content="本书主要讲的是UML的设计方法及如何把UML运用到实际的工作当中
-
-#第一部分：准备篇——需要了解
-##1. 为什么需要UML
-简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出来的，对象世界的不容易理解等，要想更好的解决这些问题，我们就需要：
-
-一种把现实世界映射到">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Muse',
-    sidebar: '[object Object]',
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> Think in UML | OohCode </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  
+<body>
 
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">OohCode</a>
+        </div>
 
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">OohCode</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">好奇的码农~</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-      
-      
-    </ul>
-  
-
-  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/oohcoder">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
 </nav>
 
- </div>
-    </header>
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Think in UML
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2013-12-30T00:00:00+08:00" content="2013-12-30">
-              2013-12-30
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/UML/" itemprop="url" rel="index">
-                    <span itemprop="name">UML</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/12/30/think-in-uml/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/30/think-in-uml/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
+<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Think in UML</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        2013-12-30
+                    </span>
+                </div>
+            </div>
         </div>
-      </header>
-    
+    </div>
+</header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-    <div class="post-body" itemprop="articleBody">
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
 
-      
-      
+<a href="/categories/UML/">UML</a>
 
-      
-        <blockquote>
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <blockquote>
 <p><em>本书主要讲的是UML的设计方法及如何把UML运用到实际的工作当中</em></p>
 </blockquote>
-<p>#第一部分：准备篇——需要了解</p>
-<p>##1. 为什么需要UML</p>
-<p>简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出来的，对象世界的不容易理解等，要想更好的解决这些问题，我们就需要：</p>
+<h1 id="第一部分：准备篇——需要了解">第一部分：准备篇——需要了解</h1><h2 id="1-_为什么需要UML">1. 为什么需要UML</h2><p>简单来说随着业务越来越复杂面向过程的方法已经不能满足对这种业务的分析需求了，需要使用新的方法，也就是面向对象的分析方法对业务进行分析，但是面向对象也存在一下问题，比如对象是如何抽象出来的，对象世界的不容易理解等，要想更好的解决这些问题，我们就需要：</p>
 <ul>
 <li>一种把现实世界映射到对象世界的方法。</li>
 <li>一种从对象世界描述现实世界的方法。</li>
 <li>一种验证对象世界行为是否正确反映了现实世界的方法。</li>
 </ul>
 <p>而UML背后所代表的面向对象设计方法正式针对这些问题提出的。下面将详细介绍UML是如何解决这些问题的。</p>
-<p>###UML带来了什么</p>
-<p>面向对象分析（OOA）方法中，其中最重要的就是UML的前身，后来发展成为UML这种统一建模语言，这种统一建模语言是为了让人们能够无障碍的交流，并且让人和机器都能够读懂，而且UML是可视化的，使用图形更能够形象的说明问题。为了便于建模，UML提供了一些元素来为现实世界建模：  </p>
+<h3 id="UML带来了什么">UML带来了什么</h3><p>面向对象分析（OOA）方法中，其中最重要的就是UML的前身，后来发展成为UML这种统一建模语言，这种统一建模语言是为了让人们能够无障碍的交流，并且让人和机器都能够读懂，而且UML是可视化的，使用图形更能够形象的说明问题。为了便于建模，UML提供了一些元素来为现实世界建模：  </p>
 <ul>
 <li><strong>actor 参与者</strong>:信息来源的提供者，同时也是第一驱动者。</li>
 <li><strong>use case用例</strong>:表示驱动者的业务目标。</li>
@@ -315,39 +195,33 @@
 <li><strong>控制类(control)</strong>:边界和实体都是静态的，UML采用控制类来表述原始需求中的动态信息，即业务或用例场景中的步骤和活动。</li>
 </ul>
 <p>通过从<strong>现实世界</strong> -&gt; <strong>业务模型</strong> -&gt; <strong>概念模型</strong> -&gt; <strong>设计模型</strong>的过程便可以解决上一节提到的三个问题了。</p>
-<p>###统一过程简介</p>
-<p>RUP是统一过程，统一过程是在很多实践中总结出来的软件工程的最佳实践。RUP是一个理论的指导，UML则是具体的语言实现。</p>
-<p>##2. 建模基础</p>
-<p>###建模</p>
-<p><strong>建模(Modeling)</strong>:是指通过对客观事物建立一种抽象的方法用以表征事物并获得对事物本身的理解，同时把这种理解概念化，将这些逻辑概念组织起来，构成一种对所观察的对象的内部结构和工作原理的便于理解的表达。<br>建模需要关注的两点是：这么建立？模是什么？<br>做需求的时候，首先目标不是弄清楚业务是如何一步一步完成的，而是要弄清楚有多少个业务的参与者，每个参与者的目标是什么，参与者的目标就是你的抽象角度。实际上，这就是用例。<br>业务建模是什么，这个问题可以参考下面的几个公式来理解：  </p>
+<h3 id="统一过程简介">统一过程简介</h3><p>RUP是统一过程，统一过程是在很多实践中总结出来的软件工程的最佳实践。RUP是一个理论的指导，UML则是具体的语言实现。</p>
+<h2 id="2-_建模基础">2. 建模基础</h2><h3 id="建模">建模</h3><p><strong>建模(Modeling)</strong>:是指通过对客观事物建立一种抽象的方法用以表征事物并获得对事物本身的理解，同时把这种理解概念化，将这些逻辑概念组织起来，构成一种对所观察的对象的内部结构和工作原理的便于理解的表达。<br>建模需要关注的两点是：这么建立？模是什么？<br>做需求的时候，首先目标不是弄清楚业务是如何一步一步完成的，而是要弄清楚有多少个业务的参与者，每个参与者的目标是什么，参与者的目标就是你的抽象角度。实际上，这就是用例。<br>业务建模是什么，这个问题可以参考下面的几个公式来理解：  </p>
 <ul>
 <li>\(问题领域＝ \sum_{1}^{n} 抽象问题 \)</li>
 <li>抽象角度 ＝ 问题领域边界之外的参与者的业务目标 ＝ 业务用例</li>
 <li>\(业务用例＝ \sum_{1}^{n} 特定场景\)</li>
 <li>特定场景 ＝ 静态的事物 ＋ 特定的条件 ＋ 特定的动作  或者<br>特定的事 ＝ 特定的事物 ＋ 特定的规则 ＋ 特定的人的行为</li>
 </ul>
-<p>###用例驱动<br>用例驱动是统一过程的重要概念，或者说整个软件的生产过程就是用例驱动的。如果我们找到的事物、规则和行为实现了所有必要的用例，那么问题领域就被解决了。统一过程中一个用例就是一个分析单元、设计单元、测试单元甚至部署单元。用例可以驱动的内容包括：</p>
+<h3 id="用例驱动">用例驱动</h3><p>用例驱动是统一过程的重要概念，或者说整个软件的生产过程就是用例驱动的。如果我们找到的事物、规则和行为实现了所有必要的用例，那么问题领域就被解决了。统一过程中一个用例就是一个分析单元、设计单元、测试单元甚至部署单元。用例可以驱动的内容包括：</p>
 <ul>
 <li>逻辑视图: 一个系统只有一个，它以图形的方式说明关键的用例实现、子系统、包和类。即建模公式中的那些“人”、“事”、“物”、“规则”是如何分类组织的。</li>
 <li>进程视图: 一个系统只有一个，它以图形方式说明系统中进程的详细组织结构，其中包括类和子系统到进程和线程的映射。即建模公式中的那些“人”、“事”、“物”、“规则”是如何交互的，它们的关系如何。</li>
 <li>部署视图: 一个系统只有一个，它以图形的方式说明了处理活动在系统中各节点的分布，包括进程和线程的物理分布。即建模公式中的那些是如何部署在物理节点（主机、网络环境）上的。</li>
 <li>实施视图: 获取为实施指定的架构决策，即建模公式中那些是如何构系统的“零部件”，以及我们如何组织人力生产和组装这些“零部件”以建成最终系统。</li>
 </ul>
-<p>###抽象层次</p>
-<p>抽象层次是面向对象方法中极其重要，但是又非常难以掌握的技巧。抽象层次越高，具体信息越少，越容易理解，反之亦然。抽象的方法有两种：</p>
+<h3 id="抽象层次">抽象层次</h3><p>抽象层次是面向对象方法中极其重要，但是又非常难以掌握的技巧。抽象层次越高，具体信息越少，越容易理解，反之亦然。抽象的方法有两种：</p>
 <ul>
 <li>自顶向下： 适用于让人们从头开始认识一个事物。</li>
 <li>自底向上： 适用于在实践中改进和提高认识。</li>
 </ul>
 <p>软件开发中应该主体上采用自顶向下的方法，同时应当辅以自底向上的方法，通过总结在较低抽象层次的实践经验来改进较高层次的概念一提升软件质量。</p>
-<p>###视图</p>
-<p>视图用于组织UML元素，表达出模型某一方面的含义。如何选择视图才是重点。视图另一个被人忽视重要概念是：视角。就是人们观察事物的角度。一方面，从信息的展示角度来说，恰当的视角可以让观察者更容易抓住信息的本质；另一方面，从观察者角度说，观察者只会关心信息中他感兴趣的那一部分视角。于是用很多个不同的视图去展示软件这些不同的方面——静态的、动态的、结构性的、逻辑性的等——才能够说建立了一个完整的模型。为了说明这些方面,UML定义了用例图、对象图、类图、包图、活动图等不同的视图。所以在实际工作过程中需要考虑的问题就是：</p>
+<h3 id="视图">视图</h3><p>视图用于组织UML元素，表达出模型某一方面的含义。如何选择视图才是重点。视图另一个被人忽视重要概念是：视角。就是人们观察事物的角度。一方面，从信息的展示角度来说，恰当的视角可以让观察者更容易抓住信息的本质；另一方面，从观察者角度说，观察者只会关心信息中他感兴趣的那一部分视角。于是用很多个不同的视图去展示软件这些不同的方面——静态的、动态的、结构性的、逻辑性的等——才能够说建立了一个完整的模型。为了说明这些方面,UML定义了用例图、对象图、类图、包图、活动图等不同的视图。所以在实际工作过程中需要考虑的问题就是：</p>
 <ul>
 <li>应该为哪些软件信息绘制哪些视图？</li>
 <li>应给给哪些干系人展示哪些视角？</li>
 </ul>
-<p>###对象分析方法</p>
-<p>使用好UML的前提条件就是掌握了面向对象的思想和方法：</p>
+<h3 id="对象分析方法">对象分析方法</h3><p>使用好UML的前提条件就是掌握了面向对象的思想和方法：</p>
 <ul>
 <li>一切都是对象</li>
 <li>对象都是独立的</li>
@@ -356,9 +230,7 @@
 <li>对象都有层次性</li>
 <li>对象分析方法总结</li>
 </ul>
-<p>#第二部分：基础篇——在学习中思考</p>
-<p>##3. UML核心元素</p>
-<ul>
+<h1 id="第二部分：基础篇——在学习中思考">第二部分：基础篇——在学习中思考</h1><h2 id="3-_UML核心元素">3. UML核心元素</h2><ul>
 <li>版型(stereotype):是对UML元素基础定义的一个扩展，在同一元素基础定义的基础上赋予特别的含义，使得这个元素适用于特定的场合。</li>
 <li><p>参与者(actor):是系统之外与系统交互的某人或某事物。系统与参与者之间有一个明确的边界。如何确定系统之外和系统之内呢？主要通过下面两个问题来判断：</p>
 <ul>
@@ -395,9 +267,8 @@
 <li>包:将某些信息分类，形成逻辑单元。包的目标是高內聚、低耦合。包的版型有：领域包、子系统、组织结构、层等。</li>
 <li>分析类：用于获取系统中主要的“职责簇”。两个主要的性质：<br>  － 分析类代表系统中主要的法“职责簇”，这意味着分析类是从功能性需求向计算机实现转化过程中的“第一个关口”<br>  － 分析累可以产生系统的设计类和子系统，这意味着计算机实现是可以通过某种途径“产生”出来的 ，而不是拍脑袋拍出来的。<br>  分析类有三个版型：边界类、控制类和实体类。</li>
 </ul>
-<p>##4. UML核心视图</p>
-<p>###静态视图<br>  只描述事物的静态结构，而不描述其动态行为。</p>
-<p>####用例图<br>采用参与者和用例作为基本元素,用不同的视角展现系统的功能性需求。用例图是系统蓝图和开发的依据。主要包括：</p>
+<h2 id="4-_UML核心视图">4. UML核心视图</h2><h3 id="静态视图">静态视图</h3><p>  只描述事物的静态结构，而不描述其动态行为。</p>
+<h4 id="用例图">用例图</h4><p>采用参与者和用例作为基本元素,用不同的视角展现系统的功能性需求。用例图是系统蓝图和开发的依据。主要包括：</p>
 <ul>
 <li><p>业务用例视图: 从不同的角度来对业务用例视图进行不同的划分，来保证业务目标是否齐全，业务主角和用例是否齐全等。<br>业务主角视角：  </p>
 <img src="http://www.plantuml.com/plantuml/svg/IogDVzem_-MCrYUxTYdebXResYbe9C74dixUzsJdCask91oAkkOzdz06aNcnlb4J0000">
@@ -419,16 +290,15 @@
 <li><p>系统用例实现视图<br>与业务用例实现视图类似，如果一个系统用例有多种实现方式，也应当为其绘制实现视图。</p>
 </li>
 </ul>
-<p>####类图<br>是现实世界问题领域的抽象对象的结构化、概念化、逻辑化描述。</p>
+<h4 id="类图">类图</h4><p>是现实世界问题领域的抽象对象的结构化、概念化、逻辑化描述。</p>
 <ul>
 <li>概念层类图：概念层的观点认为，在这个层次的类图描述的是现实世界中问题领域的概念理解，即类图中表达的类与现实世界的问题领域有着明显的对应关系，类之间的关系也与问题领域中实际事物的关系有着明显的对应关系。说的通俗一点就是概念层类图与现实世界中的事物一一对应，类与类之间的关系也与现实世界中的事物之间的关系一一对应。</li>
 <li>说明层类图：说明层的观点认为，在这个层次的类图考察的是类的接口而不是实现，类图中表达的类和类之间的关系应当是对问题领域在接口层次抽象的描述。</li>
 <li>实现层类图：实现层观点认为，类是实现代码的描述，类图中的类直接映射到可执行代码。这个阶段必须明确用哪种语言，什么设计模式，什么通信标准，遵循什么规范等。</li>
 </ul>
-<p>####包图<br>一般用来展示高层次的观点，把繁多的元素通过包这个容器从大到小、从粗到细地建立关系。</p>
-<p>###动态视图<br>动态视图是描述视图动态行为的。</p>
-<p>####活动图</p>
-<ul>
+<h4 id="包图">包图</h4><p>一般用来展示高层次的观点，把繁多的元素通过包这个容器从大到小、从粗到细地建立关系。</p>
+<h3 id="动态视图">动态视图</h3><p>动态视图是描述视图动态行为的。</p>
+<h4 id="活动图">活动图</h4><ul>
 <li><p>用例活动图：活动图用来描述用例场景，也就是通常所说的业务流程，活动图有几个关键的元素：</p>
 <ul>
 <li>起始点：标记业务流程的开始，一个业务流程有且仅有一个起始点。</li>
@@ -446,472 +316,78 @@
 </li>
 <li>泳道图</li>
 <li>业务场景建模</li>
-<li>用例场景建模<br>####状态图<br>####时序图<br>####协作图</li>
+<li>用例场景建模<h4 id="状态图">状态图</h4><h4 id="时序图">时序图</h4><h4 id="协作图">协作图</h4></li>
 </ul>
-<p>##5. UML核心模型</p>
-<p>##6. 统一过程核心工作简介</p>
-<p>##7. 迭代式软件生命周期</p>
-<p>#第三部分：进阶篇——在实践中思考 </p>
-<p>#第四部分：高级篇——在提炼中思考</p>
+<h2 id="5-_UML核心模型">5. UML核心模型</h2><h2 id="6-_统一过程核心工作简介">6. 统一过程核心工作简介</h2><h2 id="7-_迭代式软件生命周期">7. 迭代式软件生命周期</h2><h1 id="第三部分：进阶篇——在实践中思考">第三部分：进阶篇——在实践中思考</h1><h1 id="第四部分：高级篇——在提炼中思考">第四部分：高级篇——在提炼中思考</h1>
 
-      
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
     </div>
+</article>
 
-    <footer class="post-footer">
-      
+    <!-- Footer -->
+    <hr />
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2013/12/30/jekyll-and-plugin-plantuml/" rel="next" title="jekyll添加plantuml模块">
-                <i class="fa fa-chevron-left"></i> jekyll添加plantuml模块
-              </a>
-            
-          </div>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
 
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/01/10/add-dot-language/" rel="prev" title="Jekyll 添加DOT language支持">
-                Jekyll 添加DOT language支持 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/oohcoder" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
         </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
     </div>
-  </div>
+</footer>
 
 
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
+    <!-- After footer scripts -->
     
-      <div class="ds-thread" data-thread-key="2013/12/30/think-in-uml/"
-           data-title="Think in UML" data-url="http://oohcode.com/2013/12/30/think-in-uml/">
-      </div>
-    
-  </div>
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
+<!-- Disqus Comments -->
 
-      
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/default_avatar.jpg"
-               alt="sean chen" />
-          <p class="site-author-name" itemprop="name">sean chen</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">55</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            
-              <span class="site-state-item-count">19</span>
-              <span class="site-state-item-name">分类</span>
-              
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">22</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-            <p class="site-author-name">Links</p>
-            
-              <span class="links-of-author-item">
-                <a href="http://oohcode.com/" target="_blank">OohCode</a>
-              </span>
-            
-          
-        </div>
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator">
-            <i class="fa fa-angle-double-up"></i>
-          </div>
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator">
-            <i class="fa fa-angle-double-down"></i>
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2015</span>
-  <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">sean chen</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  
-
-
-  
-
-
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
-
-
-
-  
-  
-
-  
-  
-<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 1 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    NexT.motion.middleWares.sidebar = function () {
-      var $tocContent = $('.post-toc-content');
-
-      if (CONFIG.sidebar === 'post') {
-        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-          NexT.utils.displaySidebar();
-        }
-      }
-    };
-  });
-</script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
-
-
-
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"oohcode"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-  
-
-
-
-
-
-  
-  
-
-  
-  
-
-
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 </body>
+
 </html>

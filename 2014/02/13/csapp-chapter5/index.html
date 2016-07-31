@@ -1,288 +1,190 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 
-
-
-  
-
-
-<html class="theme-next muse use-motion">
+<!-- Head tag -->
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="《深入理解计算机操作系统》英文名Computer Systems A programmer&#39;s Perspective的读书笔记">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="sean chen">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="csapp chapter5:优化程序性能"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="《深入理解计算机操作系统》英文名Computer Systems A programmer&#39;s Perspective的读书笔记" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="OohCode"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>csapp chapter5:优化程序性能 - OohCode</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
-
-
-
-
-
-
-<meta name="description" content="《深入理解计算机操作系统》英文名Computer Systems A programmer&apos;s Perspective的读书笔记">
-<meta property="og:type" content="article">
-<meta property="og:title" content="csapp chapter5:优化程序性能">
-<meta property="og:url" content="http://oohcode.com/2014/02/13/csapp-chapter5/index.html">
-<meta property="og:site_name" content="OohCode">
-<meta property="og:description" content="《深入理解计算机操作系统》英文名Computer Systems A programmer&apos;s Perspective的读书笔记">
-<meta property="og:image" content="http://oohcode.com/assets/img/csapp/fig5.13.png">
-<meta property="og:image" content="http://oohcode.com/assets/img/csapp/fig5.14.png">
-<meta property="og:image" content="http://oohcode.com/assets/img/csapp/fig5.20.png">
-<meta property="og:image" content="http://oohcode.com/assets/img/csapp/fig5.24.png">
-<meta property="og:image" content="http://oohcode.com/assets/img/csapp/fig5.29.png">
-<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="csapp chapter5:优化程序性能">
-<meta name="twitter:description" content="《深入理解计算机操作系统》英文名Computer Systems A programmer&apos;s Perspective的读书笔记">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Muse',
-    sidebar: '[object Object]',
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> csapp chapter5:优化程序性能 | OohCode </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  
+<body>
 
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">OohCode</a>
+        </div>
 
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">OohCode</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">好奇的码农~</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-      
-      
-    </ul>
-  
-
-  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/oohcoder">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
 </nav>
 
- </div>
-    </header>
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                csapp chapter5:优化程序性能
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-02-13T00:00:00+08:00" content="2014-02-13">
-              2014-02-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CSAPP/" itemprop="url" rel="index">
-                    <span itemprop="name">CSAPP</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/02/13/csapp-chapter5/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/02/13/csapp-chapter5/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
+<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>csapp chapter5:优化程序性能</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        2014-02-13
+                    </span>
+                </div>
+            </div>
         </div>
-      </header>
-    
+    </div>
+</header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-    <div class="post-body" itemprop="articleBody">
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
 
-      
-      
+<a href="/categories/CSAPP/">CSAPP</a>
 
-      
-        <blockquote>
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <blockquote>
 <p>编写高效程序需要几类活动：第一，我们必须选择一组合适的算法和数据结构。第二，我们必须编写出编译器能够优化以转化成高效可执行代码的源代码。本章重点讲的是第二个活动，利用我们对编译器的了解来写出让编译器编译出更高效的机器码的方法。</p>
 </blockquote>
-<p>##优化编译器的能力和局限性<br>程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。主要包括消除<strong>不必要</strong>的<em>函数调用</em>，<em>条件测试</em>和<em>存储器引用</em>。<br>编译器本身通过复杂精细算法对程序编译时进行了优化。编译器的优化有不同的级别，也是高程度的优化程序的执行效率就越高，但同时也可能增加程序的规模，也可能使标准的调试工具更难对程序进行调试。<br>编译器必须很小心的对程序只是用<em>安全</em>的优化，也就是说对于程序可能遇到的所有可能情况，在C语言标准提供的保证之下，优化后得到的程序和未优化的版本有一样的行为。<br>通过一个例子来理解决定一种程序转换是否安全的难度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += *yp;&#10;    *xp += *yp;&#10;&#125;&#10;&#10;void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += 2* *yp;&#10;&#125;</span><br></pre></td></tr></table></figure><br>这两个过程似乎有相同的行为。而且twiddle2的效率更高一些，因为twiddle1需要6次存储器引用，而twiddle2只需要三次存储器引用。但是当xp与yp的值相同时，twiddle1中*xp的值时原来的4倍，twiddle2却是3倍。编译器并不知道它们会不会指向同一地址，所以不能进行从twiddle1到twiddle2的优化。<br>这种两个指针可能指向同一存储器位置的情况称为<em>存储器别名使用(memory aliasing)</em>。编译器对这种情况的优化能力是有限的，所以需要写程序的过程中进行优化。  </p>
-<p>##表示程序性能<br>引入度量标准<em>每元素的周期数(Cycles Per Element, CPE)</em>,作为一种表示程序性能并指导我们改进代码的方法。<br>处理器活动的顺序是由时钟控制的，时钟提供了某个频率的规律信号，通常用<em>千兆赫兹(GHz)</em>。就是我们常说的CPU的运行频率。时钟周期就是时钟频率的倒数。</p>
-<p>##程序示例<br>举例说明程序优化的效果,这里写出最后的运行函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine1(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    *dest = IDENT;&#10;    for (i=0; i &#60; vec_length(v); i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>看一下优化钱和优化后的效果，就可以看到，CPE从平均29左右降到了12左右，效果的确很明显啊。</p>
-<p>##消除循环的低效率<br>上面过程在执行for循环的时候调用vec_length函数左右循环测试的条件，也就是说每次执行条件测试的时候都要执行这个函数调用过程，这明显地影响了程序的性能。注意到向量的长度并不会随程序运行发生改变，所以可以考虑只计算一次向量的长度，然后条件测试都用这个值，如下函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine2(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>再看修改后的程序，CPE降到了8左右。<br>这个优化是一种常见的优化例子，称为<em>代码移动(code motion)</em>。这类优化包括识别要执行多次但是计算结果不会改变的计算。编译器会试着进行代码移动，但是对于会改变在哪里调用函数或调用多少次的变换，编译器通常都会非常小心。如果vec_length有某种副作用，那么combine1和combine2可能有不同的行为。为了改进代码，程序员必须经常帮助编译器显式地完成代码的移动。</p>
-<p>##减少过程调用<br>过程调用会带来相当大的开销，而且妨碍大多数形式的程序优化。<br>上面的combine2中，每次循环迭代都会调用get_vec_element来获取下一个向量元素，很明显会照成低效率。对其进行优化的思路就是减少过程的调用，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_t *get_vec_start(vec_ptr v)&#10;&#123;&#10;    return v-&#62;data;&#10;&#125;&#10;&#10;void combine3(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        *dest = *dest OP data[i];&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure><br>得到的代码运行速度开得多，这是以损害一些程序的模块性为代价的。<br>实际情况是，得到的性能提高出乎意料的普通，这是因为5.11讲到的分支预测策略会预计函数的返回值，预测对的情况下直接执行，预测错误的话会有更多的处罚，如果分支预测策略比较好的话，预测正确的概率就高，所以带来的性能问题就越小。</p>
-<p>##消除不必要的存储器引用<br>combine3过程中for循环对应的汇编代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L498:&#10;    movss   (%rbp), %xmm0           #&#20174;dest&#35835;&#21462;&#25968;&#25454;&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    movss   %xmm0, (%rbp)           #&#23384;&#20648;&#32467;&#26524;&#21040;dest&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %r12              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L498                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>上面的代码不断从(%rbp)处读取和操作数据，其实可以去掉这个中间寄存器以消除不必要的读写。可以直接利用%xmm0来保存积值。向下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L488:&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %rbp              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L488                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>对应C代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine4(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;    data_t acc = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        acc  = acc OP data[i];&#10;    &#125;&#10;&#10;    *dest = acc;&#10;&#125;</span><br></pre></td></tr></table></figure><br>编译器不会做出这样的优化还是因为前面提到的<em>存储器别名使用</em>带来的问题。例如：  </p>
+<h2 id="优化编译器的能力和局限性">优化编译器的能力和局限性</h2><p>程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。主要包括消除<strong>不必要</strong>的<em>函数调用</em>，<em>条件测试</em>和<em>存储器引用</em>。<br>编译器本身通过复杂精细算法对程序编译时进行了优化。编译器的优化有不同的级别，也是高程度的优化程序的执行效率就越高，但同时也可能增加程序的规模，也可能使标准的调试工具更难对程序进行调试。<br>编译器必须很小心的对程序只是用<em>安全</em>的优化，也就是说对于程序可能遇到的所有可能情况，在C语言标准提供的保证之下，优化后得到的程序和未优化的版本有一样的行为。<br>通过一个例子来理解决定一种程序转换是否安全的难度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += *yp;&#10;    *xp += *yp;&#10;&#125;&#10;&#10;void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += 2* *yp;&#10;&#125;</span><br></pre></td></tr></table></figure><br>这两个过程似乎有相同的行为。而且twiddle2的效率更高一些，因为twiddle1需要6次存储器引用，而twiddle2只需要三次存储器引用。但是当xp与yp的值相同时，twiddle1中*xp的值时原来的4倍，twiddle2却是3倍。编译器并不知道它们会不会指向同一地址，所以不能进行从twiddle1到twiddle2的优化。<br>这种两个指针可能指向同一存储器位置的情况称为<em>存储器别名使用(memory aliasing)</em>。编译器对这种情况的优化能力是有限的，所以需要写程序的过程中进行优化。  </p>
+<h2 id="表示程序性能">表示程序性能</h2><p>引入度量标准<em>每元素的周期数(Cycles Per Element, CPE)</em>,作为一种表示程序性能并指导我们改进代码的方法。<br>处理器活动的顺序是由时钟控制的，时钟提供了某个频率的规律信号，通常用<em>千兆赫兹(GHz)</em>。就是我们常说的CPU的运行频率。时钟周期就是时钟频率的倒数。</p>
+<h2 id="程序示例">程序示例</h2><p>举例说明程序优化的效果,这里写出最后的运行函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine1(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    *dest = IDENT;&#10;    for (i=0; i &#60; vec_length(v); i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>看一下优化钱和优化后的效果，就可以看到，CPE从平均29左右降到了12左右，效果的确很明显啊。</p>
+<h2 id="消除循环的低效率">消除循环的低效率</h2><p>上面过程在执行for循环的时候调用vec_length函数左右循环测试的条件，也就是说每次执行条件测试的时候都要执行这个函数调用过程，这明显地影响了程序的性能。注意到向量的长度并不会随程序运行发生改变，所以可以考虑只计算一次向量的长度，然后条件测试都用这个值，如下函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine2(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>再看修改后的程序，CPE降到了8左右。<br>这个优化是一种常见的优化例子，称为<em>代码移动(code motion)</em>。这类优化包括识别要执行多次但是计算结果不会改变的计算。编译器会试着进行代码移动，但是对于会改变在哪里调用函数或调用多少次的变换，编译器通常都会非常小心。如果vec_length有某种副作用，那么combine1和combine2可能有不同的行为。为了改进代码，程序员必须经常帮助编译器显式地完成代码的移动。</p>
+<h2 id="减少过程调用">减少过程调用</h2><p>过程调用会带来相当大的开销，而且妨碍大多数形式的程序优化。<br>上面的combine2中，每次循环迭代都会调用get_vec_element来获取下一个向量元素，很明显会照成低效率。对其进行优化的思路就是减少过程的调用，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_t *get_vec_start(vec_ptr v)&#10;&#123;&#10;    return v-&#62;data;&#10;&#125;&#10;&#10;void combine3(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        *dest = *dest OP data[i];&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure><br>得到的代码运行速度开得多，这是以损害一些程序的模块性为代价的。<br>实际情况是，得到的性能提高出乎意料的普通，这是因为5.11讲到的分支预测策略会预计函数的返回值，预测对的情况下直接执行，预测错误的话会有更多的处罚，如果分支预测策略比较好的话，预测正确的概率就高，所以带来的性能问题就越小。</p>
+<h2 id="消除不必要的存储器引用">消除不必要的存储器引用</h2><p>combine3过程中for循环对应的汇编代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L498:&#10;    movss   (%rbp), %xmm0           #&#20174;dest&#35835;&#21462;&#25968;&#25454;&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    movss   %xmm0, (%rbp)           #&#23384;&#20648;&#32467;&#26524;&#21040;dest&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %r12              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L498                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>上面的代码不断从(%rbp)处读取和操作数据，其实可以去掉这个中间寄存器以消除不必要的读写。可以直接利用%xmm0来保存积值。向下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L488:&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %rbp              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L488                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>对应C代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine4(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;    data_t acc = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        acc  = acc OP data[i];&#10;    &#125;&#10;&#10;    *dest = acc;&#10;&#125;</span><br></pre></td></tr></table></figure><br>编译器不会做出这样的优化还是因为前面提到的<em>存储器别名使用</em>带来的问题。例如：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v)+2);&#10;combine4(v, get_vec_start(v)+2);</span><br></pre></td></tr></table></figure>
 <p>执行这两个函数的时候结果就会出现不一致性。</p>
-<p>##理解现代处理器<br>上面所说的都是从程序的调用角度考虑的，主要是减少不必要的指令执行，但是并没有运用目标机器的任何特性。随着试图进一步提高性能，我们必须考虑利用处理器<em>微体系结构</em>的变化，也就是处理器用来执行指令的底层系统设计。在实际的处理器中，是可以同时对多条指令求值的，这个现象称为<em>指令级并行</em>。现代处理器取得了不起的功绩之一就是：它们采用复杂而奇异的微处理器结构，其中，多条指令可以并行地执行，同时又呈现一种简单地顺序执行的表象。<br>程序的最大性能在处理器中主要受到下面两个重要因素的影响：</p>
+<h2 id="理解现代处理器">理解现代处理器</h2><p>上面所说的都是从程序的调用角度考虑的，主要是减少不必要的指令执行，但是并没有运用目标机器的任何特性。随着试图进一步提高性能，我们必须考虑利用处理器<em>微体系结构</em>的变化，也就是处理器用来执行指令的底层系统设计。在实际的处理器中，是可以同时对多条指令求值的，这个现象称为<em>指令级并行</em>。现代处理器取得了不起的功绩之一就是：它们采用复杂而奇异的微处理器结构，其中，多条指令可以并行地执行，同时又呈现一种简单地顺序执行的表象。<br>程序的最大性能在处理器中主要受到下面两个重要因素的影响：</p>
 <ul>
 <li>当一系列操作必须严格顺序执行时，就会遇到<em>延迟界限(latency bound)</em>。因为在下一条指令开始之前，这条指令必须结束。</li>
 <li><em>吞吐量界限(throughput bound)</em>刻画了处理器功能但愿的原始计算能力。这个界限是程序性能的终极限制。</li>
@@ -306,14 +208,13 @@
 <p>这段代码跟例子2很像，只不过改变了运算结合的顺序，程序的性能却得到了很大的提高，这是为什么呢？可以看到这个程序在计算机中计算的过程如下：<br><img src="/assets/img/csapp/fig5.29.png" alt=""><br>可以看到每个周期也是两个mul操作，为什么会快呢？这是因为第一个mul操作并不依赖寄存器的值，也就是说其实对于data数组之间的运算可以通过流水线并行计算，制约性能的只是acc所在的寄存器的计算，所以性能主要因素还是一个mul的操作。<br>从上面可以看到利用多个寄存器可以提高性能，那是不是利用的越多越好呢？答案是：NO.因为计算机的寄存器个数是有限的，如果需要的寄存器的个超过了寄存器的个数，那就只能把这些值放入到栈中，这样就会急剧降低程序的性能。</p>
 </li>
 </ul>
-<p>##一些限制因素<br>影响程序性能的限制因素有下面几个：</p>
+<h2 id="一些限制因素">一些限制因素</h2><p>影响程序性能的限制因素有下面几个：</p>
 <ul>
 <li>寄存器溢出：就是上面最后一段介绍的寄存器不够用时的情况。</li>
 <li>分支预测和预测错误处罚：这回提高程序的代价。</li>
 <li>其它：如加载的性能，存储的性能等。</li>
 </ul>
-<p>##提高性能的技术</p>
-<ol>
+<h2 id="提高性能的技术">提高性能的技术</h2><ol>
 <li>高级设计: 为遇到的问题选择适当的算法和数据结构。</li>
 <li>基本编码原则:<ul>
 <li>消除连续的函数调用</li>
@@ -329,433 +230,73 @@
 </ol>
 <p>(本章完 2014-05-17 22:57:27)</p>
 
-      
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
     </div>
+</article>
 
-    <footer class="post-footer">
-      
+    <!-- Footer -->
+    <hr />
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2014/02/11/csapp-chapter4/" rel="next" title="csapp chapter4:处理器体系结构">
-                <i class="fa fa-chevron-left"></i> csapp chapter4:处理器体系结构
-              </a>
-            
-          </div>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
 
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/03/22/linux-shell-programe1/" rel="prev" title="linux shell 编程之语法学习">
-                linux shell 编程之语法学习 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/oohcoder" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
         </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
     </div>
-  </div>
+</footer>
 
 
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
+    <!-- After footer scripts -->
     
-      <div class="ds-thread" data-thread-key="2014/02/13/csapp-chapter5/"
-           data-title="csapp chapter5:优化程序性能" data-url="http://oohcode.com/2014/02/13/csapp-chapter5/">
-      </div>
-    
-  </div>
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
+<!-- Disqus Comments -->
 
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/default_avatar.jpg"
-               alt="sean chen" />
-          <p class="site-author-name" itemprop="name">sean chen</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">55</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            
-              <span class="site-state-item-count">19</span>
-              <span class="site-state-item-name">分类</span>
-              
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">22</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-            <p class="site-author-name">Links</p>
-            
-              <span class="links-of-author-item">
-                <a href="http://oohcode.com/" target="_blank">OohCode</a>
-              </span>
-            
-          
-        </div>
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator">
-            <i class="fa fa-angle-double-up"></i>
-          </div>
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator">
-            <i class="fa fa-angle-double-down"></i>
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2015</span>
-  <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">sean chen</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  
-
-
-  
-
-
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
-
-
-
-  
-  
-
-  
-  
-<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 1 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    NexT.motion.middleWares.sidebar = function () {
-      var $tocContent = $('.post-toc-content');
-
-      if (CONFIG.sidebar === 'post') {
-        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-          NexT.utils.displaySidebar();
-        }
-      }
-    };
-  });
-</script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
-
-
-
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"oohcode"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-  
-
-
-
-
-
-  
-  
-
-  
-  
 
 
 <!-- mathjax config similar to math.stackexchange -->
@@ -789,4 +330,5 @@
 <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </body>
+
 </html>

@@ -1,272 +1,186 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 
-
-
-  
-
-
-<html class="theme-next muse use-motion">
+<!-- Head tag -->
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="linux shell 基本语法学习">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="sean chen">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="linux shell 编程之语法学习"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="linux shell 基本语法学习" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="OohCode"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>linux shell 编程之语法学习 - OohCode</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="shell," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
-
-
-
-
-
-
-<meta name="description" content="linux shell 基本语法学习">
-<meta property="og:type" content="article">
-<meta property="og:title" content="linux shell 编程之语法学习">
-<meta property="og:url" content="http://oohcode.com/2014/03/22/linux-shell-programe1/index.html">
-<meta property="og:site_name" content="OohCode">
-<meta property="og:description" content="linux shell 基本语法学习">
-<meta property="og:updated_time" content="2015-11-27T03:04:17.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux shell 编程之语法学习">
-<meta name="twitter:description" content="linux shell 基本语法学习">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Muse',
-    sidebar: '[object Object]',
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> linux shell 编程之语法学习 | OohCode </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  
+<body>
 
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">OohCode</a>
+        </div>
 
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">OohCode</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">好奇的码农~</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-      
-      
-    </ul>
-  
-
-  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/oohcoder">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
 </nav>
 
- </div>
-    </header>
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                linux shell 编程之语法学习
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-03-22T00:00:00+08:00" content="2014-03-22">
-              2014-03-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/SHELL/" itemprop="url" rel="index">
-                    <span itemprop="name">SHELL</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/03/22/linux-shell-programe1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/22/linux-shell-programe1/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
+<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>linux shell 编程之语法学习</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        2014-03-22
+                    </span>
+                </div>
+            </div>
         </div>
-      </header>
-    
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
 
 
-    <div class="post-body" itemprop="articleBody">
+<a href="/tags/shell/">#shell</a>
 
-      
-      
 
-      
-        <blockquote>
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/SHELL/">SHELL</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <blockquote>
 <p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
 </blockquote>
 <h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
@@ -277,7 +191,7 @@
 <li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
 </ol>
 </blockquote>
-<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
+<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
 <ul>
 <li><code>$ ./script.sh</code></li>
 <li><code>$ sh ./script.sh</code></li>
@@ -290,7 +204,7 @@
 </ol>
 </blockquote>
 <h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
-<p>###变量替换<br>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
+<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
 <ul>
 <li>变量被声明: <code>variable</code></li>
 <li>变量被赋值: <code>variable=12</code></li>
@@ -299,14 +213,13 @@
 </ul>
 <p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
 <p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
-<p>###变量赋值:<br>变量赋值的方式也有多种：</p>
+<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
 <ol>
 <li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
 <li>使用let赋值.<code>let a=2</code></li>
 <li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
 </ol>
-<p>###特殊的变量类型</p>
-<ul>
+<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
 <li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
 <li>$0:代表脚本名称</li>
 <li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
@@ -314,9 +227,8 @@
 </ul>
 </li>
 </ul>
-<h2 id="条件判断">条件判断</h2><p>###条件判断格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;# 2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;# 3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;# 4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure></p>
-<p>###条件格式：</p>
-<ol>
+<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
+<h3 id="条件格式：">条件格式：</h3><ol>
 <li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
 <li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
 <li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
@@ -325,450 +237,83 @@
 <blockquote>
 <p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
 </blockquote>
-<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;#2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;#3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;#4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;#5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;#6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;#7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
-<p>##分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;#select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
-<p>##函数</p>
-<p>###函数定义的两种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>###函数调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure><br>ps:</p>
+<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
+<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
+<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
+<p>ps:</p>
 <ol>
 <li>函数调用之前必须先定义</li>
 </ol>
-<p>##结语<br>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
+<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
 
-      
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
     </div>
+</article>
 
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/shell/" rel="tag">#shell</a>
-          
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/oohcoder" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2014/02/13/csapp-chapter5/" rel="next" title="csapp chapter5:优化程序性能">
-                <i class="fa fa-chevron-left"></i> csapp chapter5:优化程序性能
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/03/22/linux-shell-command-line-control-key/" rel="prev" title="linux命令行控制字符汇总">
-                linux命令行控制字符汇总 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
     </div>
-  </div>
+</footer>
 
 
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
+    <!-- After footer scripts -->
     
-      <div class="ds-thread" data-thread-key="2014/03/22/linux-shell-programe1/"
-           data-title="linux shell 编程之语法学习" data-url="http://oohcode.com/2014/03/22/linux-shell-programe1/">
-      </div>
-    
-  </div>
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
+<!-- Disqus Comments -->
 
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/default_avatar.jpg"
-               alt="sean chen" />
-          <p class="site-author-name" itemprop="name">sean chen</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">55</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            
-              <span class="site-state-item-count">19</span>
-              <span class="site-state-item-name">分类</span>
-              
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">22</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-            <p class="site-author-name">Links</p>
-            
-              <span class="links-of-author-item">
-                <a href="http://oohcode.com/" target="_blank">OohCode</a>
-              </span>
-            
-          
-        </div>
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator">
-            <i class="fa fa-angle-double-up"></i>
-          </div>
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#独特的开头"><span class="nav-number">1.</span> <span class="nav-text">独特的开头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行shell脚本的方法"><span class="nav-number">2.</span> <span class="nav-text">执行shell脚本的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量的表示"><span class="nav-number">3.</span> <span class="nav-text">变量的表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件判断"><span class="nav-number">4.</span> <span class="nav-text">条件判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环"><span class="nav-number">5.</span> <span class="nav-text">循环</span></a></li></ol></div>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator">
-            <i class="fa fa-angle-double-down"></i>
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2015</span>
-  <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">sean chen</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  
-
-
-  
-
-
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
-
-
-
-  
-  
-
-  
-  
-<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 1 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    NexT.motion.middleWares.sidebar = function () {
-      var $tocContent = $('.post-toc-content');
-
-      if (CONFIG.sidebar === 'post') {
-        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-          NexT.utils.displaySidebar();
-        }
-      }
-    };
-  });
-</script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
-
-
-
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"oohcode"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-  
-
-
-
-
-
-  
-  
-
-  
-  
 
 
 <!-- mathjax config similar to math.stackexchange -->
@@ -802,4 +347,5 @@
 <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </body>
+
 </html>
