@@ -494,12 +494,12 @@ body {
 }
 pre,
 .highlight {
-  background: #2d2d2d;
+  background: highlight-background;
   margin: 20px 0;
   padding: 15px;
   overflow: auto;
   font-size: 13px;
-  color: #ccc;
+  color: highlight-foreground;
   line-height: 1.6;
 }
 .highlight .gutter pre,
@@ -537,7 +537,7 @@ pre code {
 }
 .highlight figcaption {
   font-size: 0.85em;
-  color: #999;
+  color: highlight-comment;
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -564,7 +564,7 @@ pre code {
   border-style: solid;
   border-color: #ccc;
   border-width: 1px 0;
-  background: #2d2d2d;
+  background: highlight-background;
   padding: 15px 40px 15px 15px;
 }
 .gist .gist-file {
@@ -590,8 +590,8 @@ pre code {
   border: none;
 }
 .gist .gist-file .gist-meta {
-  background: #2d2d2d;
-  color: #999;
+  background: highlight-background;
+  color: highlight-comment;
   font: 13px Lato, "PingFang SC", "Microsoft YaHei", sans-serif;
   text-shadow: 0 0;
   padding: 0;
@@ -606,7 +606,7 @@ pre code {
   text-decoration: underline;
 }
 pre .comment {
-  color: #999;
+  color: highlight-comment;
 }
 pre .variable,
 pre .attribute,
@@ -620,7 +620,7 @@ pre .html .doctype,
 pre .css .id,
 pre .css .class,
 pre .css .pseudo {
-  color: #f2777a;
+  color: highlight-red;
 }
 pre .number,
 pre .preprocessor,
@@ -628,11 +628,11 @@ pre .built_in,
 pre .literal,
 pre .params,
 pre .constant {
-  color: #f99157;
+  color: highlight-orange;
 }
 pre .ruby .class .title,
 pre .css .rules .attribute {
-  color: #9c9;
+  color: highlight-green;
 }
 pre .string,
 pre .value,
@@ -640,11 +640,11 @@ pre .inheritance,
 pre .header,
 pre .ruby .symbol,
 pre .xml .cdata {
-  color: #9c9;
+  color: highlight-green;
 }
 pre .title,
 pre .css .hexcolor {
-  color: #6cc;
+  color: highlight-aqua;
 }
 pre .function,
 pre .python .decorator,
@@ -654,11 +654,11 @@ pre .ruby .title .keyword,
 pre .perl .sub,
 pre .javascript .title,
 pre .coffeescript .title {
-  color: #69c;
+  color: highlight-blue;
 }
 pre .keyword,
 pre .javascript .function {
-  color: #c9c;
+  color: highlight-purple;
 }
 .full-image.full-image.full-image {
   border: none;
@@ -1514,7 +1514,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff5d21;
+  background: #90526e;
 }
 .sidebar-nav {
   margin: 0 0 20px;
