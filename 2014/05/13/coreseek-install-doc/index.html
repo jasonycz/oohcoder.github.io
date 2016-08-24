@@ -1,167 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<!DOCTYPE HTML>
+<html>
 <head>
+  <meta charset="utf-8">
+  
+  <title>中文搜索引擎coreseek的安装使用 | OohCode | 好奇的码农~</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="sean chen">
+  
 
-    <!--Description-->
-    
-        <meta name="description" content="中文搜索引擎coreseek的安装使用">
-    
+  
+  <meta name="description" content="中文搜索引擎coreseek的安装使用">
+  
 
-    <!--Author-->
-    
-        <meta name="author" content="sean chen">
-    
+  
+  
+  <meta name="keywords" content="">
+  
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="中文搜索引擎coreseek的安装使用"/>
-    
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="中文搜索引擎coreseek的安装使用" />
-    
+  <meta property="og:title" content="中文搜索引擎coreseek的安装使用"/>
 
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="OohCode"/>
+  <meta property="og:site_name" content="OohCode"/>
 
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
 
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>中文搜索引擎coreseek的安装使用 - OohCode</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
-    
-
-
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
 
 <body>
+<div class="blog">
+  <div class="content">
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">OohCode</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/oohcoder">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>中文搜索引擎coreseek的安装使用</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        2014-05-13
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+    </ul>
+  </nav>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+    <main class="site-main posts-loop">
+    <article>
 
-            <!-- Tags and categories -->
-           
+  
+    
+    <h3 class="article-title"><span>中文搜索引擎coreseek的安装使用</span></h3>
+    
+  
 
-            <!-- Gallery -->
-            
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/05/13/coreseek-install-doc/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-05-12T16:00:00.000Z">
+          2014-05-13
+        </time>
+      </a>
+    </span>
+  </div>
 
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <blockquote>
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
 <p>项目中原来使用的是solr,由于solr是java写的，团队中没有java的经验，并且原来维护的人离职了，所以改用<a href="http://sphinxsearch.com/" target="_blank" rel="external">sphinx search</a>来做项目的内部检索服务，由于中文的特殊性，我们选择了<a href="http://www.coreseek.cn/" target="_blank" rel="external">coreseek</a>这个基于sphinx的中文搜索引擎。但是好像这个好久没人维护了～一直停留在了4.1beta版本～</p>
 </blockquote>
 <h2 id="下载解压">下载解压</h2><p>源码下载地址<a href="http://www.coreseek.cn/uploads/csft/4.0/coreseek-4.1-beta.tar.gz" target="_blank" rel="external">oreseek-3.1-beta.tar.gz</a>;<br>解压下载的文件,进入目录<code>cd coreseek-4.1-beta</code>;</p>
@@ -183,75 +105,43 @@
 <h2 id="测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN-UTF-8，确保正确显示中文）">测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN.UTF-8，确保正确显示中文）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd testpack&#10;$ cat var/test/test.xml    #&#27492;&#26102;&#24212;&#35813;&#27491;&#30830;&#26174;&#31034;&#20013;&#25991;&#10;$ /usr/local/mmseg3/bin/mmseg -d /usr/local/mmseg3/etc var/test/test.xml&#10;$ /usr/local/coreseek/bin/indexer -c etc/csft.conf --all&#10;$ /usr/local/coreseek/bin/search -c etc/csft.conf &#32593;&#32476;&#25628;&#32034;</span><br></pre></td></tr></table></figure>
 <p>上面是官方文档给的，需要说明的是，csft.conf是由sphinx.conf.dist复制而来的，里面的关于mysql的配置，自己按照实际情况修改。</p>
 
-
-                
-            </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
+      
     </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
 </article>
 
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/oohcoder" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
+  
 
 
-    <!-- After footer scripts -->
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
     
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    &copy; 2016 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
@@ -283,5 +173,4 @@
 <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </body>
-
 </html>

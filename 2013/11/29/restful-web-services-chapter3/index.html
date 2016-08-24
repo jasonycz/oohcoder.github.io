@@ -1,179 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<!DOCTYPE HTML>
+<html>
 <head>
+  <meta charset="utf-8">
+  
+  <title>chapter3:REST式服务有什么特别不同 | OohCode | 好奇的码农~</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="sean chen">
+  
 
-    <!--Description-->
-    
-        <meta name="description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
+  
+  <meta name="description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
 
 资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是">
-    
+  
 
-    <!--Author-->
-    
-        <meta name="author" content="sean chen">
-    
+  
+  
+  <meta name="keywords" content="">
+  
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="chapter3:REST式服务有什么特别不同"/>
-    
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!--Open Graph Description-->
-    
+  <meta property="og:title" content="chapter3:REST式服务有什么特别不同"/>
 
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="OohCode"/>
+  <meta property="og:site_name" content="OohCode"/>
 
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
 
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>chapter3:REST式服务有什么特别不同 - OohCode</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
-    
-
-
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
 
 <body>
+<div class="blog">
+  <div class="content">
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">OohCode</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/oohcoder">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>chapter3:REST式服务有什么特别不同</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        2013-11-29
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+    </ul>
+  </nav>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+    <main class="site-main posts-loop">
+    <article>
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
+  
+    
+    <h3 class="article-title"><span>chapter3:REST式服务有什么特别不同</span></h3>
+    
+  
 
-<a href="/categories/restful-web-services/">restful web services</a>
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/29/restful-web-services-chapter3/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-28T16:00:00.000Z">
+          2013-11-29
+        </time>
+      </a>
+    </span>
+  </div>
 
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                </div>
-            
 
-            <!-- Gallery -->
-            
+  
 
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <blockquote>
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
 <p><em>前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。</em></p>
 </blockquote>
 <h2 id="资源">资源</h2><p>Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：</p>
@@ -221,75 +133,49 @@
 <h2 id="使用S3客户端">使用S3客户端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># !/usr/bin/ruby -w&#10;#  s3-sample-client.rb&#10;require &#39;S3lib&#39;&#10;&#10;# &#25910;&#38598;&#21629;&#20196;&#34892;&#21442;&#25968;&#10;bucket_name, object_name, object_value = ARGV&#10;unless bucket_name&#10;    puts &#34;Usage: #&#123;0&#125; [bucket name] [object name] [object value]&#34;&#10;    exit&#10;end&#10;&#10;# &#25214;&#21040;&#25110;&#21019;&#24314;&#26742;&#10;buckets = S3::BucketList.new.get    #GET /&#10;bucket = buckets.detect&#123; |b| b.name == bucket_name &#125;&#10;if bucket&#10;    puts &#34;Found bucket #(bucket_name).&#34;&#10;else&#10;    puts &#34;Could not find bucket #&#123;bucket_name&#125;, creating it&#34;&#10;    bucket = S3::Bucket.new(bucket_name)&#10;    bucket.put&#10;end&#10;&#10;# &#21019;&#24314;&#23545;&#35937;&#10;object = S3:Object.new(bucket, object_name)&#10;object.metadata[&#39;content-type&#39;] = &#39;text/plain&#39;&#10;object.value = object_value&#10;object.put                              #PUT /&#123;bucket&#125;/&#123;object&#125;&#10;&#10;# &#23545;&#26742;&#37324;&#30340;&#27599;&#20010;&#23545;&#35937;...&#10;bucket.get[0].each do |o|               #GET /&#123;bucket&#125;&#10;    #...&#25171;&#21360;&#20986;&#26377;&#20851;&#35813;&#23545;&#35937;&#30340;&#20449;&#24687;&#10;    puts &#34;Name: #&#123;o.name&#125;&#34;&#10;    puts &#34;Value: #&#123;o.value&#125;&#34;            #GET /&#123;bucket&#125;/&#123;object&#125;&#10;    puts &#34;Metadata hash: #&#123;o.metadata.inspect&#125;&#34;&#10;    puts&#10;end</span><br></pre></td></tr></table></figure>
 <h2 id="用ActiveResource创建透明的客户端">用ActiveResource创建透明的客户端</h2><p>安装ruby on rails，然后利用rails生成一个创建一个自己的app，根据书里的过程并参考《Ruby On Ralis 3 Toturial》中的例子就可以完成。建立完成后可以在页面中看到notes的操作了，可以增加，编辑，删除note,可以到在views里可以看到这么一段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;td&#62;&#60;%= link_to &#39;Destroy&#39;, note, method: :delete, data: &#123; confirm: &#39;Are you sure?&#39; &#125; %&#62;&#60;/td&#62;</span><br></pre></td></tr></table></figure><br>ruby中前端是通过method来指定HTTP请求的发送类型的，但是我在web端看到的请求是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Request Method:POST&#10;Form Data:&#10;_method:delete</span><br></pre></td></tr></table></figure><br>从这里来看ruby并没有在HTTP请求的方法中就变为DELETE，而是在from里传了一个参数，这并不是符合标准的REST架构的。鉴于我对ROR还不了解，现在可能有些不太明白，先看着后面的章节，等了解后再完善本章内容。</p>
 
-
-                
-            </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
+      
     </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/restful-web-services/">restful web services</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
 </article>
 
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/oohcoder" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
+  
 
 
-    <!-- After footer scripts -->
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
     
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    &copy; 2016 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
 </body>
-
 </html>

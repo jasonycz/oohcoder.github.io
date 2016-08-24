@@ -1,186 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<!DOCTYPE HTML>
+<html>
 <head>
+  <meta charset="utf-8">
+  
+  <title>python打包 | OohCode | 好奇的码农~</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="sean chen">
+  
 
-    <!--Description-->
-    
-        <meta name="description" content="python的打包方式有很多种，而且针对不同的平台又有很多不同的方式，这里指针对linux平台进行介绍……
+  
+  <meta name="description" content="python的打包方式有很多种，而且针对不同的平台又有很多不同的方式，这里指针对linux平台进行介绍……
 
 1 python打包工具选择关于python打包相关的工具，这篇文档有一个列表，其中打包工具主要分为pip, dislib, setuptools, distribute(已经于setupt">
-    
+  
 
-    <!--Author-->
-    
-        <meta name="author" content="sean chen">
-    
+  
+  
+  <meta name="keywords" content="python,setuptools">
+  
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="python打包"/>
-    
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!--Open Graph Description-->
-    
+  <meta property="og:title" content="python打包"/>
 
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="OohCode"/>
+  <meta property="og:site_name" content="OohCode"/>
 
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
 
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>python打包 - OohCode</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
-    
-
-
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
 
 <body>
+<div class="blog">
+  <div class="content">
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">OohCode</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/oohcoder">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>python打包</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        2013-10-15
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+    </ul>
+  </nav>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+    <main class="site-main posts-loop">
+    <article>
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
+  
+    
+    <h3 class="article-title"><span>python打包</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/10/15/python-packaging/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-10-14T16:00:00.000Z">
+          2013-10-15
+        </time>
+      </a>
+    </span>
+  </div>
 
 
-<a href="/tags/python/">#python</a> <a href="/tags/setuptools/">#setuptools</a>
+  
 
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/python/">python</a>
-
-                    
-                </div>
-            
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <blockquote>
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
 <p><em>python的打包方式有很多种，而且针对不同的平台又有很多不同的方式，这里指针对linux平台进行介绍……</em></p>
 </blockquote>
 <h2 id="1_python打包工具选择">1 python打包工具选择</h2><p>关于python打包相关的工具，这篇文档有一个<a href="https://python-packaging-user-guide.readthedocs.org/en/latest/projects.html#" target="_blank" rel="external">列表</a>，其中打包工具主要分为pip, dislib, setuptools, distribute(已经于setuptools合并）。还有博客也是关于python 打包工具的，<a href="http://www.ituring.com.cn/article/19090" target="_blank" rel="external">这篇博客</a>对于python的各种打包工具，及其优缺点写的很详细，里面说的Distutils2是更为先进的打包工具，但是适用范围还不是太广泛，这里先不做研究了。经过综合对比，目前选中setuptools和pip这两个个比较成熟的打包工具，下面就对他们用法和原理分别进行详细的介绍。  </p>
@@ -200,75 +105,57 @@
 <p>setup.py内容也要修改，修改默认的搜索路径为src，而不是从根目录开始，内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># setup.py&#10;# !/usr/bin/env python&#10;# -*- coding:utf-8 -*-&#10;&#10;from setuptools import setup, find_packages&#10;&#10;setup(&#10;        name = &#34;myproject&#34;,        &#10;        version=&#34;0.1.0&#34;, &#10;        packages = find_packages(&#39;src&#39;), &#10;        package_dir = &#123;&#39;&#39;:&#39;src&#39;&#125;,&#10;        zip_safe = False,&#10;&#10;        description = &#34;egg test demo.&#34;, &#10;        long_description = &#34;egg test demo, haha.&#34;, &#10;        author = &#34;sean&#34;,&#10;        author_email = &#34;seanerchen@gmail.com&#34;,&#10;&#10;        license = &#34;GPL&#34;,&#10;        keywords = (&#34;test&#34;, &#34;egg&#34;),&#10;        platforms = &#34;Independant&#34;,&#10;        url = &#34;&#34;,&#10;        )</span><br></pre></td></tr></table></figure><br>然后运行命令生成egg等文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python setup.py bdist_egg&#10;&#10;$ tree&#10;.&#10;&#9500;&#9472;&#9472; build&#10;&#9474;&#160;&#160; &#9500;&#9472;&#9472; bdist.linux-x86_64&#10;&#9474;&#160;&#160; &#9492;&#9472;&#9472; lib&#10;&#9474;&#160;&#160;     &#9492;&#9472;&#9472; myproject&#10;&#9474;&#160;&#160;         &#9492;&#9472;&#9472; __init__.py&#10;&#9500;&#9472;&#9472; dist&#10;&#9474;&#160;&#160; &#9492;&#9472;&#9472; myproject-0.1.0-py2.6.egg&#10;&#9500;&#9472;&#9472; setup.py&#10;&#9492;&#9472;&#9472; src&#10;    &#9500;&#9472;&#9472; myproject&#10;    &#9474;&#160;&#160; &#9500;&#9472;&#9472; __init__.py&#10;    &#9474;&#160;&#160; &#9492;&#9472;&#9472; __init__.pyc&#10;    &#9492;&#9472;&#9472; myproject.egg-info&#10;        &#9500;&#9472;&#9472; dependency_links.txt&#10;        &#9500;&#9472;&#9472; not-zip-safe&#10;        &#9500;&#9472;&#9472; PKG-INFO&#10;        &#9500;&#9472;&#9472; SOURCES.txt&#10;        &#9492;&#9472;&#9472; top_level.txt&#10;&#10;8 directories, 10 files</span><br></pre></td></tr></table></figure><br>然后用同样的方式进行安装运行，依然没有问题。  </p>
 <h4 id="2-8,_卸载程序">2.8, 卸载程序</h4><p>安装过的python包，如果要删除该如何做呢？<br>首先要找到easy-install.pth文件,这个文件是自动查询安装包的路径的文件，如果把安装包的路径从这个文件中去掉，将找不到要使用的包<br>当运行安装程序发现最后几行信息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python setup.py install&#10;  ...&#10;  Processing myproject-0.1.0-py2.6.egg&#10;  creating /root/.local/lib/python2.6/site-packages/myproject-0.1.0-py2.6.egg&#10;  Extracting myproject-0.1.0-py2.6.egg to /root/.local/lib/python2.6/site-packages&#10;  Adding myproject 0.1.0 to easy-install.pth file&#10;&#10;  Installed /root/.local/lib/python2.6/site-packages/myproject-0.1.0-py2.6.egg&#10;  Processing dependencies for myproject==0.1.0&#10;  Finished processing dependencies for myproject==0.1.0</span><br></pre></td></tr></table></figure><br>可以看出包的安装路径和包的路径信息都能找到，删除相应的包和路径就会发现无法使用该包了。<br>打开文件easy-install.pth，删除./myproject-0.1.0-py2.6.egg这一行，或者直接删除安装好的egg包,再次运行python时就会提示找不到该包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62;&#62;&#62; from myproject import test&#10;Traceback (most recent call last):&#10;  File &#34;&#60;stdin&#62;&#34;, line 1, in &#60;module&#62;&#10;ImportError: No module named myproject</span><br></pre></td></tr></table></figure><br>到这里整个配置文件的写法，源代码的写法，打包到本地和打包到远程，本地安装和远程安装都介绍完了。</p>
 
-
-                
-            </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
+      
     </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/python/">python</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/setuptools/">setuptools</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
 </article>
 
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/oohcoder" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
+  
 
 
-    <!-- After footer scripts -->
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
     
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    &copy; 2016 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
@@ -300,5 +187,4 @@
 <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </body>
-
 </html>

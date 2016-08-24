@@ -1,254 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<!DOCTYPE HTML>
+<html>
 <head>
+  <meta charset="utf-8">
+  
+  <title>phpenv安装自定义配置 | OohCode | 好奇的码农~</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="sean chen">
+  
 
-    <!--Description-->
-    
-        <meta name="description" content="##自定义配置在使用phpenv安装php是，有时候需要对内置扩展进行自定义控制是否开启，比如我要开启zts模块, 源码安装我么可以用./configure --enable-maintainer-zts来安装，但是phpenv不支持直接这么写，这时候就要phpenv自己的方式来安装了。可以在php">
-    
+  
+  <meta name="description" content="##自定义配置在使用phpenv安装php是，有时候需要对内置扩展进行自定义控制是否开启，比如我要开启zts模块, 源码安装我么可以用./configure --enable-maintainer-zts来安装，但是phpenv不支持直接这么写，这时候就要phpenv自己的方式来安装了。可以在php">
+  
 
-    <!--Author-->
-    
-        <meta name="author" content="sean chen">
-    
+  
+  
+  <meta name="keywords" content="php">
+  
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="phpenv安装自定义配置"/>
-    
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!--Open Graph Description-->
-    
+  <meta property="og:title" content="phpenv安装自定义配置"/>
 
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="OohCode"/>
+  <meta property="og:site_name" content="OohCode"/>
 
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
 
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>phpenv安装自定义配置 - OohCode</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
-    
-
-
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
 
 <body>
+<div class="blog">
+  <div class="content">
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">OohCode</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/oohcoder">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>phpenv安装自定义配置</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        2016-08-23
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+    </ul>
+  </nav>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+    <main class="site-main posts-loop">
+    <article>
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
+  
+    
+    <h3 class="article-title"><span>phpenv安装自定义配置</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/08/23/phpenv-configuration-options/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-08-23T08:45:47.000Z">
+          2016-08-23
+        </time>
+      </a>
+    </span>
+  </div>
 
 
-<a href="/tags/php/">#php</a>
+  
 
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                </div>
-            
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>##自定义配置<br>在使用phpenv安装php是，有时候需要对内置扩展进行自定义控制是否开启，比如我要开启<code>zts</code>模块, 源码安装我么可以用<code>./configure --enable-maintainer-zts</code>来安装，但是phpenv不支持直接这么写，这时候就要phpenv自己的方式来安装了。可以在phpenv安装的路径里找到下面这个文件：<code>~/.phpenv/plugins/php-build/bin/php-build</code>, 这个文件就是phpenv install时运行的脚本，可以找到如下内容:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">CONFIGURE_OPTIONS=$(cat <span class="string">"$PHP_BUILD_ROOT/share/php-build/default_configure_options"</span>)</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"$PHP_BUILD_CONFIGURE_OPTS"</span> ]; then</span><br><span class="line">    CONFIGURE_OPTIONS=<span class="string">"$CONFIGURE_OPTIONS $PHP_BUILD_CONFIGURE_OPTS"</span></span><br><span class="line">fi</span><br><span class="line">...</span><br><span class="line">local append_default_libdir=<span class="string">'yes'</span></span><br><span class="line"><span class="keyword">for</span> option in <span class="variable">$CONFIGURE_OPTIONS</span>; <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">case</span> <span class="string">"$option"</span> in</span><br><span class="line">    <span class="string">"--with-libdir"</span>*) append_default_libdir=<span class="string">'no'</span> ;;</span><br><span class="line">  esac</span><br><span class="line">done</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"$(uname -p)"</span> = <span class="string">"x86_64"</span> ] &amp;&amp; [ <span class="string">"$&#123;append_default_libdir&#125;"</span> = <span class="string">'yes'</span> ]; then</span><br><span class="line">    argv=<span class="string">"$argv --with-libdir=lib64"</span></span><br><span class="line">fi</span><br><span class="line">...</span><br><span class="line">./configure <span class="variable">$argv</span> &gt; /dev/<span class="keyword">null</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>##自定义配置<br>在使用phpenv安装php是，有时候需要对内置扩展进行自定义控制是否开启，比如我要开启<code>zts</code>模块, 源码安装我么可以用<code>./configure --enable-maintainer-zts</code>来安装，但是phpenv不支持直接这么写，这时候就要phpenv自己的方式来安装了。可以在phpenv安装的路径里找到下面这个文件：<code>~/.phpenv/plugins/php-build/bin/php-build</code>, 这个文件就是phpenv install时运行的脚本，可以找到如下内容:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">CONFIGURE_OPTIONS=$(cat <span class="string">"$PHP_BUILD_ROOT/share/php-build/default_configure_options"</span>)</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"$PHP_BUILD_CONFIGURE_OPTS"</span> ]; then</span><br><span class="line">    CONFIGURE_OPTIONS=<span class="string">"$CONFIGURE_OPTIONS $PHP_BUILD_CONFIGURE_OPTS"</span></span><br><span class="line">fi</span><br><span class="line">...</span><br><span class="line">local append_default_libdir=<span class="string">'yes'</span></span><br><span class="line"><span class="keyword">for</span> option in <span class="variable">$CONFIGURE_OPTIONS</span>; <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">case</span> <span class="string">"$option"</span> in</span><br><span class="line">    <span class="string">"--with-libdir"</span>*) append_default_libdir=<span class="string">'no'</span> ;;</span><br><span class="line">  esac</span><br><span class="line">done</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"$(uname -p)"</span> = <span class="string">"x86_64"</span> ] &amp;&amp; [ <span class="string">"$&#123;append_default_libdir&#125;"</span> = <span class="string">'yes'</span> ]; then</span><br><span class="line">    argv=<span class="string">"$argv --with-libdir=lib64"</span></span><br><span class="line">fi</span><br><span class="line">...</span><br><span class="line">./configure <span class="variable">$argv</span> &gt; /dev/<span class="keyword">null</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
 <p>可见，默认会读取<code>~/.phpenv/plugins/php-build/share/php-build/default_configure_options</code>里面的配置加到<code>./configure</code>的参数里，当存在变量<code>$PHP_BUILD_CONFIGURE_OPTS</code>时，会把这个变量的值也加到<code>./configure</code>的参数里。<br>所以就存在两种方式实现上面的安装方法：</p>
 <ol>
 <li><code>~/.phpenv/plugins/php-build/share/php-build/default_configure_options</code>文件末尾加上<code>--enable-maintainer-zts</code></li>
 <li>运行<code>PHP_BUILD_CONFIGURE_OPTS=--enable-maintainer-zts phpenv install 5.6.2</code></li>
 </ol>
 
-
-                
-            </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
+      
     </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/php/">php</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
 </article>
 
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/oohcoder" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
+  
 
 
-    <!-- After footer scripts -->
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
     
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    &copy; 2016 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
@@ -280,5 +165,4 @@
 <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </body>
-
 </html>
