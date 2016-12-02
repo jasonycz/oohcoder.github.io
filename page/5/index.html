@@ -59,15 +59,15 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/11/25/synchronous-asynchronous-blocking-non-blocking/"><span>同步与异步，阻塞与非阻塞</span></a></h3>
+    <h3 class="article-title"><a href="/2014/02/13/csapp-chapter5/"><span>csapp chapter5:优化程序性能</span></a></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/2013/11/25/synchronous-asynchronous-blocking-non-blocking/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-24T16:00:00.000Z">
-          2013-11-25
+      <a href="/2014/02/13/csapp-chapter5/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-12T16:00:00.000Z">
+          2014-02-13
         </time>
       </a>
     </span>
@@ -80,235 +80,61 @@
     <div class="entry">
       
         <blockquote>
-<p><em>同步异步及阻塞与非阻塞是在开发过程中经常遇到的名词，但是却经常容易混淆的名称，这里根据自己的理解对他们进行简要的介绍，以便自己能够清晰的记住他们之间的区别和联系</em></p>
+<p>编写高效程序需要几类活动：第一，我们必须选择一组合适的算法和数据结构。第二，我们必须编写出编译器能够优化以转化成高效可执行代码的源代码。本章重点讲的是第二个活动，利用我们对编译器的了解来写出让编译器编译出更高效的机器码的方法。</p>
 </blockquote>
-<p>说道同步与异步，阻塞与非阻塞这两个概念，我一直都很混淆，相信很多人也和我一样对它们之间的单个记起来很容易，但是放到一起的时候就晕了，这其实是对它们了解不清楚导致的。这里我根据自己的理解说下他们的本质区别：<br><strong>阻塞与非阻塞</strong>的区别就是一个进程在等待一个事情处理的时候能不能干其他的事情。<br>举个例子：假设一个进程为P,任务分为T1,T2,T3等。  </p>
+<h2 id="优化编译器的能力和局限性">优化编译器的能力和局限性</h2><p>程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。主要包括消除<strong>不必要</strong>的<em>函数调用</em>，<em>条件测试</em>和<em>存储器引用</em>。<br>编译器本身通过复杂精细算法对程序编译时进行了优化。编译器的优化有不同的级别，也是高程度的优化程序的执行效率就越高，但同时也可能增加程序的规模，也可能使标准的调试工具更难对程序进行调试。<br>编译器必须很小心的对程序只是用<em>安全</em>的优化，也就是说对于程序可能遇到的所有可能情况，在C语言标准提供的保证之下，优化后得到的程序和未优化的版本有一样的行为。<br>通过一个例子来理解决定一种程序转换是否安全的难度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += *yp;&#10;    *xp += *yp;&#10;&#125;&#10;&#10;void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += 2* *yp;&#10;&#125;</span><br></pre></td></tr></table></figure><br>这两个过程似乎有相同的行为。而且twiddle2的效率更高一些，因为twiddle1需要6次存储器引用，而twiddle2只需要三次存储器引用。但是当xp与yp的值相同时，twiddle1中*xp的值时原来的4倍，twiddle2却是3倍。编译器并不知道它们会不会指向同一地址，所以不能进行从twiddle1到twiddle2的优化。<br>这种两个指针可能指向同一存储器位置的情况称为<em>存储器别名使用(memory aliasing)</em>。编译器对这种情况的优化能力是有限的，所以需要写程序的过程中进行优化。  </p>
+<h2 id="表示程序性能">表示程序性能</h2><p>引入度量标准<em>每元素的周期数(Cycles Per Element, CPE)</em>,作为一种表示程序性能并指导我们改进代码的方法。<br>处理器活动的顺序是由时钟控制的，时钟提供了某个频率的规律信号，通常用<em>千兆赫兹(GHz)</em>。就是我们常说的CPU的运行频率。时钟周期就是时钟频率的倒数。</p>
+<h2 id="程序示例">程序示例</h2><p>举例说明程序优化的效果,这里写出最后的运行函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine1(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    *dest = IDENT;&#10;    for (i=0; i &#60; vec_length(v); i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>看一下优化钱和优化后的效果，就可以看到，CPE从平均29左右降到了12左右，效果的确很明显啊。</p>
+<h2 id="消除循环的低效率">消除循环的低效率</h2><p>上面过程在执行for循环的时候调用vec_length函数左右循环测试的条件，也就是说每次执行条件测试的时候都要执行这个函数调用过程，这明显地影响了程序的性能。注意到向量的长度并不会随程序运行发生改变，所以可以考虑只计算一次向量的长度，然后条件测试都用这个值，如下函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine2(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>再看修改后的程序，CPE降到了8左右。<br>这个优化是一种常见的优化例子，称为<em>代码移动(code motion)</em>。这类优化包括识别要执行多次但是计算结果不会改变的计算。编译器会试着进行代码移动，但是对于会改变在哪里调用函数或调用多少次的变换，编译器通常都会非常小心。如果vec_length有某种副作用，那么combine1和combine2可能有不同的行为。为了改进代码，程序员必须经常帮助编译器显式地完成代码的移动。</p>
+<h2 id="减少过程调用">减少过程调用</h2><p>过程调用会带来相当大的开销，而且妨碍大多数形式的程序优化。<br>上面的combine2中，每次循环迭代都会调用get_vec_element来获取下一个向量元素，很明显会照成低效率。对其进行优化的思路就是减少过程的调用，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_t *get_vec_start(vec_ptr v)&#10;&#123;&#10;    return v-&#62;data;&#10;&#125;&#10;&#10;void combine3(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        *dest = *dest OP data[i];&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure><br>得到的代码运行速度开得多，这是以损害一些程序的模块性为代价的。<br>实际情况是，得到的性能提高出乎意料的普通，这是因为5.11讲到的分支预测策略会预计函数的返回值，预测对的情况下直接执行，预测错误的话会有更多的处罚，如果分支预测策略比较好的话，预测正确的概率就高，所以带来的性能问题就越小。</p>
+<h2 id="消除不必要的存储器引用">消除不必要的存储器引用</h2><p>combine3过程中for循环对应的汇编代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L498:&#10;    movss   (%rbp), %xmm0           #&#20174;dest&#35835;&#21462;&#25968;&#25454;&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    movss   %xmm0, (%rbp)           #&#23384;&#20648;&#32467;&#26524;&#21040;dest&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %r12              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L498                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>上面的代码不断从(%rbp)处读取和操作数据，其实可以去掉这个中间寄存器以消除不必要的读写。可以直接利用%xmm0来保存积值。向下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L488:&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %rbp              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L488                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>对应C代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine4(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;    data_t acc = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        acc  = acc OP data[i];&#10;    &#125;&#10;&#10;    *dest = acc;&#10;&#125;</span><br></pre></td></tr></table></figure><br>编译器不会做出这样的优化还是因为前面提到的<em>存储器别名使用</em>带来的问题。例如：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v)+2);&#10;combine4(v, get_vec_start(v)+2);</span><br></pre></td></tr></table></figure>
+<p>执行这两个函数的时候结果就会出现不一致性。</p>
+<h2 id="理解现代处理器">理解现代处理器</h2><p>上面所说的都是从程序的调用角度考虑的，主要是减少不必要的指令执行，但是并没有运用目标机器的任何特性。随着试图进一步提高性能，我们必须考虑利用处理器<em>微体系结构</em>的变化，也就是处理器用来执行指令的底层系统设计。在实际的处理器中，是可以同时对多条指令求值的，这个现象称为<em>指令级并行</em>。现代处理器取得了不起的功绩之一就是：它们采用复杂而奇异的微处理器结构，其中，多条指令可以并行地执行，同时又呈现一种简单地顺序执行的表象。<br>程序的最大性能在处理器中主要受到下面两个重要因素的影响：</p>
 <ul>
-<li><strong>阻塞模式下</strong>：<br>P从T1开始执行,如果T1没有执行完返回则P一直在挂起状态，只有T1执行完了才重新唤醒P，执行T2任务。注意重点是：<code>这期间P只能等待，不能干其他的事情。</code>  </li>
-<li><strong>非阻塞模式下</strong>：<br>P从T1开始执行，这是不管T1有没有执行完毕都会返回一个结果，则P会继续执行其他任务，比如说T2,再执行T3等，也就是P不用关心所执行的任务是否执行完毕，只需要任务及时给出相应即可，这时如果T1执行完毕则会主动通知P，告诉P任务执行完了。可以看出P一直出去激活状态，不管是执行的一个任务还是多个任务，它不会因为一个任务没有执行完就等待。</li>
+<li>当一系列操作必须严格顺序执行时，就会遇到<em>延迟界限(latency bound)</em>。因为在下一条指令开始之前，这条指令必须结束。</li>
+<li><em>吞吐量界限(throughput bound)</em>刻画了处理器功能但愿的原始计算能力。这个界限是程序性能的终极限制。</li>
 </ul>
-<p><strong>异步与同步</strong>的区别就是进程在干多个事情的时候，这些事情是不是存在顺序关系。<br>举个例子：还是假设一个进程为P,任务分为T1,T2,T3等，每个任务又分为多个步骤，例如T1分为T1.1, T1.2, T1.3等步骤。  </p>
+<p>下面通过一些例子说明如何利用现代处理器的流水线，指令级并行等特性提高程序性能：</p>
 <ul>
-<li><strong>同步模式下</strong>：<br>在同步模式下，任务的执行是有先后顺序之分的。比如T1，必须T1.1完了才能进行T1.2步骤，T1.2步骤完了才能进行T1.3步骤。所以当P执行T1的时候必须等T1.1执行完了才能执行T1.2,T1.3等任务。  </li>
-<li><strong>异步模式下</strong>：<br>异步模式是没有顺序之分的，P可以执行T1的步骤安装任何的顺序，因为这些步骤之间不存在依赖关系。  </li>
+<li><p>例子1， 下面代码是对一个数据组求和，根据下面的代码可以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//combine 1&#10;for(i = 0; i&#60; limit; i++) &#10;&#123;&#10;    acc = acc * data[i];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是这段代码对应的在系统中运行的过程：<br><img src="/assets/img/csapp/fig5.13.png" alt=""><br>下面是过程的简化：<br><img src="/assets/img/csapp/fig5.14.png" alt=""><br>其中寄存器<code>xmm0</code>是变量<code>acc</code>对应。可见这段代码中，制约性能的瓶颈就是每次都要进行mul运算，更新acc的值，然后进入下一个循环周期。如何提高这样的程序性能呢？这个运算已经是最简洁的了，但是可不可以考虑减少循环的次数来优化呢？请看下面的这段代码.</p>
+</li>
+<li><p>例子2， 减少循环周期也可以这么做：<br>//combine 2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#123;&#10;    acc = (acc * data[i]) * data[i+1];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码看似把循环周期减少了一般，但其实性能并没有得到提高，通过他的计算过程可以看到：<br><img src="/assets/img/csapp/fig5.20.png" alt=""><br>虽然周期减少了一半，但是每个周期却进行了两次运算，而且每次运算都依赖上次计算的结果，也就是acc的值，所以性能并未得到改善。再看例子3。</p>
+</li>
+<li><p>例子3， 多变量提高并行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#10;&#123;&#10;    acc0 = acc0 * data[i];&#10;    acc1 = acc1 * data[i+1];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码跟上一段代码的区别是增加了一个变量，也就是增加了对寄存器的使用，其过程如下：<br><img src="/assets/img/csapp/fig5.24.png" alt=""><br>可以看到同样是减少了周期，但是每个周期的运算使用了不同的计算器，每个计算都不依赖同一周期内的其他值，利用了计算器的并行性，从而提高了程序的性能。还有其它的方式。</p>
+</li>
+<li><p>例子4, 重新结合变换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#123;&#10;    acc = acc * (data[i] * data[i+1]);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码跟例子2很像，只不过改变了运算结合的顺序，程序的性能却得到了很大的提高，这是为什么呢？可以看到这个程序在计算机中计算的过程如下：<br><img src="/assets/img/csapp/fig5.29.png" alt=""><br>可以看到每个周期也是两个mul操作，为什么会快呢？这是因为第一个mul操作并不依赖寄存器的值，也就是说其实对于data数组之间的运算可以通过流水线并行计算，制约性能的只是acc所在的寄存器的计算，所以性能主要因素还是一个mul的操作。<br>从上面可以看到利用多个寄存器可以提高性能，那是不是利用的越多越好呢？答案是：NO.因为计算机的寄存器个数是有限的，如果需要的寄存器的个超过了寄存器的个数，那就只能把这些值放入到栈中，这样就会急剧降低程序的性能。</p>
+</li>
 </ul>
-<p>如果按照以上的理解(我得理解，如果有问题，恳请指出~)，我觉得其实他们之间的关系就可以分得很清楚了~ 下面再来看看他们的混合情况：</p>
+<h2 id="一些限制因素">一些限制因素</h2><p>影响程序性能的限制因素有下面几个：</p>
 <ul>
-<li><strong>同步阻塞</strong>: 这个其实可以根据他们各自的定义来看，还以上面的为例。P执行T1三个阶段的任务以及T2,T3等任务，先执行T1.1,由于是同步所以，必须等T1.1执行完了才能继续往下进行，有由于是阻塞过程，所以在等待T1.1执行的过程中P是挂起的，T2,T3等任务必须处于等待状态。</li>
-<li><strong>同步非阻塞</strong>: 这个过程还是同步的。前面和同步阻塞一样，必须等T1.1执行完了才能执行T1.2和T1.3，但是T2和T3和T1并没有顺序关系，所以当等待T1.1执行的过程中，P可以继续执行T2和T3,这就是非阻塞。</li>
-<li><strong>异步阻塞</strong>:这个组合其实是不存在的。首先因为是异步的，也就是说P可以任意顺序执行T1,T2,T3，执行的过程中他们并不会相互等待，进程更不会挂起，所以没有这个组合。也有的说这个状态是存在的，因为执行T的过程虽然可以同时进行，但是等待消息的过程是可以是阻塞的，也就是任务同时发出，等待任务结果的这段时间进程是处于挂起状态的，我觉得这其实跟你执行的任务多少以及任务的执行时间是密切关联的，如果同时发出很多任务，而任务需要执行很长时间，那么应该有一段时间进程是挂起的，但是纵观整个过程来看，这样说并不合适，所以我认为不存在这种状态。</li>
-<li><strong>异步非阻塞</strong>: 异步非阻塞是执行效率最高的模式，一个进程可以同时发出很多任务，比如说T1,T2,T3等,而它们之间并无顺序关系，那个任务先执行完就可以先进行回调，执行其它任务。这样P的利用率就可以达到最大。</li>
+<li>寄存器溢出：就是上面最后一段介绍的寄存器不够用时的情况。</li>
+<li>分支预测和预测错误处罚：这回提高程序的代价。</li>
+<li>其它：如加载的性能，存储的性能等。</li>
 </ul>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/computer-system/">computer system</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/25/select-poll-epoll/"><span>select poll epoll</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/25/select-poll-epoll/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-24T16:00:00.000Z">
-          2013-11-25
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/computer-system/">computer system</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/21/soap-and-rest/"><span>SOAP and REST</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/21/soap-and-rest/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-20T16:00:00.000Z">
-          2013-11-21
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>SOAP(Simple Object Access Protocol)和REST(Representational State Transfer)是现在Web Service开发中最流行的两个架构，这篇文章详细分析了他们的来源以及优缺点。</em></p>
-</blockquote>
-<p>作为一个web后台开发人员我竟然拿分不清web service 和 web server!!!自觉面壁~~~<br>所以我做不住了，我睡不着了，听说了REST后我知道了SOAP，知道SOAP后我知道了WSDL,但是始终百思不得其解，原来是我最基本的东西都不知道，何谈了解他们！所以之能静下心来从头开始了！</p>
-<h2 id="web_server与_web_service">web server与 web service</h2><p>其实这两个差的太远了，如果不细看还以为是一个东西，因为写法差不多，但是仔细品味一下就知道了:  </p>
-<ul>
-<li>web server是指web服务器，如果apache、nginx等，主要是用来用来处理HTTP服务的底层软件(下次把学到的web server的发展说一下)。</li>
-<li>web service是指基于web的一个服务，是web技术的一个应用。就像你开发一个网站就是一个service，提供一个HTTP的API接口也是service。</li>
+<h2 id="提高性能的技术">提高性能的技术</h2><ol>
+<li>高级设计: 为遇到的问题选择适当的算法和数据结构。</li>
+<li>基本编码原则:<ul>
+<li>消除连续的函数调用</li>
+<li>消除不必要的存储器引用：引入临时变量来保持中间结果。只有在最后的值计算出来时，才将结果存放到数组或全局变量中。</li>
 </ul>
-<p>其实web service这个东西只要是做web开发或者移动端开发的人都会用到，只不过各有各的用法，各有各的标准。而这里的SOAP和REST只是在众多的应用中提取出来的通用的协议标准。当然拟开发的时候也可以都不用都没有任何关系。<br>再看看W3C对Web service的定义：</p>
-<ol>
-<li>Web Services 是应用程序组件</li>
-<li>Web Services 使用开放协议进行通信</li>
-<li>Web Services 是独立的（self-contained）并可自我描述</li>
-<li>Web Services 可通过使用UDDI来发现</li>
-<li>Web Services 可被其他应用程序使用</li>
-<li>XML 是 Web Services 的基础</li>
+</li>
+<li>低级优化<ul>
+<li>展开循环，降低开销，并且使得进一步优化成为可能。</li>
+<li>通过使用例如多个累积变量和重新结合技术，找到方法提高指令级并行。</li>
+<li>用功能得风格重写条件操作，使得编译采用条件数据传送。</li>
+</ul>
+</li>
 </ol>
-<p>其实SOAP和REST主要解决的是一个分布式应用的情况，什么是分布式应用呢？我的理解是比如一个MVC结构的网站。一般情况下都会把所有代码放到一台前端机器上，我们开发的时候也是C直接调用M的函数接口。这样对于一般应用是满足的，但是存在两个问题：</p>
-<ol>
-<li>网站发展的一定程度后所有的服务压力都在前端机器不能满足业务需求</li>
-<li>为了提高性能M采用的是更快速的语言开发的，C采用的是另一种语言，它们之间怎么通信？</li>
-</ol>
-<p>针对第一个问题，我们知道M和C的作用不一样，M主要是底层服务，而C主要是业务逻辑相关的服务，网站开发过程中其性能瓶颈主要是集中在M这一层，所以有可能我们需要把M和C完全分离开，M放在单独的底层服务器，C放在前端机，这样就可以各司其职了。但是这样做就会面临第二个问题，它们之间如何通信？比如C需要调用M的某个函数，怎么实现？这就是SOAP和REST发挥作用的地方了，只要C和M都遵循这两个标准开发，整个世界就都清净了~<br>(详细的过程下面将具体的协议时会说道。)</p>
-<h2 id="RPC协议">RPC协议</h2><p>说道这两个协议，不得不提一下RPC协议，其实他们都是在RPC的思想上发展起来的~<br>《TCP/IP协议详解卷一：协议》这本书的第29章网络文件系统介绍了RPC协议。<br>当终端用户编程的时候其实是不关心网络传输细节的，比如一个C/S架构的程序，Client只需要把网络的数据流当做是一个文件进行操作就可以了，不管是向服务器发送请求还是接受来之服务器的请求都只需调用系统函数就可以实现；同样Server端也是只需要调用系统函数获取客户端发出的请求并且队请求进行处理并把处理结果返回到客户端就行了。C和S之间的交互都是通过网络实现的，但是对于两端来说并无这个过程是透明的。中间的过程其实就是由RPC协议实现的，交互的过程中底层发生的细节入下：  </p>
-<ol>
-<li>当客户程序调用远程的过程时，它实际上只是掉哟呵过年了一个位于本机上的、有RPC程序包生成的函数。这个函数被称为客户残桩(stub)。客户残桩将过程的参数封装在一个网络报文，并且将这个报文发送给服务器程序。</li>
-<li>服务器主机上的一个服务器残桩负责接收这个网络报文。它从网络报文中提取参数，然后调用应用程序员编写的服务器过程。</li>
-<li>当服务器函数返回时，它返回到服务器残桩。服务器残桩提取返回值，把返回值封装成一个网络报文，然后将网络报文发送给客户残桩。</li>
-<li>客户残桩从接收到的网络报文中取出返回值，将其返回给客户程序。</li>
-</ol>
-<p>一个RPC程序包提供好很多好处：</p>
-<ul>
-<li>程序设计更加容易，因为很少或几乎没有涉及到网络编程。应用程序设计院只需要编写一个客户程序和客户程序调用的服务器过程。</li>
-<li>如果使用了一个不可靠的协议，如UDP,像超时和重传等细节一样就由RPC程序包来处理。这就简化了用户应用程序。</li>
-<li>RPC库为参数和返回值的传输提供任何需要的数据转换。</li>
-</ul>
-<p>下面这个图片可以展示一下在报文中RPC所处的位置：<br><img src="/assets/img/others/fig1.png" alt="RPC报文"><br><img src="/assets/img/others/fig2.png" alt="RPC报文">  </p>
-<h2 id="SOAP协议">SOAP协议</h2><p>上节说道的RPC协议是应用于网络通信服务，但是HTTP却不是为此设计的，RPC 会产生兼容性以及安全问题；防火墙和代理服务器通常会阻止此类流量。对于web应用来说通过HTTP协议进行通信是更好的方法,因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。<br>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。(以上来<a href="http://www.w3school.com.cn/soap/soap_intro.asp" target="_blank" rel="external">W3C</a>)</p>
-<p>Web services 平台的元素：</p>
-<ol>
-<li>SOAP (简易对象访问协议)</li>
-<li>UDDI (通用描述、发现及整合)</li>
-<li>WSDL (Web services 描述语言)</li>
-</ol>
-<p>这三个元素是组成SOAP服务必须标准组件，一个完整的SOAP交互过程可以用下面这个图来表示(下图是基于自己的理解画的，如果不妥之处还请指出)：<br><img src="/assets/img/others/fig3.png" alt="SOAP flow"><br>为了更好地理解SOAP协议，这里举一个例子：用PHP大家SOAP server服务<br>首先要安装soap服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install php-soap</span><br></pre></td></tr></table></figure><br>然后在服务端建立两个文件<br>user.wsdl<br>其内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;&#10;&#60;definitions xmlns:SOAP-ENV=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:xsd=&#34;http://www.w3.org/2001/XMLSchema&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; xmlns:SOAP-ENC=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34; xmlns:tns=&#34;http://www.somelocation.com&#34; xmlns:soap=&#34;http://schemas.xmlsoap.org/wsdl/soap/&#34; xmlns:wsdl=&#34;http://schemas.xmlsoap.org/wsdl/&#34; xmlns=&#34;http://schemas.xmlsoap.org/wsdl/&#34; targetNamespace=&#34;http://www.somelocation.com&#34;&#62;&#10;&#60;types&#62;&#10;&#60;xsd:schema targetNamespace=&#34;http://www.somelocation.com&#34;&#62;&#10; &#60;xsd:import namespace=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34; /&#62;&#10; &#60;xsd:import namespace=&#34;http://schemas.xmlsoap.org/wsdl/&#34; /&#62;&#10;&#60;/xsd:schema&#62;&#10;&#60;/types&#62;&#10;&#60;message name=&#34;userDataRequest&#34;&#62;&#10;  &#60;part name=&#34;operation&#34; type=&#34;xsd:string&#34; /&#62;&#10;  &#60;part name=&#34;statement&#34; type=&#34;xsd:string&#34; /&#62;&#10;&#60;/message&#62;&#10;&#60;message name=&#34;userDataResponse&#34;&#62;&#10;  &#60;part name=&#34;return&#34; type=&#34;xsd:string&#34; /&#62;&#10;&#60;/message&#62;&#10;&#60;portType name=&#34;userWsdlPortType&#34;&#62;&#10;  &#60;operation name=&#34;userData&#34;&#62;&#10;    &#60;documentation&#62;Query User Data&#60;/documentation&#62;&#10;    &#60;input message=&#34;tns:userDataRequest&#34; /&#62;&#10;    &#60;output message=&#34;tns:userDataResponse&#34; /&#62;&#10;  &#60;/operation&#62;&#10;&#60;/portType&#62;&#10;&#60;binding name=&#34;userWsdlBinding&#34; type=&#34;tns:userWsdlPortType&#34;&#62;&#10;  &#60;soap:binding style=&#34;rpc&#34; transport=&#34;http://schemas.xmlsoap.org/soap/http&#34; /&#62;&#10;  &#60;operation name=&#34;userData&#34;&#62;&#10;    &#60;soap:operation soapAction=&#34;http://www.somelocation.com#feelbad&#34; style=&#34;rpc&#34; /&#62;&#10;    &#60;input&#62;&#60;soap:body use=&#34;encoded&#34; namespace=&#34;http://www.somelocation.com&#34; encodingStyle=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34; /&#62;&#60;/input&#62;&#10;    &#60;output&#62;&#60;soap:body use=&#34;encoded&#34; namespace=&#34;http://www.somelocation.com&#34; encodingStyle=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34; /&#62;&#60;/output&#62;&#10;  &#60;/operation&#62;&#10;&#60;/binding&#62;&#10;&#60;service name=&#34;userWsdl&#34;&#62;&#10;  &#60;port name=&#34;userWsdlPort&#34; binding=&#34;tns:userWsdlBinding&#34;&#62;&#10;    &#60;soap:address location=&#34;http://www.soap.com/service.php&#34; /&#62;&#10;  &#60;/port&#62;&#10;&#60;/service&#62;&#10;&#60;/definitions&#62;</span><br></pre></td></tr></table></figure><br>然后在服务端建立两个文件</p>
-<p>service.php<br>内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;&#10;//&#35774;&#32622;&#19981;&#32531;&#23384;wsdl&#10;ini_set(&#34;soap.wsdl_cache_enabled&#34;,&#34;0&#34;);&#10;&#10;//&#21021;&#22987;&#21270;wsdl&#26381;&#21153;&#10;$server = new SoapServer(&#34;user.wsdl&#34;);&#10;&#10;//&#20027;&#21151;&#33021;&#24615;&#30340;class&#65292;&#36825;&#37324;&#21487;&#20197;&#20998;&#31163;&#20986;&#26469;&#20889;&#21508;&#31181;&#22797;&#26434;&#30340;&#36923;&#36753;&#10;class USER &#123;&#10;&#10;    function getInfo($userId) &#123;&#10;        return json_encode(array(&#39;userId&#39;=&#62;$userId,&#39;userName&#39;=&#62;&#39;Zhang San&#39;));&#10;    &#125;   &#10;&#10;    function getGroup($userId) &#123;&#10;        return json_encode(array(&#39;userId&#39;=&#62;$userId,&#39;userGroup&#39;=&#62;&#39;111&#39;));&#10;    &#125;   &#10;&#10;&#125;&#10;&#10;//&#25509;&#21475;&#30340;&#20027;&#20837;&#21475;&#20989;&#25968;&#10;function userData($operation,$statement)&#123;&#10;    return USER::$operation($statement);&#10;&#125;&#10;&#10;//&#27880;&#20876;&#20027;&#20989;&#25968;&#10;$server-&#62;AddFunction(&#34;userData&#34;);&#10;&#10;//&#21551;&#21160;soap server&#10;$server-&#62;handle();&#10;&#10;?&#62;</span><br></pre></td></tr></table></figure></p>
-<p>然后在客户端建立一个访问的文件<br>client.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;&#10;# $client = new SoapClient(&#39;http://www.soap.com/service.php?wsdl&#39;);&#10;$client = new SoapClient(&#39;http://www.soap.com/service.php?wsdl&#39;);&#10;$res1 = $client-&#62;__soapCall(&#39;userData&#39;,array(&#39;operation&#39;=&#62;&#39;getInfo&#39;,&#39;statement&#39;=&#62;&#39;111&#39;));&#10;print_r($res1);&#10;?&#62;</span><br></pre></td></tr></table></figure></p>
-<p>上面这个例子客户端和服务端都是PHP写的，其实他们可以是不同的语言，只需要这个语言支持SOAP协议即可。<br>根据以上的例子我相信你已经能对SOAP有个清晰的定义了。根据SOAP的特点可以知道SOAP对于分布式的服务和跨语言的通信提供了一个很好的方案，但是就不足的就是它需要额外定义的SOAP协议，WSDL描述性文件等，具有一定的复杂性。随着HTTP协议的发展，它本身其实已经具有了独立承担这个服务的能力了，利用HTTP协议本身我们能够做得更好，这就是下面要讲的REST协议。</p>
-<h2 id="REST协议">REST协议</h2><p>在读这个之前请先移步到<a href="http://www.infoq.com/cn/articles/understanding-restful-style" target="_blank" rel="external">理解本真的REST架构风格</a>这篇文章</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/web/">web</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/21/csapp-chapter2/"><span>csapp chapter2:信息的表示和处理</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/21/csapp-chapter2/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-20T16:00:00.000Z">
-          2013-11-21
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>本章主要是对各种信息在计算机中是如何表示的进行了详细的介绍。特别是不同的数据类型，比如浮点数的表示方式，进行了非常深入的介绍，学习本章对科学计算以及程序中出现的莫名其妙的数据错乱会有很好的理解。</em></p>
-</blockquote>
-<p>（由于本章对了解计算机系统的运行过程相关性不是太大可以先不阅读）</p>
+<p>(本章完 2014-05-17 22:57:27)</p>
 
       
     </div>
@@ -341,15 +167,15 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/11/20/csapp-chapter1/"><span>csapp chapter1:计算机系统漫游</span></a></h3>
+    <h3 class="article-title"><a href="/2014/02/11/csapp-chapter4/"><span>csapp chapter4:处理器体系结构</span></a></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/2013/11/20/csapp-chapter1/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-19T16:00:00.000Z">
-          2013-11-20
+      <a href="/2014/02/11/csapp-chapter4/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-10T16:00:00.000Z">
+          2014-02-11
         </time>
       </a>
     </span>
@@ -362,42 +188,85 @@
     <div class="entry">
       
         <blockquote>
-<p><em>第一章是对本书的概括性介绍，虽然是概括介绍但是仍然有不少猛料，比如一个c语言是如何编程可执行文件的，计算机的存储器是如何构成的，一个进程在计算机虚拟空间中的结构等等，这些问题能够理解了我感觉自己在写程序的时候有种豁然开朗的感觉，没写一行代码仿佛都看到它们是怎么进入计算机并执行的，实在是爽啊~</em></p>
+<p>现代微处理器是人类创造的最复杂的系统之一。本章简要接受处理器硬件的设计。</p>
 </blockquote>
-<h2 id="信息就是位+上下文">信息就是位+上下文</h2><p>这里说的位其实就是信息其实就是一些字符串组成的，但是不同的信息有着不同的作用，这其实是跟这些信息所处的上下文环境有关系，同样的一串字符在不同的环境中发挥不同的作用~</p>
-<h2 id="程序的翻译过程">程序的翻译过程</h2><p>一个C编写的程序需要经过这怎么样的过程才能让计算机识别并执行？话不多说直接上图<br><img src="/assets/img/csapp/fig1.2.png" alt="程序翻译过程"><br>从图中可以看到一个c语言源程序需要经过预处理器处理生成.i文件，然后在经过编译器的处理编程.s文件，最后经过汇编器处理编程.o的二进制文件，你以为这样就可以了？no,一个源程序需要其他库文件的支持，还要经过链接器才能生成可执行文件。<br><strong>预处理阶段</strong><br>这个阶段会对你写的源代码进行预处理，首先是找到#开头的行，比如说#include 这时候就需要加载需要的文件。最后形成了一个完整的源文件内容：以.i结尾的文件。<br><strong>编译阶段</strong><br>编辑器在这个阶段会发挥作用把C语言转换为汇编语言。（由于没有学过编译原理，这里只能囫囵吞枣了，下一步准备研究一下<a href="http://book.douban.com/subject/3296317/" target="_blank" rel="external">龙书</a>)。<br><strong>汇编阶段</strong><br>这个阶段汇编器把.s结尾的汇编文件转化为以.o结尾的二进制文件<br><strong>链接阶段</strong><br>经过上面的几个步骤后程序还不能真正的运行起来，需要将程序用到的系统类库等于这个二进制文件进行组合，最后生成一个可执行的目标文件，这个目标文件就可以执行了~<br>这里还提到了解编译系统的工作原理是大有益处的，其中主要的几点就是可以优化程序性能、理解链接是出现的错误、避免安全漏洞等，这些在以后的章节中会介绍到。</p>
-<h2 id="计算机系统的硬件组成">计算机系统的硬件组成</h2><p>还是直接上图：<br><img src="/assets/img/csapp/fig1.4.png" alt="计算机系统硬件组成"><br>从图中可以看到一个计算机系统的组成主要包括一下几个重要部分：总线(bus)、IO设备、主存(Main memory)、处理器(CPU)。下面对它们的作用一一介绍:<br><strong>总线</strong><br>总线是贯穿整个系统的一组电子管道，它携带信息并在各个部件之间进行传递。总线通常被设计成传送定长的字节块,也就是字(word)。总线宽度决定了计算机系统的寻址能力，因为每根总线代表的是一位bit，我们所说的32bit系统其实就是说总线的宽度为32，也就是4字节，而现在的64bit就是说总线宽度为64位。可见总线的宽度决定了计算机的寻址能力。<br><strong>IO设备</strong><br>IO设备这个更好理解了，就是我们能够看到的键盘、鼠标、显示器以及看不到的磁盘，这些都是进行与终端用户进行交互的或者是永久存储数据的。<br><strong>主存</strong><br>主存是一个临时的存储设备，当程序运行时程序本身的以及程序运行时需要处理的数据。其实就是我们经常说的内存，服务器内存不够用了很有可能是打开的程序太多或者程序处理的数据太大导致内存被占用过多。从物理上说主存就是一个动态随机存储器(DRAM)，从逻辑上说主存其实就是一个线性的数组，每个字节都对应一个唯一的地址。<br><strong>处理器</strong><br>处理器全称是中央处理单元(CPU),它是解释或执行存储在主存中指令的引擎。处理器的核心是一个字长的存储设备（或寄存器），称为<code>程序计数器</code>(PC),在任何时刻程序计数器都是指向主存中某条机器语言指令的（即程序计数器存储的是主存中某条指令的地址）。<br>处理器是整个计算机系统的核心，CPU的操作主要是围绕主存、寄存器文件（register file)和算术/逻辑单元(ALU)进行的。寄存器文件是1字长的寄存器组成的存储设备，没个寄存器都有一个唯一的名字。ALU计算新的数据和地址值。下面简要说一下CPU执行的一些操作：  </p>
+<p>一个处理器支持的指令和指令的字节级编码称为它的<em>指令集体系结构(Instruction-Set Architecture, ISA)</em></p>
+<h2 id="Y86指令集体系结构">Y86指令集体系结构</h2><p>Y86指令就是它规定的一些指令的叫法和功能。指令编码就是这些指令的字节级编码。每条指令的第一个字节表明指令的类型，分为两部分，高4位是<em>代码(code)</em>部分，低4位是<em>功能(function)</em>部分。需要操作数的指令编码更长一些,例如<code>rmmovl %esp, 0x12345(%edx)</code>的字节编码<strong>40*</strong>42*45230100(注意是16进制, 每一位代表4个bit位),因为rmmovl第一个字节位40; 第二个字节应该是rArB(r代表源的类型，r:寄存器，m:存储器, 这里r是寄存器;A\B代表目的类型),%esp对应的数字为4，%edx对应的数字为2,所以第二个字节是：42;，最后4字节是偏移量0x12345的编码，首先补0填充为4字节：00 01 23 45， 然后反序插入：45230100。最后连起来就是404245230100。</p>
+<h3 id="Y86的顺序实现">Y86的顺序实现</h3><h4 id="将处理组织成阶段">将处理组织成阶段</h4><p>将处理组织成阶段主要：</p>
 <ul>
-<li><strong>加载:</strong> 把一个字节或一个字从主存复制到寄存器，已覆盖寄存器原来的内容。</li>
-<li><strong>存储:</strong> 把一个字节或一个字从寄存器复制到主存的某个位置，已覆盖这个位置上原来的内容。</li>
-<li><strong>操作:</strong> 把两个寄存器的内容复制到ALU,ALU对这两个字做算术操作，并将结果存放到一个寄存器中，已覆盖该寄存器中原来的内容。</li>
-<li><strong>跳转:</strong> 从指令本身中抽取一个字，并将这个字复制到程序计数器（PC)中，以覆盖PC中原来的值。</li>
+<li><strong>取指(fetch)</strong>:取指阶段从存储器读取指令字节，地址为程序计数器(PC)的值。它按顺序方式计算当前指令的下一条指令的地址valP(等于PC的值加上已取出指令的长度)。</li>
+<li><strong>译码(decode)</strong>:译码阶段从寄存器文件读入最多两个操作数, 得到值valA或／和valB。</li>
+<li><strong>执行(excute)</strong>:执行阶段，算术/逻辑单元要么执行指令指明的操作，计算存储器引用的有效地址，要么增加或减少栈指针。</li>
+<li><strong>访存(memory)</strong>:访存阶段可以将数据写入存储器，或者从存储器读出数据。</li>
+<li><strong>写回(write back)</strong>:写回阶段最多可以写两个结果到寄存器文件。</li>
+<li><strong>更新PC(PC update)</strong>:将PC设置成下一条指令的地址。<br>例如：  </li>
 </ul>
-<p><strong>指令集结构</strong>描述的是每条机器代码指令的效果，<strong>微体系结构</strong>描述的是处理器实际上是如何实现的。</p>
-<p>一个hello world的自白：<br>我是一个hello world，我使用C语言写的，我被翻译后变成了可执行文件，下面是我如何从可执行文件显示到显示器的过程，过程晦涩，大牛勿入:<br>下面是执行的过程:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./hello.out&#10;hello world!</span><br></pre></td></tr></table></figure><br>下面是计算机系统所做的工作：<br>读取用书的输入<code>--&gt;</code>在当前目录下勋章可执行文件<code>--&gt;</code>把可执行文件从磁盘复制到主存<code>--&gt;</code>处理器执行main函数<code>--&gt;</code>把要输出的hello world!从主存复制到寄存器文件<code>--&gt;</code>寄存器内容复制到显示器<br>前面的工作其实是由外壳程序(其实就是shell)控制的</p>
-<h2 id="存储设备的层次结构">存储设备的层次结构</h2><p>根据机械原理，较大的存储设备要比较小的存储设备运行的慢，但是快速设备的成本却别低速设备高。根据这个原理我们知道处理速度方面寄存器文件&gt;主存&gt;磁盘。而成本也是这样，为了平衡成本和速度，以及适应不同的设备，需要在它们之间再加一个缓存设备，叫做<code>高速缓存存储器</code>。它能够存储更多的信息同时也有更快的速度。这就形成了存储设备的层次结构。直接上图：<br><img src="/assets/img/csapp/fig1.9.png" alt="存储设备的层次结构"><br>了解存储设备的层次结构可以利用这种特点提高程序的性能，这点在第六章会做介绍。</p>
-<h2 id="操作系统管理硬件">操作系统管理硬件</h2><p>操作系统有两个基本功能： </p>
-<ol>
-<li><strong>防止硬件被失控的应用程序滥用</strong></li>
-<li><strong>向应用程序提供简单一致的机制来控制复杂而又通常大相径庭的低级硬件设备</strong></li>
-</ol>
-<p>操作系统是通过进程、虚拟存储器和文件等抽象概念来实现这两个功能的,这种抽象表示如图所示：<br><img src="/assets/img/csapp/fig1.11.png" alt="进程的上下文切换"><br>下面对他们进行简要的介绍：<br><strong>进程</strong>是操作系统对一个正在运行的程序的一种抽象，一般来说一个CPU同时只能够运行一个进程，一个CPU运行多个进程是需要通过时间片轮转进行上下文切换。下面这幅图展示了一个CPU如何运行多个进程的：<br><img src="/assets/img/csapp/fig1.12.png" alt="进程的上下文切换"><br><strong>虚拟存储器</strong>是一个抽象概念，它为每个进程提供了一个奸相，即每个进程都在独占地使用主存，每个进程看到的是一致的存储器，称为<em>虚拟地址空间</em>。一个进程的虚拟地址空间如下图所示：<br><img src="/assets/img/csapp/fig1.13.png" alt="进程的上下文切换"><br>可以看到虚拟地址空间分为几部分，每个区都有专门的功能。下面从地址空间的最下方向上进行一一介绍：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>OPl rA, rB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取指</td>
+<td>icode:ifun&lt;-\(M_{1}\)[PC]</td>
+</tr>
+<tr>
+<td></td>
+<td>rA:rB&lt;-\(M_{1}\)[PC+1]</td>
+</tr>
+<tr>
+<td></td>
+<td>valP&lt;-PC+2</td>
+</tr>
+<tr>
+<td>译码</td>
+<td>valA&lt;-R[rA]</td>
+</tr>
+<tr>
+<td></td>
+<td>valB&lt;-R[rB]</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>valE&lt;-valB OP valA</td>
+</tr>
+<tr>
+<td></td>
+<td>Set CC</td>
+</tr>
+<tr>
+<td>访存</td>
+<td></td>
+</tr>
+<tr>
+<td>写回</td>
+<td>R[rB]&lt;-valE</td>
+</tr>
+<tr>
+<td>更新PC</td>
+<td>PC&lt;-valP</td>
+</tr>
+</tbody>
+</table>
+<h4 id="SEO硬件结构">SEO硬件结构</h4><p><img src="/assets/img/csapp/fig4.22.png" alt="">  </p>
+<p>硬件单元与各个处理阶段的关联：  </p>
 <ul>
-<li><strong>程序代码和数据:</strong> 对于所有的进程来说，代码是从同一固定地址开始。紧接着是全局变量和静态变量相对应的数据位置。代码区和数据区是直接按照可执行目标文件的内容进行初始化的。这两个区域是从程序一开始运行是就规定好了，不会再做改变了。</li>
-<li><strong>堆:</strong> 代码区和数据区后紧随着的是运行时堆。这个区的空间是动态的伸缩的，通过malloc和free这样的C标准库函数进行申请和释放空间。</li>
-<li><strong>共享库:</strong> 在地址空间的中间部分，是一块用来存放像C标准库和数学库这样共享库的代码和数据的区域。这部分会再第七章介绍是如何工作的。</li>
-<li><strong>栈:</strong> 位于虚拟地址空间顶部的是<em>用户栈</em>，编译器用它来实现函数调用，比如保持局部变量，保存函数调用的现场等等。</li>
-<li><strong>内核虚拟存储器:</strong> 内核总是驻留在内存中，是操作系统的一部分。这部分不允许应用程序读写。</li>
+<li>取指：将程序计数器寄存器作为地址，指令存储器读取指令的字节。PC增加器(PC incrementer)计算valP,即增加了的程序计数器。</li>
+<li>译码：寄存器文件有两个读端口A和B,从这两个端口同事图去寄存器值valA和valB。</li>
+<li>执行：根据指令的类型，将算术/逻辑单元(ALU)用于不同的目的。</li>
+<li>访存：在执行访存操作时，数据存储器读出或写入一个存储器字。</li>
+<li>写回：寄存器文件有两个写端口。端口E用来写ALU计算出来的值，而端口M用来写从数据存储器中读出的值。</li>
 </ul>
-<p>ps:注意到堆的地址空间是向上增长的，而栈的地址空间是向下增长的。这样设计是为了最大限度的利用地址空间。可以根据堆和栈的需求动态分配地址空间。<br><strong>文件</strong><br>文件其实就是字节序列。每个IO设备都可以看做是文件。系统的所有输入输出都是通过使用一小组成为Unix I/O的系统函数调用读写文件来实现的。第十章会进行详细的介绍。</p>
-<h2 id="系统之间利用网络通信">系统之间利用网络通信</h2><p>不同的系统之间通过网络进行通信。详细过程会在第十一章进行介绍。</p>
-<h2 id="其它">其它</h2><p>下面几个概念贯穿了计算机系统的所有方面。我们需要铭记在心：  </p>
-<ul>
-<li><strong>并发(concurrency):</strong> 是一个通用的概念，指一个同时具有多个活动的系统;</li>
-<li><strong>并行(parallellism):</strong> 指的是用并发使一个系统运行的更快。</li>
-</ul>
-<p>并发和并行的却别是一个很容易混淆的概念，下面通过一个简单的图像来表述他们的区别：<br><img src="/assets/img/csapp/fig1.other1.png" alt="并发与并行"><br>可以看出并发是在一个时间段内执行不同的任务，但是同一个时间点只能执行一个任务，通过时间片轮转来进行任务的切换。<br>并行是在同一个时间点不同的任务同时被执行，但是每个任务都有一个对应的执行者。<br>关于并发和并行其实有很多更加复杂的方式，一个go语言的例子可以学习一下：<a href="http://www.aqee.net/docs/Concurrency-is-not-Parallelism/#landing-slide" target="_blank" rel="external">并发不是并行</a>  </p>
-<h2 id="总结">总结</h2><p>本章虽然是一个概括性的介绍，但其实已经包含了本书很多重要的核心内容，以后章节是对每个重要的部分进行一个详细的介绍。了解本章的内容对了解计算机系统有一个整体性的印象，让人有一种把握全局的感觉~</p>
+<h4 id="SEO的时序">SEO的时序</h4><p>SEO的实现包括组合逻辑和两种存储器设备：时钟寄存器(程序计数器和条件码寄存器), 随机访问存储器(寄存器文件、指令存储器和数据存储器)。组合逻辑不需要任何时序或控制——只要输入变化了，值就通过逻辑门网络传播。现在有四个硬件单元需要对它们的时序进行明确的控制——程序计数器、条件码寄存器、数据存储器和寄存器文件。这些单元通过一个时钟信号来控制，它触发将新值转载到寄存器以及将值写到随机访问存储器。每个时钟周期，程序计数器都会装载新的指令地址。只有在执行整数运算指令时，才会装载条件码寄存器。只有在执行rmmovl, pushl或call指令时，才会写数据存储器。根据下图来理解处理器活动的时序控制：<br><img src="/assets/img/csapp/fig4.25.png" alt=""><br>可以看出，其实所有的状态更新实际上同时发生，且只在时钟上升开始下一个周期时，保证这个等价性的原则是：<em>处理器从来不需要为了完成一条指令的执行而去读由该指令更新了的状态</em>,我对这句话的理解是，一个周期内（其实一个周期就是一条指令的执行）执行的指令所更新的数据不会成为该指令读取的数据。<br>上图中周期3通过组合逻辑算出了条件码的新值：000， ％ebx的新值,以及程序计数器的新值(0x00e)，但是这些都是一个临时状态，是组合逻辑的出口值，在下一个周期开始的时候，也就是电瓶上升沿，把这些临时的值更新到了xian相应的寄存器中,开始下一个逻辑运算。<br>SEO阶段的实现，就是以上每条指令逻辑运算的过程。不再说明。</p>
+<h2 id="流水线的通用原理">流水线的通用原理</h2><p>流水线化的一个重要特性就是增加了系统的<em>吞吐量（throughput)</em>。我理解吞吐量就是在单位时间内能够执行的命令个数。通过例子来说明：<br>非流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.32.png" alt=""><br>图中，I1,I2,I3表示的是三条指令。<br>一个组合逻辑需要300ps时间来进行运算，然后需要20ps的时间把数据加载到寄存器中，也就是一个<em>延迟(latency)</em>为320ps，所以可以计算处吞吐量：<br>\(吞吐量=\frac{1}{(300+20)*10^{-12}} \approx 3.12GIPS\)  </p>
+<p>流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.33.png" alt=""><br>图中，I1,I2,I3表示的是三条指令, A, B, C表示执行每条指令需要三个阶段。这里每个阶段为100ps, 也就是把300ps分成三次来执行。但是各个阶段之间需要放上<em>流水线寄存器(pipeline registers)</em>,每次加载寄存器都需要20ps, 所以可以看出执行一条指令需要3*（20+100）＝360ps, 比之前执行一条指令多出来40ps。但是看一下流水线的流程，A先执行I 1指令，执行完后，B开始执行I1指令，这时I2就可以进入A阶段进行执行了，最终的结果是A, B, C都在自行命令。也就是得到流水线的吞吐量是：<br>\(吞吐量=\frac{1}{(100+20)*10^{-12}} \approx 8.33GIPS\)<br>对于这三条指令可以看出，非流水线状态下一共执行了960ps, 流水线情况下执行了600ps， 提高了整个系统的执行效率。</p>
+<blockquote>
+<p>ps： 不是流水线的级数越多约好，因为级数增加的，每个阶段的执行时间减少，吞吐量增加了，但是整个执行过程的延迟也增加了，所以收益不一定会变好。所以实际过程中要兼顾吞吐量和时延两个指标。</p>
+</blockquote>
+<p>后面的内容说的是具体流水线的设计实现，这里就不再说了。</p>
 
       
     </div>
@@ -430,15 +299,15 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/11/20/csapp-chapter0/"><span>深入理解计算机操作系统之写在前面</span></a></h3>
+    <h3 class="article-title"><a href="/2014/02/06/apue-chapter2/"><span>apue chapter2</span></a></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/2013/11/20/csapp-chapter0/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-19T16:00:00.000Z">
-          2013-11-20
+      <a href="/2014/02/06/apue-chapter2/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-05T16:00:00.000Z">
+          2014-02-06
         </time>
       </a>
     </span>
@@ -451,122 +320,10 @@
     <div class="entry">
       
         <blockquote>
-<p><em>这个系列的博客主要是对《深入理解计算机操作系统》(</em>Computer Systems A Programmers’s Perspective<em> 以下简称CSAPP)这本书的学习记录和感悟。</em></p>
+<p>本章主要介绍UNIX系统的标准化及不同UNIX系统的实现。</p>
 </blockquote>
-<p>这本书让我学到了很多东西，特别是对程序运行的过程和程序在计算机系统中的组织结构。以前也学过单片机原理，但是跟这个比起来就有点小打小闹了，这本书在<a href="http://book.douban.com/subject/5333562/" target="_blank" rel="external">豆瓣</a>也是超高人气的。希望自己能通过写博客的方式对它进行更加深入的研究，让自己有些提高~</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/CSAPP/">CSAPP</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/19/apue-chapter1/"><span>apue chapter1:UNIX基础知识</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/19/apue-chapter1/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-18T16:00:00.000Z">
-          2013-11-19
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>本章主要是从程序设计人员角度对UNIX系统的一些术语和概念有一个大概的印象。</em></p>
-</blockquote>
-<h2 id="UNIX体系结构">UNIX体系结构</h2><p>首先看下UNIX操作系统的体系及构图:<br><!-- retina屏幕下截图尺寸太大了，不得不限制一下图片的大小，但是markdown貌似现在还不支持图片的大小，只能用html代码来写了～--><br><img class="img-rounded, center-block" src="/assets/img/apue/fig1.1.png" alt="UNIX操作系统体系结构" width="320px"><br>从图的内往外看</p>
-<ol>
-<li>第一层是内核(kernel)，它是系统软件，控制计算机的硬件资源，提供程序运行环境。</li>
-<li><p>第二层是系统调用(system call)，所有的系统调用都要通过它来实现。</p>
-</li>
-<li><p>第三层比较复杂了，主要有库函数(library routines)，shell和应用软件(application)。应用软件可以调用库函数，也可以直接调用系统函数，shell则是一种特殊的应用软件。</p>
-</li>
-</ol>
-<h2 id="登录">登录</h2><p>用过unix系统的都知道，当开机首先会让输入用户名和密码才能进入系统，其实在unix系统开机后首先运行登录程序<code>/bin/login</code>（关于unix从开机到进入系统的过程，先参考阮一峰的这篇博客：<a href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html" target="_blank" rel="external">linux的启动流程</a>, 稍后做一下补充）,然后读取<code>/etc/passwd</code>文件，验证用户名密码是否正确。<br>这个passwd文件由7个以冒号分割的字段组成，举个例子：<br><code>sean:x:504:505::/home/sean:/bin/bash</code><br>这七个字段分别是：<br>登录名:加密口令:数值用户ID:数值组ID:注释字段:起始目录:shell程序<br>ps:加密口令单数放在一个文件里面，第六章会对其进行介绍</p>
-<h2 id="输入和输出">输入和输出</h2><ol>
-<li><strong>文件描述符</strong>:内核用来标识一个特定进程正在访问的文件的非负整数。</li>
-<li><strong>标准输入、标准输出和标准出错</strong>:运行一个新程序shell都会为其打开这三个文件描述符。</li>
-<li><strong>不用缓冲的I/O</strong>:程序直接对输入输出进行处理。</li>
-<li><strong>标准I/O</strong>:需要先输入输出到缓冲区，然后按照某种策略中缓冲区中输出。</li>
-</ol>
-<p>ps:具体的过程后面会讲到。</p>
-<h2 id="程序和进程">程序和进程</h2><ul>
-<li><strong>程序</strong>:是存放在磁盘上、处于某个目录中的一个可执行文件。使用6个exec函数中的一个由内核将程序读入存储器，并使其执行。</li>
-<li><p><strong>进程和进程ID</strong>:程序的执行实例被称为<em>进程(process)</em>。某些操作系统使用<em>任务(task)</em>表示。UNIX系统确保每个进程都有一个唯一的数字标志符，称为<em>进程ID(process ID)</em>。进程ID总是非负数。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &#34;apue.h&#34;&#10;&#10;int &#10;main(void)&#10;&#123;&#10;    printf(&#34;hello world from process ID %d\n&#34;, getpid());&#10;    exit(0);&#10;&#125;</span><br></pre></td></tr></table></figure>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./a.out&#10;hello world from precess ID 851&#10;$ ./a.out&#10;hello world from precess ID 854</span><br></pre></td></tr></table></figure></li>
-<li><strong>进程控制</strong>:有三个用于进程控制的主要函数：fork, exec和waitpid。<ul>
-<li>fork:调用fork创建一个新进程。新进程是调用进程的复制品，我们称调用进程为父进程，新创建的进程为子进程。fork向父进程返回新子进程的进程ID,对子进程返回0。因为fork创建一新进程，所以它被调用一次（由父进程），但返回两次（分别是在父进程及子进程中）。</li>
-</ul>
-</li>
-<li><strong>线程和线程ID</strong>:为了充分利用对处理器系统的并行性，可以使用多线程(thread)。在一个进程内的所有线程同享统一地址空间、文件描述符、栈以及于进程相关的属性。因为它们能访问统一存储区，所以各线程在访问共享数据时需要采取同步措施以避免不一致性。与进程相同，线程也用ID标识，但是，线程ID只在它所属的进程内起作用。</li>
-</ul>
-<h2 id="出错处理">出错处理</h2><p>  当UNIX函数出错时，常常返回一个负值，而且整型变量errno通常被设置为含有附加信息的一个值。例如open函数如果执行错误则返回－1。在open出错时，有大约15种不同的errno值(文件不存在、权限问题等)。某些函数并不返回负值而是使用另一种约定。<br>  可以将<code>&lt;errno.h&gt;</code>中定义的各种出错分成致命性的和非致命性的两类。对于致命性的错误，无法执行恢复动作，最多只能在用户屏幕上打印出一条出错消息，或者将一条出错消息写如日志文件中，然后终止。对于非致命性的出错，有时可以较妥善地进行处理。大多数非致命性的出错在本质上时暂时的，例如资源短缺，当系统中的活动较少时，这种出错很可能不会发生。</p>
-<h2 id="用户标识">用户标识</h2><ul>
-<li><strong>用户ID</strong>:口令文件登录项中的<em>用户ID(user ID)</em>是一个数值，它向系统标识各个不同的用户。用户ID为0的用户为<em>根(root)</em>或<em>超级用户(superuser)</em>。</li>
-<li><strong>组ID</strong>:口令文件登录项也包括用户的<em>组ID(group ID)</em>,它是一个数值。组ID也是由系统管理员在指定用户登录名时分配的。下面就是获取用户ID和组ID的例子：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#34;apue.h&#34;&#10;&#10;int&#10;main(void)&#10;&#123;&#10;    printf(&#34;uid = %d, gid = %d\n&#34;, getuid(), getgid());&#10;    exit(0);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./a.out&#10;uid = 205, gid = 105</span><br></pre></td></tr></table></figure></li>
-<li><strong>附加组ID</strong>:除了在口令文件中对一个登录名执行一个组ID外，大多数UNIX系统版本还允许一个用户属于另外的组。这就是<em>附加组ID(supplementary group ID)</em>。通过读取<code>/etc/group</code>获得。</li>
-</ul>
-<h2 id="信号">信号</h2><p><em>信号(signal)</em>是通知进程已经发生某种情况的一种技术。进程如何处理信号由三种选择：  </p>
-<ul>
-<li>忽略该信号。</li>
-<li>按系统默认方式处理。</li>
-<li>提供一个函数，信号发生时则调用该函数，这被称为捕捉该信号。使用这种方式，我们要提供自编的函数就将能知道什么时候产生了信号，并按所希望的方式处理它。</li>
-</ul>
-<p>很多情况会产生信号，比如终端键盘上有两种产生信号的方法，分别称为<em>中断键(interrupt key, 通常是Delete键或Ctrl+ C)</em>和<em>退出键(quit key, 通常是Ctrl＋)</em>。另外一种产生信号的方法是调用名为<code>kill</code>的函数，在一个进程中调用该函数就可以向另外一个进程发送一个信号。</p>
-<h2 id="时间值">时间值</h2><p>UNIX系统一直使用两种不同的时间值：</p>
-<ul>
-<li>日历时间:该值是自1970年1月1日00:00:00以来国际标准时间（UTC）所经过的秒数累计值。系统基本数据类型为time_t用户保存这种时间值。</li>
-<li>进程时间:这也被称为CPU时间，用以度量进程使用的中央处理机资源。进程时间以时钟滴答计算，历史上曾经取50、60和100个滴答。系统基本数据类型clock_t用于保存这种时间值。</li>
-</ul>
-<p>当度量一个进程的执行时间时，UNIX系统使用三个进程时间值：</p>
-<ul>
-<li>时钟时间:又称为墙上时钟时间(wall clock time)。它是进程运行的时间总量，其值与系统中同时运行的进程数有关。</li>
-<li>用户CPU时间:是执行用户指令所用的时间。</li>
-<li>系统CPU时间:是为该进程执行内核程序所经历的时间。</li>
-</ul>
-<p>用户CPU时间 ＋ 系统CPU时间 ＝ CPU时间。<br>时钟时间 ＝ CPU时间 ＋ 其它等待的时间。</p>
-<h2 id="系统调用和库函数">系统调用和库函数</h2><p>所有的操作系统都提供多种服务的入口点，程序由此向内核请求服务。这些入口点被称为<em>系统调用</em>。<br>UNIX所使用的技术是为每个系统调用在标准C库中设置一个具有同样名字的函数。用户进程用标准C调用序列来调用这些函数，然后，函数又用系统所要求的技术调用相应的内核服务。从应用的角度考虑，可将系统调用视作为C函数。从实现者的角度观察，系统调用和库函数之间有重大区别；但从用户角度看，其区别并不非常重要。系统调用通常提供一种最小接口，而库函数通常提供比较复杂的功能。<br><img src="http://www.plantuml.com/plantuml/svg/IybCBqeio51mLwZcKe22lFoKL4E5wEACn89K1Lk5fFmAXPp4fDGS85lfwQufpwUiUBwY--ck_YUx5pzVqAYa48kYqmYNphKpdZQjUDhHzhArzsdxtcTJDyJavIRcvEGdevjWZCE4ugIYx9YyvvjtFzyz_yM6Pg0xb20QYqkJ8Bv8pYajBaajCa3oJ759PKwgRKf-IKbg2feFTUrW3auiAielBqdCpB5Loiil0hfAIG4ib96Qc88GIiaiiatAByc8LO0R17SRq37FEhQ_s3yR63HArc3vMYwiZZD42sbZJCEUjhK-Mx03RWmYPA4kDYR3nRK0"><br><em>图1-2 malloc函数和sbrk系统调用</em><br><img src="http://www.plantuml.com/plantuml/svg/IybCBqeio51mLwZcKe22lFoKL4E5wEACn89K1Lk5fFmAXPp4fDGS85lfwQufpwUiUBwY--ck_YUx5pzVqAYa48kYqmY7JkUdkoO_RT_xREe6T1t6E7Gytxpx-UxvBpOq0srKWcWfBas2k3SvfxIu9BN80CdPnIMLEQcsAVab9QafQ7xHjOCvBR6eAB-y934pnrOfBxyeDp57IG4ib96Qc88GIiaiiatAByc8LO0RX73Lb1NFEhQ_s3yR60XArc3vMYwiZZD42rDZJCEUjhK-Mx03RWo6Yut9T374jnGOKWi0"><br><em>图1-3 C库函数和系统调用之间的差别</em></p>
-<h2 id="习题">习题</h2><blockquote>
-<p><strong>1.3</strong> 在1.7节中,perror的参数是用ISO C的属性const定义的，而strerror的整型参数则没有用此属性定义，为什么？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#60;string.h&#62;&#10;char *strerror(int errnum);&#10;&#10;# include &#60;stdio.h&#62;&#10;void perror(const char *msg);</span><br></pre></td></tr></table></figure><br>下面先看这两个函数的使用方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/* perror example */&#10;# include &#60;stdio.h&#62;&#10;&#10;int main ()&#10;&#123;&#10;    FILE * pFile;&#10;    pFile=fopen (&#34;unexist.ent&#34;,&#34;rb&#34;);&#10;    if (pFile==NULL)&#10;        perror (&#34;The following error occurred&#34;);&#10;    else&#10;        fclose (pFile);&#10;    return 0;&#10;&#125;&#10;/*&#10;out put;&#10;The following error occurred: No such file or directory&#10;*/&#10;&#10;/* strerror example : error list */&#10;# include &#60;stdio.h&#62;&#10;# include &#60;string.h&#62;&#10;# include &#60;errno.h&#62;&#10;&#10;int main ()&#10;&#123;&#10;    FILE * pFile;&#10;    pFile = fopen (&#34;unexist.ent&#34;,&#34;r&#34;);&#10;    if (pFile == NULL)&#10;        printf (&#34;Error opening file unexist.ent: %s\n&#34;,strerror(errno));&#10;    return 0;&#10;&#125;&#10;/*&#10;out put: &#10;Error opening file unexist.ent: No such file or directory&#10;*/</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>可见<code>perror</code>的参数是程序运行前就定义好的，其输出是先输出<code>msg</code>指向的字符串，然后加上errno值对应的出错信息。<br>而<code>strerror</code>的参数是运行时确定的，是一个errno的值，其输出是errno对应的出错信息.<br>所以perror的参数带<code>const</code>而strerror的参数不带<code>const</code>。</p>
+<h2 id="UNIX标准化">UNIX标准化</h2><p>UNIX系统由各自独立的组织执行了三个标准：ISO C、IEEE POSIX以及Single UNIX Specification。</p>
+<p><img src="/assets/img/apue/unix_chart_775.jpg" alt="unix系统家族树"></p>
 
       
     </div>
@@ -606,15 +363,15 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/11/19/apue-chapter0/"><span>UNIX环境高级编程之写在前面</span></a></h3>
+    <h3 class="article-title"><a href="/2014/01/15/mysql-merge-engine/"><span>mysql merge engine 介绍</span></a></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/2013/11/19/apue-chapter0/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-18T16:00:00.000Z">
-          2013-11-19
+      <a href="/2014/01/15/mysql-merge-engine/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-01-14T16:00:00.000Z">
+          2014-01-15
         </time>
       </a>
     </span>
@@ -627,9 +384,45 @@
     <div class="entry">
       
         <blockquote>
-<p><em>很久没有写读书笔记了,以前的读书笔记都是记在本子上的,或者直接写到书里备注的,但是发现其实接在本子上的都懒得去翻了,写在书里的也不能随身携带,遇到问题如果忘了的话还是要到网上去google,对自己的知识积累很是不利。现在好了,有了github一切都解决了~以前无知，没有认识到github的重要性，现在发现它真是无所不能啊~,希望伟大的墙不要再让码农做翻墙运动了~</em></p>
+<p><em>最近由于项目需求，使用了Merge Engine这个Mysql数据库引擎，看着<a href="http://dev.mysql.com/doc/refman/5.6/en/merge-storage-engine.html" target="_blank" rel="external">官方文档</a>对其了解了一下。总结加翻译一下～</em></p>
 </blockquote>
-<p>《UNIX环境高级编程》(<em>Advanced Programming in the UNIX Environment</em>,后面简称apue)这本书在<a href="http://book.douban.com/subject/1788421/" target="_blank" rel="external">豆瓣</a>的评分很高。作为一个非计算机出身的人，自知基础薄弱，需要多方面学习，这本经典书让我对linux系统以及进程线程等概念有了更深的认识，希望自己在写读书笔记的过程中能够对其有更加深入的了解，并且学以致用，运用到工作中去~</p>
+<h2 id="MERGE引擎初体验">MERGE引擎初体验</h2><p>MERGE存储引擎又叫MRG_MyISAM存储引擎，可以把许多相同的MyISAM表可以聚集到一个表来使用。“相同”的意思是所有的表要有相同的列和相同的索引信息。<br>MERGE引擎的另一个代替方案是分割(partitioned)表(把一个独立的分割后的表放到一个单独的文件中)。分割表是一个比MERGE更好的方案，具体请参考第18章<a href="http://dev.mysql.com/doc/refman/5.6/en/partitioning.html" target="_blank" rel="external">Partitioning</a>的内容。<br>当建立一个MERGE引擎表时，会产生两个文件：<code>.frm</code>文件存储的是表的格式,<code>.MRG</code>文件包含的是这个MERGE表所包含的MyISAM表的名字(这些表可以不在同一个数据库中)。<br>MERGE表中可以使用 SELECT, DELETE, UPDATE, 和INSERT等数据库操作语言。前提是对每个包含的表都有这些权限。</p>
+<blockquote>
+<p>注意:<br>如果一个用户有权限操作数据表t, 那么可以建立一个MERGE表m来访问t, 这时如果用户对t的权限没有了，仍然可以通过m来操作t。</p>
+</blockquote>
+<p>如果对MERGE使用DROP TABLE那么只是删除了MERGE表，对MERGE表包含的表没有任何影响。<br>建立一个MERGE表的时候可以使用参数<code>INSERT_METHOD</code>来决定INSERT一条数据是是如何插入MERGE表所包含的表的。</p>
+<blockquote>
+<p>INSERT_METHOD = last: 当插入一个记录时，实际插入的是union的最后一个table。<br>INSERT_METHOD = first: 当插入一个记录时，实际插入的是union的第一个table。<br>INSERT_METHOD = no: MERGE表不允许插入数据。</p>
+</blockquote>
+<p>如果MERGE表包含的数据表结构或者个数有变化，需要重新建立MERGE表，建立一个新的映射关系，方法有下面两种：</p>
+<ol>
+<li>删除这个MERGE表，重新create一个。</li>
+<li>使用<code>ALTER TABLE tbl_name UNION=(...)</code>, 改变所包含的表。</li>
+</ol>
+<h2 id="MERGE实现原理">MERGE实现原理</h2><p>由于文档没有说MERGE的内部实现原理，根据我的猜测应该是这样的，MERGE表只是记录了所包含的每个表的名字和表共同的结构，当我对表的内容进行检索时，其实MERGE是分别对它包含的每个表进行了检索，然后输出了结果，这个可以做个验证：<br>t是表t1，t2的MERGE表，一条记录分别在t1和t里检索<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; explain select * from t1 where a =1;&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;| id | select_type | table | type  | possible_keys | key     | key_len | ref   | rows | Extra |&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;|  1 | SIMPLE      | t1    | const | PRIMARY       | PRIMARY | 4       | const |    1 |       |&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;1 row in set (0.00 sec)&#10;mysql&#62; explain select * from t where a =1;&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+&#10;| id | select_type | table | type | possible_keys | key  | key_len | ref   | rows | Extra |&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+&#10;|  1 | SIMPLE      | t     | ref  | a             | a    | 4       | const |    2 |       |&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+</span><br></pre></td></tr></table></figure><br>发现，对于主键进行检索时，MERGE的检索此时总是等于它包含的表的数量，而单个表进行检索时是直接在本表进行检索的。也就是说其实MERGE表只是一个聚合结构，并不含索引和数据，其操作都是在它包含的表中逐个进行的，其复杂度是单个表的和。</p>
+<h2 id="MERGE_优缺点">MERGE 优缺点</h2><h3 id="优点：">优点：</h3><ul>
+<li>对分表的管理更加简单。比如log表,可以根据时间进行分别，然后对其进行压缩，最后通过建立MERGE表来操作数据。</li>
+<li>获取更快的速度。可以把一个很大的只读表拆分为多个独立的表，放到不同的磁盘上，通过MERGE表结构来查询的速度要比查一个大表快的多。 </li>
+<li>更有效的搜索。如果知道要搜索的数据在哪个表里，可以直接进行搜索，否则就可以在MERGE表中搜索，不需要对每个表都分别搜索。</li>
+<li>及时映射所有包含的表。MERGE表不需要包含索引，因为它用的是包含的表的索引。</li>
+<li>如果需要建立一个很大的表，可以见多个表然后再使用MERGE表。这样更加快而且更加节省空间（应该是索引所消耗的空间）。</li>
+<li>可以突破MyISAM表大小的限制。每个MyISAM表都有大小的限制，但是MERGE没有。</li>
+<li>对一个表也可以建立MERGE表，但是对性能并没有什么提升。only a couple of indirect calls and memcpy() calls for each read （这句话不知道如何翻译）</li>
+</ul>
+<h3 id="缺点：">缺点：</h3><ul>
+<li>MERGE表只能对MyISAM引擎的表建立。</li>
+<li>MERGE引擎不支持MyISAM引擎的一些特性。例如不能建立FULLTEXT索引，可以在MyISAM上建立，但是不能通过MERGE表来使用。</li>
+<li>如果MERGE表不是临时的，那么它包含的表也不能是临时的，如果MERGE表是临时的，那么它包含的表可以是任何临时和不临时的表的组合。</li>
+<li>MERGE表比MyISAM表需要更多的文件描述。 If 10 clients are using a MERGE table that maps to 10 tables, the server uses (10 × 10) + 10 file descriptors. (10 data file descriptors for each of the 10 clients, and 10 index file descriptors shared among the clients.)，这个也不太明白。</li>
+<li>读索引比较慢。当使用索引时，MERGE需要对它包含的每个表进行查询。这让MERGE表在eq_ref搜索时很慢，但是在ref搜索时不会太慢。</li>
+</ul>
+<h2 id="MERGE_存在的问题">MERGE 存在的问题</h2><p>捡总要的说了</p>
+<ul>
+<li>如果改变一个原来是MERGE引擎的表为非MERGE引擎，那么MERGE表的映射就没有了，所包含的表的所有数据都会copy的修改后的表中。</li>
+<li>MyISAM里的AUTO_INCREMENT字段对于MERGE来说没有用</li>
+<li>MERGE不能保持唯一索引，在MyISAM中是可以的。</li>
+<li></li>
+</ul>
 
       
     </div>
@@ -644,17 +437,10 @@
 
     <span class="post-categories">
       <i class="icon-categories"></i>
-        <a href="/categories/APUE/">APUE</a>
+        <a href="/categories/DB/">DB</a>
     </span>
     
 
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/linux/">linux</a><a href="/tags/unix/">unix</a>
-    </span>
     
 
     </div>
@@ -669,76 +455,15 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/11/14/pip-and-easy_install/"><span>python打包高级进阶:pip and easy_install</span></a></h3>
+    <h3 class="article-title"><a href="/2014/01/10/add-dot-language/"><span>Jekyll 添加DOT language支持</span></a></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/2013/11/14/pip-and-easy_install/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-13T16:00:00.000Z">
-          2013-11-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h2 id="如何选择已经安装的不同版本？">如何选择已经安装的不同版本？</h2><p>其实很简单。以myproject为例：<code>easy_install myproject==version</code> 就可以了，默认是先从本地开始找，如果本地找不到就会从远程源上找。</p>
-<h2 id="能不能指定安装路径？">能不能指定安装路径？</h2><p>经过再次了解，发现其实是可以的,<code>easy_install -h</code>命令可以看到有以下两条：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--install-dir (-d)             install package to DIR&#10;--script-dir (-s)              install scripts to DIR&#10;--prefix                       installation prefix</span><br></pre></td></tr></table></figure><br>第一个其实就是可以指定默认搜索路径的。第二个是可以指定二进制脚本的安装路径，如果指定了第一个而没有指定第二个那就会默认都安装到第一个,第三个是实际包的安装路径，但是只是路径前缀，默认会加上lib/python2.6/site-packages<br>还有一个问题，如果按照路径不在PYTHONPATH里，那么就会报错，可以通过先把你要制定的路径加入进去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/python/packages&#34;&#10;PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/lib/python2.6/site-packages&#34;&#10;export PYTHONPATH</span><br></pre></td></tr></table></figure><br>然后再次安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">easy_install -d /search/sean/python/packages/ -s /search/sean/python/ --prefix /search/sean  myproject==1.9</span><br></pre></td></tr></table></figure><br>可以看到-d需要PYTHONPATH 而-s并不需要，安装完后可以在两个目录中找到安装后的文件<br>更正：之前说安装多版本的时候会有一个去掉版本的文件夹，其实这个是pip的实现方式，而easy_install的实现方式是：每次安装都会把easy-install.pth路径修改了，python就会去找修改过的路径。<br>具体pip的版本选择和安装路径的问题时间限制先不发了，研究后再补充~</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/python/">python</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/python/">python</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/13/django-nginx-fastcgi/"><span>django+nginx+fastcgi 配置</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/13/django-nginx-fastcgi/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-12T16:00:00.000Z">
-          2013-11-13
+      <a href="/2014/01/10/add-dot-language/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-01-09T16:00:00.000Z">
+          2014-01-10
         </time>
       </a>
     </span>
@@ -751,10 +476,10 @@
     <div class="entry">
       
         <blockquote>
-<p><em>我们知道刚开始学习django的时候使用的是django内置的服务器，当然这个是为了能够快速的搭建django的运行环境，并不能运用到实际的生产环境中。而</em>django book<em> 这本书中只接受了django+apache和django+lighttpd的配置。但是我们实际的生产环境中nginx使用的很广泛。于是django+nginx+fastcgi的配置方法就有比较了解一下了…</em></p>
+<p><em>plantuml是基于graphviz来做的，而graphviz支持DOT language,所以可不可以直接用plantuml支持DOT language来进行画图呢？这样的话岂不是更爽了～，折腾吧，骚年！</em></p>
 </blockquote>
-<h2 id="django配置">django配置</h2><p>首先<em>django book</em>这本书中介绍了如何在生产过程中配置<code>setting.py</code>这个文件,其中提到变量<code>DJANGO_SETTINGS_MODULE</code>的值其实就是网站的配置文件的路径,我们可以根据环境的不同选择不同的配置文件，例如开发环境、测试环境和线上环境等。这个变量的设置其实就在网站的根目录下<code>wsgi.py</code>这个文件中。其内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;&#34;&#34;&#10;wsgi.py&#10;&#34;&#34;&#34;&#10;import os&#10;&#10;os.environ.setdefault(&#34;DJANGO_SETTINGS_MODULE&#34;, &#34;djsite.settings_dev&#34;)&#10;&#10;#  This application object is used by any WSGI server configured to use this&#10;#  file. This includes Django&#39;s development server, if the WSGI_APPLICATION&#10;#  setting points here.&#10;from django.core.wsgi import get_wsgi_application&#10;application = get_wsgi_application()</span><br></pre></td></tr></table></figure><br>这里设置的默认加载配置文件为：<code>settings_dev.py</code>，这是开发环境的配置文件,用户可以根据需求选择不同的配置文件。</p>
-<h2 id="uwsig配置文件">uwsig配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$cat uwsig.xml &#10;&#60;uwsgi&#62;  &#10;    &#60;socket&#62;0.0.0.0:3001&#60;/socket&#62;  &#10;    &#60;listen&#62;20&#60;/listen&#62;  &#10;    &#60;master&#62;true&#60;/master&#62;  &#10;    &#60;pidfile&#62;/etc/nginx/uwsgi.pid&#60;/pidfile&#62;  &#10;    &#60;processes&#62;2&#60;/processes&#62;  &#10;    &#60;module&#62;wsgi&#60;/module&#62;&#10;    &#60;pythonpath&#62;/search/sean/python/djsite/djsite&#60;/pythonpath&#62;  &#10;    &#60;profiler&#62;true&#60;/profiler&#62;  &#10;    &#60;memory-report&#62;true&#60;/memory-report&#62;&#10;    &#60;enable-threads&#62;true&#60;/enable-threads&#62;&#10;    &#60;logdate&#62;true&#60;/logdate&#62;&#10;    &#60;limit_as&#62;6048&#60;/limit_as&#62;&#10;&#60;/uwsgi&#62;</span><br></pre></td></tr></table></figure>
+<p>DOT language的<a href="http://www.graphviz.org/doc/info/lang.html" target="_blank" rel="external">介绍</a>及<a href="http://www.graphviz.org/Documentation/dotguide.pdf" target="_blank" rel="external">文档</a>。在plantuml的官网找到了有关plantuml支持DOT的<a href="http://plantuml.sourceforge.net/dot.html" target="_blank" rel="external">说明</a>。根据这个说明的意思，开头的<code>@startuml</code>和结尾的<code>@enduml</code>需要换成<code>@startdot</code>和<code>@enddot</code>就可以了，然后用<code>plantuml.jar</code>生产图片，官网上说只支持png格式，但是我试了一下svg也是支持的,可能是文档没有更新的原因。  </p>
+<p>但是jekyll能不能支持DOT呢？我原来想可能要改一下插件，可以在<a href="http://www.plantuml.com/plantuml/form" target="_blank" rel="external">http://www.plantuml.com/plantuml/form</a>试了一下DOT是可以生成图片的，也就是说我用的JS插件生成图片是原生就支持的。所以我直接用下面的的写法放到了jekyll里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% plantuml %&#125;&#10;&#10;digraph G &#123;&#10;    subgraph cluster0 &#123;&#10;        node [style=filled,color=white];&#10;        style=filled;&#10;        color=lightgrey;&#10;        a0 -&#62; a1 -&#62; a2 -&#62; a3;&#10;        label = &#34;process #1&#34;;&#10;    &#125;&#10;    subgraph cluster1 &#123;&#10;        node [style=filled];&#10;        b0 -&#62; b1 -&#62; b2 -&#62; b3;&#10;        label = &#34;process #2&#34;;&#10;        color=blue&#10;    &#125;&#10;    start -&#62; a0;&#10;    start -&#62; b0;&#10;    a1 -&#62; b3;&#10;    b2 -&#62; a3;&#10;    a3 -&#62; a0;&#10;    a3 -&#62; end;&#10;    b3 -&#62; end;&#10;    start [shape=Mdiamond];&#10;    end [shape=Msquare];&#10;&#125;&#10;&#10;&#123;% endplantuml %&#125;</span><br></pre></td></tr></table></figure><br>效果如下：<br><img src="http://www.plantuml.com/plantuml/svg/VL713e8m3Btx5GrUDG4v6hnwyWk8XnOgBAaCjn5Z3F-kRYXWZ3qqwNjlUwzRgIg3RGrxk2_WMRQZ01JIMSSc7l1NDRfaoAsx2MSd9SBbgj2YJNQjbUFZzYESIaOqQ4LLjQiCtqO2OrZl01FVDxwd8oj8B911r1fTiBMmJAB0zZyJ9tyJJrAIjoLlIzwM_jfkekzTI3gU9d5ed8yVR-S03K3OyMr3irqndHuD4pV3-z5y31VdjiQMiqEfyAoRzsfFqOUnbmxDwsVw1m00"><br>成功了～</p>
 
       
     </div>
@@ -769,17 +494,10 @@
 
     <span class="post-categories">
       <i class="icon-categories"></i>
-        <a href="/categories/python/">python</a>
+        <a href="/categories/tools/">tools</a>
     </span>
     
 
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/django/">django</a><a href="/tags/python/">python</a>
-    </span>
     
 
     </div>

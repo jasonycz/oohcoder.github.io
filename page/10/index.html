@@ -1,0 +1,477 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 10 页 | OohCode | 好奇的码农~</title>
+
+  
+  <meta name="author" content="sean chen">
+  
+
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="OohCode"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/20/csapp-chapter0/"><span>深入理解计算机操作系统之写在前面</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/20/csapp-chapter0/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-19T16:00:00.000Z">
+          2013-11-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>这个系列的博客主要是对《深入理解计算机操作系统》(</em>Computer Systems A Programmers’s Perspective<em> 以下简称CSAPP)这本书的学习记录和感悟。</em></p>
+</blockquote>
+<p>这本书让我学到了很多东西，特别是对程序运行的过程和程序在计算机系统中的组织结构。以前也学过单片机原理，但是跟这个比起来就有点小打小闹了，这本书在<a href="http://book.douban.com/subject/5333562/" target="_blank" rel="external">豆瓣</a>也是超高人气的。希望自己能通过写博客的方式对它进行更加深入的研究，让自己有些提高~</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/CSAPP/">CSAPP</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/19/apue-chapter1/"><span>apue chapter1:UNIX基础知识</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/19/apue-chapter1/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-18T16:00:00.000Z">
+          2013-11-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>本章主要是从程序设计人员角度对UNIX系统的一些术语和概念有一个大概的印象。</em></p>
+</blockquote>
+<h2 id="UNIX体系结构">UNIX体系结构</h2><p>首先看下UNIX操作系统的体系及构图:<br><!-- retina屏幕下截图尺寸太大了，不得不限制一下图片的大小，但是markdown貌似现在还不支持图片的大小，只能用html代码来写了～--><br><img class="img-rounded, center-block" src="/assets/img/apue/fig1.1.png" alt="UNIX操作系统体系结构" width="320px"><br>从图的内往外看</p>
+<ol>
+<li>第一层是内核(kernel)，它是系统软件，控制计算机的硬件资源，提供程序运行环境。</li>
+<li><p>第二层是系统调用(system call)，所有的系统调用都要通过它来实现。</p>
+</li>
+<li><p>第三层比较复杂了，主要有库函数(library routines)，shell和应用软件(application)。应用软件可以调用库函数，也可以直接调用系统函数，shell则是一种特殊的应用软件。</p>
+</li>
+</ol>
+<h2 id="登录">登录</h2><p>用过unix系统的都知道，当开机首先会让输入用户名和密码才能进入系统，其实在unix系统开机后首先运行登录程序<code>/bin/login</code>（关于unix从开机到进入系统的过程，先参考阮一峰的这篇博客：<a href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html" target="_blank" rel="external">linux的启动流程</a>, 稍后做一下补充）,然后读取<code>/etc/passwd</code>文件，验证用户名密码是否正确。<br>这个passwd文件由7个以冒号分割的字段组成，举个例子：<br><code>sean:x:504:505::/home/sean:/bin/bash</code><br>这七个字段分别是：<br>登录名:加密口令:数值用户ID:数值组ID:注释字段:起始目录:shell程序<br>ps:加密口令单数放在一个文件里面，第六章会对其进行介绍</p>
+<h2 id="输入和输出">输入和输出</h2><ol>
+<li><strong>文件描述符</strong>:内核用来标识一个特定进程正在访问的文件的非负整数。</li>
+<li><strong>标准输入、标准输出和标准出错</strong>:运行一个新程序shell都会为其打开这三个文件描述符。</li>
+<li><strong>不用缓冲的I/O</strong>:程序直接对输入输出进行处理。</li>
+<li><strong>标准I/O</strong>:需要先输入输出到缓冲区，然后按照某种策略中缓冲区中输出。</li>
+</ol>
+<p>ps:具体的过程后面会讲到。</p>
+<h2 id="程序和进程">程序和进程</h2><ul>
+<li><strong>程序</strong>:是存放在磁盘上、处于某个目录中的一个可执行文件。使用6个exec函数中的一个由内核将程序读入存储器，并使其执行。</li>
+<li><p><strong>进程和进程ID</strong>:程序的执行实例被称为<em>进程(process)</em>。某些操作系统使用<em>任务(task)</em>表示。UNIX系统确保每个进程都有一个唯一的数字标志符，称为<em>进程ID(process ID)</em>。进程ID总是非负数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &#34;apue.h&#34;&#10;&#10;int &#10;main(void)&#10;&#123;&#10;    printf(&#34;hello world from process ID %d\n&#34;, getpid());&#10;    exit(0);&#10;&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./a.out&#10;hello world from precess ID 851&#10;$ ./a.out&#10;hello world from precess ID 854</span><br></pre></td></tr></table></figure></li>
+<li><strong>进程控制</strong>:有三个用于进程控制的主要函数：fork, exec和waitpid。<ul>
+<li>fork:调用fork创建一个新进程。新进程是调用进程的复制品，我们称调用进程为父进程，新创建的进程为子进程。fork向父进程返回新子进程的进程ID,对子进程返回0。因为fork创建一新进程，所以它被调用一次（由父进程），但返回两次（分别是在父进程及子进程中）。</li>
+</ul>
+</li>
+<li><strong>线程和线程ID</strong>:为了充分利用对处理器系统的并行性，可以使用多线程(thread)。在一个进程内的所有线程同享统一地址空间、文件描述符、栈以及于进程相关的属性。因为它们能访问统一存储区，所以各线程在访问共享数据时需要采取同步措施以避免不一致性。与进程相同，线程也用ID标识，但是，线程ID只在它所属的进程内起作用。</li>
+</ul>
+<h2 id="出错处理">出错处理</h2><p>  当UNIX函数出错时，常常返回一个负值，而且整型变量errno通常被设置为含有附加信息的一个值。例如open函数如果执行错误则返回－1。在open出错时，有大约15种不同的errno值(文件不存在、权限问题等)。某些函数并不返回负值而是使用另一种约定。<br>  可以将<code>&lt;errno.h&gt;</code>中定义的各种出错分成致命性的和非致命性的两类。对于致命性的错误，无法执行恢复动作，最多只能在用户屏幕上打印出一条出错消息，或者将一条出错消息写如日志文件中，然后终止。对于非致命性的出错，有时可以较妥善地进行处理。大多数非致命性的出错在本质上时暂时的，例如资源短缺，当系统中的活动较少时，这种出错很可能不会发生。</p>
+<h2 id="用户标识">用户标识</h2><ul>
+<li><strong>用户ID</strong>:口令文件登录项中的<em>用户ID(user ID)</em>是一个数值，它向系统标识各个不同的用户。用户ID为0的用户为<em>根(root)</em>或<em>超级用户(superuser)</em>。</li>
+<li><strong>组ID</strong>:口令文件登录项也包括用户的<em>组ID(group ID)</em>,它是一个数值。组ID也是由系统管理员在指定用户登录名时分配的。下面就是获取用户ID和组ID的例子：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#34;apue.h&#34;&#10;&#10;int&#10;main(void)&#10;&#123;&#10;    printf(&#34;uid = %d, gid = %d\n&#34;, getuid(), getgid());&#10;    exit(0);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./a.out&#10;uid = 205, gid = 105</span><br></pre></td></tr></table></figure></li>
+<li><strong>附加组ID</strong>:除了在口令文件中对一个登录名执行一个组ID外，大多数UNIX系统版本还允许一个用户属于另外的组。这就是<em>附加组ID(supplementary group ID)</em>。通过读取<code>/etc/group</code>获得。</li>
+</ul>
+<h2 id="信号">信号</h2><p><em>信号(signal)</em>是通知进程已经发生某种情况的一种技术。进程如何处理信号由三种选择：  </p>
+<ul>
+<li>忽略该信号。</li>
+<li>按系统默认方式处理。</li>
+<li>提供一个函数，信号发生时则调用该函数，这被称为捕捉该信号。使用这种方式，我们要提供自编的函数就将能知道什么时候产生了信号，并按所希望的方式处理它。</li>
+</ul>
+<p>很多情况会产生信号，比如终端键盘上有两种产生信号的方法，分别称为<em>中断键(interrupt key, 通常是Delete键或Ctrl+ C)</em>和<em>退出键(quit key, 通常是Ctrl＋)</em>。另外一种产生信号的方法是调用名为<code>kill</code>的函数，在一个进程中调用该函数就可以向另外一个进程发送一个信号。</p>
+<h2 id="时间值">时间值</h2><p>UNIX系统一直使用两种不同的时间值：</p>
+<ul>
+<li>日历时间:该值是自1970年1月1日00:00:00以来国际标准时间（UTC）所经过的秒数累计值。系统基本数据类型为time_t用户保存这种时间值。</li>
+<li>进程时间:这也被称为CPU时间，用以度量进程使用的中央处理机资源。进程时间以时钟滴答计算，历史上曾经取50、60和100个滴答。系统基本数据类型clock_t用于保存这种时间值。</li>
+</ul>
+<p>当度量一个进程的执行时间时，UNIX系统使用三个进程时间值：</p>
+<ul>
+<li>时钟时间:又称为墙上时钟时间(wall clock time)。它是进程运行的时间总量，其值与系统中同时运行的进程数有关。</li>
+<li>用户CPU时间:是执行用户指令所用的时间。</li>
+<li>系统CPU时间:是为该进程执行内核程序所经历的时间。</li>
+</ul>
+<p>用户CPU时间 ＋ 系统CPU时间 ＝ CPU时间。<br>时钟时间 ＝ CPU时间 ＋ 其它等待的时间。</p>
+<h2 id="系统调用和库函数">系统调用和库函数</h2><p>所有的操作系统都提供多种服务的入口点，程序由此向内核请求服务。这些入口点被称为<em>系统调用</em>。<br>UNIX所使用的技术是为每个系统调用在标准C库中设置一个具有同样名字的函数。用户进程用标准C调用序列来调用这些函数，然后，函数又用系统所要求的技术调用相应的内核服务。从应用的角度考虑，可将系统调用视作为C函数。从实现者的角度观察，系统调用和库函数之间有重大区别；但从用户角度看，其区别并不非常重要。系统调用通常提供一种最小接口，而库函数通常提供比较复杂的功能。<br><img src="http://www.plantuml.com/plantuml/svg/IybCBqeio51mLwZcKe22lFoKL4E5wEACn89K1Lk5fFmAXPp4fDGS85lfwQufpwUiUBwY--ck_YUx5pzVqAYa48kYqmYNphKpdZQjUDhHzhArzsdxtcTJDyJavIRcvEGdevjWZCE4ugIYx9YyvvjtFzyz_yM6Pg0xb20QYqkJ8Bv8pYajBaajCa3oJ759PKwgRKf-IKbg2feFTUrW3auiAielBqdCpB5Loiil0hfAIG4ib96Qc88GIiaiiatAByc8LO0R17SRq37FEhQ_s3yR63HArc3vMYwiZZD42sbZJCEUjhK-Mx03RWmYPA4kDYR3nRK0"><br><em>图1-2 malloc函数和sbrk系统调用</em><br><img src="http://www.plantuml.com/plantuml/svg/IybCBqeio51mLwZcKe22lFoKL4E5wEACn89K1Lk5fFmAXPp4fDGS85lfwQufpwUiUBwY--ck_YUx5pzVqAYa48kYqmY7JkUdkoO_RT_xREe6T1t6E7Gytxpx-UxvBpOq0srKWcWfBas2k3SvfxIu9BN80CdPnIMLEQcsAVab9QafQ7xHjOCvBR6eAB-y934pnrOfBxyeDp57IG4ib96Qc88GIiaiiatAByc8LO0RX73Lb1NFEhQ_s3yR60XArc3vMYwiZZD42rDZJCEUjhK-Mx03RWo6Yut9T374jnGOKWi0"><br><em>图1-3 C库函数和系统调用之间的差别</em></p>
+<h2 id="习题">习题</h2><blockquote>
+<p><strong>1.3</strong> 在1.7节中,perror的参数是用ISO C的属性const定义的，而strerror的整型参数则没有用此属性定义，为什么？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#60;string.h&#62;&#10;char *strerror(int errnum);&#10;&#10;# include &#60;stdio.h&#62;&#10;void perror(const char *msg);</span><br></pre></td></tr></table></figure><br>下面先看这两个函数的使用方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/* perror example */&#10;# include &#60;stdio.h&#62;&#10;&#10;int main ()&#10;&#123;&#10;    FILE * pFile;&#10;    pFile=fopen (&#34;unexist.ent&#34;,&#34;rb&#34;);&#10;    if (pFile==NULL)&#10;        perror (&#34;The following error occurred&#34;);&#10;    else&#10;        fclose (pFile);&#10;    return 0;&#10;&#125;&#10;/*&#10;out put;&#10;The following error occurred: No such file or directory&#10;*/&#10;&#10;/* strerror example : error list */&#10;# include &#60;stdio.h&#62;&#10;# include &#60;string.h&#62;&#10;# include &#60;errno.h&#62;&#10;&#10;int main ()&#10;&#123;&#10;    FILE * pFile;&#10;    pFile = fopen (&#34;unexist.ent&#34;,&#34;r&#34;);&#10;    if (pFile == NULL)&#10;        printf (&#34;Error opening file unexist.ent: %s\n&#34;,strerror(errno));&#10;    return 0;&#10;&#125;&#10;/*&#10;out put: &#10;Error opening file unexist.ent: No such file or directory&#10;*/</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可见<code>perror</code>的参数是程序运行前就定义好的，其输出是先输出<code>msg</code>指向的字符串，然后加上errno值对应的出错信息。<br>而<code>strerror</code>的参数是运行时确定的，是一个errno的值，其输出是errno对应的出错信息.<br>所以perror的参数带<code>const</code>而strerror的参数不带<code>const</code>。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/APUE/">APUE</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/UNIX/">UNIX</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/19/apue-chapter0/"><span>UNIX环境高级编程之写在前面</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/19/apue-chapter0/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-18T16:00:00.000Z">
+          2013-11-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>很久没有写读书笔记了,以前的读书笔记都是记在本子上的,或者直接写到书里备注的,但是发现其实接在本子上的都懒得去翻了,写在书里的也不能随身携带,遇到问题如果忘了的话还是要到网上去google,对自己的知识积累很是不利。现在好了,有了github一切都解决了~以前无知，没有认识到github的重要性，现在发现它真是无所不能啊~,希望伟大的墙不要再让码农做翻墙运动了~</em></p>
+</blockquote>
+<p>《UNIX环境高级编程》(<em>Advanced Programming in the UNIX Environment</em>,后面简称apue)这本书在<a href="http://book.douban.com/subject/1788421/" target="_blank" rel="external">豆瓣</a>的评分很高。作为一个非计算机出身的人，自知基础薄弱，需要多方面学习，这本经典书让我对linux系统以及进程线程等概念有了更深的认识，希望自己在写读书笔记的过程中能够对其有更加深入的了解，并且学以致用，运用到工作中去~</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/APUE/">APUE</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/linux/">linux</a><a href="/tags/unix/">unix</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/14/pip-and-easy_install/"><span>python打包高级进阶:pip and easy_install</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/14/pip-and-easy_install/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-13T16:00:00.000Z">
+          2013-11-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="如何选择已经安装的不同版本？">如何选择已经安装的不同版本？</h2><p>其实很简单。以myproject为例：<code>easy_install myproject==version</code> 就可以了，默认是先从本地开始找，如果本地找不到就会从远程源上找。</p>
+<h2 id="能不能指定安装路径？">能不能指定安装路径？</h2><p>经过再次了解，发现其实是可以的,<code>easy_install -h</code>命令可以看到有以下两条：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--install-dir (-d)             install package to DIR&#10;--script-dir (-s)              install scripts to DIR&#10;--prefix                       installation prefix</span><br></pre></td></tr></table></figure><br>第一个其实就是可以指定默认搜索路径的。第二个是可以指定二进制脚本的安装路径，如果指定了第一个而没有指定第二个那就会默认都安装到第一个,第三个是实际包的安装路径，但是只是路径前缀，默认会加上lib/python2.6/site-packages<br>还有一个问题，如果按照路径不在PYTHONPATH里，那么就会报错，可以通过先把你要制定的路径加入进去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/python/packages&#34;&#10;PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/lib/python2.6/site-packages&#34;&#10;export PYTHONPATH</span><br></pre></td></tr></table></figure><br>然后再次安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">easy_install -d /search/sean/python/packages/ -s /search/sean/python/ --prefix /search/sean  myproject==1.9</span><br></pre></td></tr></table></figure><br>可以看到-d需要PYTHONPATH 而-s并不需要，安装完后可以在两个目录中找到安装后的文件<br>更正：之前说安装多版本的时候会有一个去掉版本的文件夹，其实这个是pip的实现方式，而easy_install的实现方式是：每次安装都会把easy-install.pth路径修改了，python就会去找修改过的路径。<br>具体pip的版本选择和安装路径的问题时间限制先不发了，研究后再补充~</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/python/">python</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/13/django-nginx-fastcgi/"><span>django+nginx+fastcgi 配置</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/13/django-nginx-fastcgi/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-12T16:00:00.000Z">
+          2013-11-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>我们知道刚开始学习django的时候使用的是django内置的服务器，当然这个是为了能够快速的搭建django的运行环境，并不能运用到实际的生产环境中。而</em>django book<em> 这本书中只接受了django+apache和django+lighttpd的配置。但是我们实际的生产环境中nginx使用的很广泛。于是django+nginx+fastcgi的配置方法就有比较了解一下了…</em></p>
+</blockquote>
+<h2 id="django配置">django配置</h2><p>首先<em>django book</em>这本书中介绍了如何在生产过程中配置<code>setting.py</code>这个文件,其中提到变量<code>DJANGO_SETTINGS_MODULE</code>的值其实就是网站的配置文件的路径,我们可以根据环境的不同选择不同的配置文件，例如开发环境、测试环境和线上环境等。这个变量的设置其实就在网站的根目录下<code>wsgi.py</code>这个文件中。其内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;&#34;&#34;&#10;wsgi.py&#10;&#34;&#34;&#34;&#10;import os&#10;&#10;os.environ.setdefault(&#34;DJANGO_SETTINGS_MODULE&#34;, &#34;djsite.settings_dev&#34;)&#10;&#10;#  This application object is used by any WSGI server configured to use this&#10;#  file. This includes Django&#39;s development server, if the WSGI_APPLICATION&#10;#  setting points here.&#10;from django.core.wsgi import get_wsgi_application&#10;application = get_wsgi_application()</span><br></pre></td></tr></table></figure><br>这里设置的默认加载配置文件为：<code>settings_dev.py</code>，这是开发环境的配置文件,用户可以根据需求选择不同的配置文件。</p>
+<h2 id="uwsig配置文件">uwsig配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$cat uwsig.xml &#10;&#60;uwsgi&#62;  &#10;    &#60;socket&#62;0.0.0.0:3001&#60;/socket&#62;  &#10;    &#60;listen&#62;20&#60;/listen&#62;  &#10;    &#60;master&#62;true&#60;/master&#62;  &#10;    &#60;pidfile&#62;/etc/nginx/uwsgi.pid&#60;/pidfile&#62;  &#10;    &#60;processes&#62;2&#60;/processes&#62;  &#10;    &#60;module&#62;wsgi&#60;/module&#62;&#10;    &#60;pythonpath&#62;/search/sean/python/djsite/djsite&#60;/pythonpath&#62;  &#10;    &#60;profiler&#62;true&#60;/profiler&#62;  &#10;    &#60;memory-report&#62;true&#60;/memory-report&#62;&#10;    &#60;enable-threads&#62;true&#60;/enable-threads&#62;&#10;    &#60;logdate&#62;true&#60;/logdate&#62;&#10;    &#60;limit_as&#62;6048&#60;/limit_as&#62;&#10;&#60;/uwsgi&#62;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/python/">python</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/django/">django</a><a href="/tags/python/">python</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/9/" class="pagination-prev">上一页</a>
+  
+  
+  <a href="/page/11/" class="pagination-next">下一页</a>
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2016 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
