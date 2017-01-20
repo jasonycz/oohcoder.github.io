@@ -1,613 +1,571 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!--<![endif]-->
+
 <head>
-  <meta charset="utf-8">
-  
-  <title>第 4 页 | OohCode | 好奇的码农~</title>
+  <title>OohCode</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="OohCode">
+    <meta name="author" content="sean chen">
+    <meta name="description" content="好奇的码农~" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
 
   
-  <meta name="author" content="sean chen">
+  
   
 
-  
-
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  
-
-  <meta property="og:site_name" content="OohCode"/>
-
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
 </head>
 
+<!--
+<body class="home-template">
+-->
+<body id="index" class="lightnav animsition">
 
-<body>
-<div class="blog">
-  <div class="content">
+      <!-- ============================ Off-canvas navigation =========================== -->
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">OohCode</a>
-    </h1>
-    <p class="site-description">好奇的码农~</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">主页</a></li>
-      
-        <li><a href="/archives">归档</a></li>
-      
-    </ul>
-  </nav>
-</header>
-
-    <main class="site-main posts-loop">
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link">AAA</a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link">BBB</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+        	<li>
+        		<a class="sb-toggle-submenu">Categories<span class="sb-caret"></span></a>
+            	<ul class="sb-submenu">
+				  	
+				    <li><a href="/categories/APUE/" class="animsition-link">APUE<small>(3)</small></a></li>
+				    
+				    <li><a href="/categories/C/" class="animsition-link">C<small>(2)</small></a></li>
+				    
+				    <li><a href="/categories/CSAPP/" class="animsition-link">CSAPP<small>(9)</small></a></li>
+				    
+				    <li><a href="/categories/DB/" class="animsition-link">DB<small>(2)</small></a></li>
+				    
+				    <li><a href="/categories/PHP/" class="animsition-link">PHP<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/RESTful-Web-Services/" class="animsition-link">RESTful Web Services<small>(2)</small></a></li>
+				    
+				    <li><a href="/categories/SHELL/" class="animsition-link">SHELL<small>(2)</small></a></li>
+				    
+				    <li><a href="/categories/UML/" class="animsition-link">UML<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/blog/" class="animsition-link">blog<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/computer-system/" class="animsition-link">computer system<small>(2)</small></a></li>
+				    
+				    <li><a href="/categories/coreseek/" class="animsition-link">coreseek<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/blog/jekyll/" class="animsition-link">jekyll<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/liquid/" class="animsition-link">liquid<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/python/" class="animsition-link">python<small>(6)</small></a></li>
+				    
+				    <li><a href="/categories/restful-web-services/" class="animsition-link">restful web services<small>(6)</small></a></li>
+				    
+				    <li><a href="/categories/tools/" class="animsition-link">tools<small>(5)</small></a></li>
+				    
+				    <li><a href="/categories/uml/" class="animsition-link">uml<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/web/" class="animsition-link">web<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/设计模式/" class="animsition-link">设计模式<small>(2)</small></a></li>
+				    
+				</ul>
+        	</li>
+			
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a href="http://go.kieran.top/" class="animsition-link">Kieran</a></li>
+                    
+                    <li><a href="http://domain.com/" class="animsition-link">Name</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
     
-  <article>
+    <!-- ============================ END Off-canvas navigation =========================== -->
 
-  
-    
-    <h3 class="article-title"><a href="/2014/05/18/csapp-chapter6/"><span>csapp chapter6:存储器层次结构</span></a></h3>
-    
-  
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/05/18/csapp-chapter6/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-05-17T16:00:00.000Z">
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">OohCode</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      <!-- ============================ Hero Image =========================== -->
+
+<section id="hero" class="scrollme">
+    <div class="container-fluid element-img" style="background: url(/img/bg_img.jpg) no-repeat center center fixed;background-size: cover">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 vertical-align cover boost text-center">
+                <div class="center-me animateme" data-when="exit" data-from="0" data-to="0.6" data-opacity="0" data-translatey="100">
+                    <div>
+                        
+                        <h2>YOU'VE MADE A <span>BRAVE</span> DECISION, WELCOME.</h2>
+                        <p></p>
+                        
+                        <h2></h2>
+                        <p>每一个不曾起舞的日子都是对生命的辜负。</p>
+                        
+
+                    </div>
+                </div>
+            </div>
+            <!-- // .col-md-12 -->
+        </div>
+        <div class="herofade beige-dk"></div>
+    </div>
+</section>
+
+<!-- Height spacing helper -->
+<div class="heightblock"></div>
+<!-- // End height spacing helper -->
+
+<!-- ============================ END Hero Image =========================== -->
+<!-- ============================ Content =========================== -->
+
+<section id="intro">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2014/05/18/csapp-chapter6/">csapp chapter6:存储器层次结构</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2014-05-17T16:00:00.000Z" itemprop="datePublished">
           2014-05-18
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>存储器系统(memory system)是一个具有不同容量、成本和访问时间的存储设备的层次结构。程序如何利用存储器的特性提高性能呢？这将是本章主要探讨的内容。</p>
-</blockquote>
-<h2 id="存储技术">存储技术</h2><p>计算机的的成功很大程度上源自于存储技术的巨大进步。下面这幅图是存储器的层次结构：<br><img src="/assets/img/csapp/fig6.23.png" alt="">  </p>
-<p>从上到下，存储的速度越慢，容量越大。<br>关于存储器内部是实现方式这就不介绍了，重点介绍一下计算机存储器的运行方式。<br>存储器层次结构的中心思想，对于每个<em>k</em>层，位于<em>k</em>层的更快更小的存储设备作为位于<em>k+1</em>层的跟大更慢的存储设备的缓存。也就是说层次结构中的<em>k</em>层的数据都是来自<em>k+1</em>层的。数据在每层之间的传送是以块大小为传送单元的。不同层之间的块大小可以不一样。程序运行过程中，对存储器的运用分为两种情况：</p>
-<ul>
-<li>缓存命中: 当程序需要数据时，最先从最高的层开始查找，如果没有找到了所需的数据，就是缓存命中。</li>
-<li>缓存不命中: 当所需的数据从当前层没有找到，就叫缓存不命中。这时候就会从下一层开始查找，直到找到所需的数据为止。当找到所需的数据后，数据会再次经过上面的层，把找到的数据保存到上面的层中，这时就要覆盖上面层的数据，如何覆盖，这涉及到替换策略，不再详述。</li>
-</ul>
-<p>通过上面存储器的使用方式，可以看出，要想提高程序的性能，就必须利用<em>时间局部性</em>和<em>空间局部性</em>。</p>
-<ul>
-<li>时间局部性: 如果一个数据被加载到了最上层，那么如果连续多次调用这个数据就不需要去其他层寻找，减少了数据寻找和写缓存的过程，大大提高到了利用效率。</li>
-<li>空间局部性： 但一个数被加载的最上层时，由于数据时以块大小进行传递的，所以这个数据相邻的地址数据也会被传递，所以如果这时候访问相邻的数据话，很有可能就在这一层，而不需要去其他层寻找数据，也大大提高了利用率。 </li>
-</ul>
-<p>下面通过一个程序来说明一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int sum1(int a[M][N])&#10;&#123;&#10;    int i, j, sum = 0;&#10;&#10;    for(i = 0; i &#60; M; i++)&#10;        for(j = 0; j &#60; N; j++)&#10;            sum += a[i][j];&#10;    return sum;&#10;&#125;&#10;&#10;int sum2(int a[M][N])&#10;&#123;&#10;    int i, j, sum = 0;&#10;&#10;    for(j = 0; j &#60; M; j++)&#10;        for(i = 0; i &#60; N; i++)&#10;            sum += a[i][j];&#10;    return sum;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>对于sum1和sum2两个程序都时求一个二纬数组的和，唯一不同的是循环变量，也就是数组的下标顺序不一样。对于sum1，由于二纬数组是顺序存储的，而求和的时候也是按照递增的地址顺序求和的，这很好的利用了<em>空间局部性</em>这个原理，而sum2，同样是求和，但是二维数组的顺序并不是顺序访问的，又跳跃，所以每次访问的地址不是连续的，没有很好的利用<em>空间局部性</em>的原理，效率要低很多。<br>另一方面，两个程序的循环的过程中都使用了一个auto变量sum，每次循环都访问这个变量的值，这很好的利用了<em>时间局部性</em>原理。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
+      </time>
     
-      
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        
+存储器系统(memory system)是一个具有不同容量、成本和访问时间的存储设备的层次结构。程序如何利用存储器的特性提高性能呢？这将是本章主要探讨的内容。
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/CSAPP/">CSAPP</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/05/13/coreseek-install-doc/"><span>中文搜索引擎coreseek的安装使用</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/05/13/coreseek-install-doc/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-05-12T16:00:00.000Z">
+存储技术计算机的的成功很大程度上源自于存储技术的巨大进步。下面这幅图是存储器的层次结构：  
+从上到下，存储的速度越慢，容量越大。关于存储器内部是实现方式这就不介绍了，重点介绍一下计算机存储器的运行方式。存储器层次结构的中心思想，对于每个k层，位于k层的更快更小的存储设备作为
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2014/05/18/csapp-chapter6/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2014/05/13/coreseek-install-doc/">中文搜索引擎coreseek的安装使用</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2014-05-12T16:00:00.000Z" itemprop="datePublished">
           2014-05-13
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>项目中原来使用的是solr,由于solr是java写的，团队中没有java的经验，并且原来维护的人离职了，所以改用<a href="http://sphinxsearch.com/" target="_blank" rel="external">sphinx search</a>来做项目的内部检索服务，由于中文的特殊性，我们选择了<a href="http://www.coreseek.cn/" target="_blank" rel="external">coreseek</a>这个基于sphinx的中文搜索引擎。但是好像这个好久没人维护了～一直停留在了4.1beta版本～</p>
-</blockquote>
-<h2 id="下载解压">下载解压</h2><p>源码下载地址<a href="http://www.coreseek.cn/uploads/csft/4.0/coreseek-4.1-beta.tar.gz" target="_blank" rel="external">oreseek-3.1-beta.tar.gz</a>;<br>解压下载的文件,进入目录<code>cd coreseek-4.1-beta</code>;</p>
-<h2 id="安装中文分词库mmseg">安装中文分词库mmseg</h2><ul>
-<li><code>cd mmseg-3.2.14/</code></li>
-<li><code>./bootstrap</code></li>
-<li><code>./configure --prefix=/usr/local/mmseg3</code></li>
-<li><code>make &amp;&amp; make install</code></li>
-</ul>
-<p>如果你幸运的话，这时候会提示错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;239&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;  &#10;css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;187&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;  &#10;css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;191&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;</span><br></pre></td></tr></table></figure><br>可能是编译器的要求太严格导致的，只有更改源码了：<br>将rc/css/SynonymsDict.cpp文件94行的代码<code>char txtHead[3] = {239,187,191};</code>改为如下的形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char txtHead[3] = &#123;&#125;; &#10;txtHead[0] = (char)239;&#10;txtHead[1] = (char)187;&#10;txtHead[2] = (char)191;</span><br></pre></td></tr></table></figure><br>再次运行<code>make &amp;&amp; make install</code>会发现又出现了错误提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmseg_main.cpp: In function &#8216;int segment(const char*, css::Segmenter*)&#8217;:&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;239&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;187&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;191&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;</span><br></pre></td></tr></table></figure><br>同样的办法修改<code>src/mmseg_main.cpp</code>文件的254行<code>char txtHead[3] = {239,187,191};</code>为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char txtHead[3] = &#123;&#125;; &#10;txtHead[0] = (char)239;&#10;txtHead[1] = (char)187;&#10;txtHead[2] = (char)191;</span><br></pre></td></tr></table></figure><br>再次运行<code>make &amp;&amp; make install</code>，终于成功了～<br>到这里mmseg就算安装成功了</p>
-<h2 id="安装coreseek">安装coreseek</h2><ul>
-<li><code>cd csft-4.1/</code></li>
-<li><code>sh buildconf.sh</code></li>
-<li><code>./configure --prefix=/usr/local/coreseek  --without-unixodbc   
---with-mmseg --with-mmseg-includes=/usr/local/mmseg3/include/mmseg/   
---with-mmseg-libs=/usr/local/mmseg3/lib/ --with-mysql</code></li>
-<li><code>make &amp;&amp; make install</code></li>
-</ul>
-<h2 id="测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN-UTF-8，确保正确显示中文）">测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN.UTF-8，确保正确显示中文）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd testpack&#10;$ cat var/test/test.xml    #&#27492;&#26102;&#24212;&#35813;&#27491;&#30830;&#26174;&#31034;&#20013;&#25991;&#10;$ /usr/local/mmseg3/bin/mmseg -d /usr/local/mmseg3/etc var/test/test.xml&#10;$ /usr/local/coreseek/bin/indexer -c etc/csft.conf --all&#10;$ /usr/local/coreseek/bin/search -c etc/csft.conf &#32593;&#32476;&#25628;&#32034;</span><br></pre></td></tr></table></figure>
-<p>上面是官方文档给的，需要说明的是，csft.conf是由sphinx.conf.dist复制而来的，里面的关于mysql的配置，自己按照实际情况修改。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
+      </time>
     
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        
+项目中原来使用的是solr,由于solr是java写的，团队中没有java的经验，并且原来维护的人离职了，所以改用sphinx search来做项目的内部检索服务，由于中文的特殊性，我们选择了coreseek这个基于sphinx的中文搜索引擎。但是好像这个好久没人维护了～一直停留在了4.1beta版本～
 
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/05/10/stdarg-function/"><span>C语言：可变参数函数</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/05/10/stdarg-function/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-05-09T16:00:00.000Z">
+下载解压源码下载地址oreseek-3.1-beta.tar.gz;解压下载的文件,进入目录cd coreseek-4.1-bet
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2014/05/13/coreseek-install-doc/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2014/05/10/stdarg-function/">C语言：可变参数函数</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2014-05-09T16:00:00.000Z" itemprop="datePublished">
           2014-05-10
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。</p>
-</blockquote>
-<h2 id="可变参数参数简介">可变参数参数简介</h2><h2 id="使用方法">使用方法</h2><p>可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：</p>
-<ol>
-<li>在函数原型中使用省略号。</li>
-<li>在函数定义中创建一个va_list类型的变量。</li>
-<li>用宏将改变量初始化为一个参数列表。</li>
-<li>用宏访问这个参数列表。</li>
-<li>用宏完成清理工作。</li>
-</ol>
-<h2 id="函数原型">函数原型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void f1(int n, ...); //&#21512;&#27861;&#10;int f2(int n, const char *s, ...);  //&#21512;&#27861;&#10;char f3(char c1, ..., char c2); //&#26080;&#25928;&#65292;&#30465;&#30053;&#21495;&#24517;&#39035;&#26159;&#26368;&#21518;&#19968;&#20010;&#21442;&#37327;&#10;doubel f3(); //&#26080;&#25928;&#65292;&#27809;&#26377;&#20219;&#20309;&#21442;&#37327;</span><br></pre></td></tr></table></figure>
-<h2 id="程序举例">程序举例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#60;stdio.h&#62;&#10;# include &#60;stdarg.h&#62;&#10;&#10;double sum(int , ...);&#10;void printSth(int, const char *, ...);&#10;&#10;int main(void)&#10;&#123;&#10;    double s, t;&#10;&#10;    s = sum(3, 1.1, 2.5, 13.3);&#10;    t = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    u = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(3, 1.1, 2.5, 13.3):    %g\n&#34;,s);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1)  %g\n&#34;, t); &#10;    &#10;    return 0;&#10;&#125;&#10;&#10;&#10;double sum(int lim, ...)&#10;&#123;&#10;    va_list ap; //&#22768;&#26126;&#29992;&#25143;&#23384;&#25918;&#21442;&#25968;&#30340;&#21464;&#37327;&#10;    double tot = 0;&#10;    int i;&#10;    va_start(ap, lim);  //&#25226;ap&#21021;&#22987;&#21270;&#20026;&#21442;&#25968;&#21015;&#34920;&#10;    for(i = 0; i &#60; lim; i++)&#10;        tot += va_arg(ap, double); //&#35775;&#38382;&#21442;&#25968;&#21015;&#34920;&#20013;&#30340;&#27599;&#19968;&#20010;&#39033;&#30446;&#10;    va_end(ap); //&#28165;&#29702;&#24037;&#20316;&#10;    return tot;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="程序分析">程序分析</h2><ul>
-<li>具有可变参数的函数<code>sum</code>的第一个参数是表示一共有多少个不确定的参数，在调用的时候传递。这个参数主要是高数<code>var_arg</code>能够取多少次传递的参数。</li>
-<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm" target="_blank" rel="external"><code>va_start()</code></a>第一个参数是va_list类型的，第二个参数是这个函数确定的参数中最有一个参数，var_start()函数的作用就是把最有一个确定参数后面的所有不确定参数做一个参数列表存储到va_list类型的变量中。</li>
-<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_arg.htm" target="_blank" rel="external"><code>va_arg</code></a>的目的是从未知参数列表中取出参数，每次调用取一个，按照参数顺序取。第一个参数是存储参数列表的变量，第二个参数标识要去的参数的类型，类型决定了要从内存栈中读取多少位。</li>
-<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_end.htm" target="_blank" rel="external"><code>va_end</code></a>函数主要是做清理工作,主要是释放动态分配的用于存放参数的内存。</li>
-</ul>
-<h2 id="运用">运用</h2><p>我在学了《C Primer Plus》这本书之后打算看看redis源码的时候发现redis的源码中，所有的系统log的记录都是通过这中函数来实现的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void redisLog(int level, const char *fmt, ...) &#123;&#10;    va_list ap;                &#10;    char msg[REDIS_MAX_LOGMSG_LEN]; &#10;    &#10;    if ((level&#38;0xff) &#60; server.verbosity) return;&#10;    &#10;    va_start(ap, fmt);         &#10;    vsnprintf(msg, sizeof(msg), fmt, ap);&#10;    va_end(ap);                &#10;    &#10;    redisLogRaw(level,msg);    &#10;&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
+      </time>
     
-      
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        
+函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/C/">C</a>
-    </span>
-    
+可变参数参数简介使用方法可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：
 
-    
+在函数原型中使用省略号。
+在函数定义中创建一个va_list类型的变量。
+用宏将改变量初始化为一个参数列表。
+用宏访问这个参数列表。
+用宏完成清理工作。
 
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
+函数原型1void f1(int n, ...); //&
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2014/05/10/stdarg-function/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2014/03/22/linux-shell-programe1/">linux shell 编程之语法学习</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2014-03-21T16:00:00.000Z" itemprop="datePublished">
           2014-03-22
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
-</blockquote>
-<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
-<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
-</ol>
-</blockquote>
-<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
-<ul>
-<li><code>$ ./script.sh</code></li>
-<li><code>$ sh ./script.sh</code></li>
-</ul>
-<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
-</ol>
-</blockquote>
-<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
-<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
-<ul>
-<li>变量被声明: <code>variable</code></li>
-<li>变量被赋值: <code>variable=12</code></li>
-<li>变量被unset: <code>unset variable</code></li>
-<li>变量被export: <code>export variable=23</code></li>
-</ul>
-<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
-<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
-<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
-<ol>
-<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
-<li>使用let赋值.<code>let a=2</code></li>
-<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
-</ol>
-<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
-<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
-<li>$0:代表脚本名称</li>
-<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
-<li>$#:表示参数的个数</li>
-</ul>
-</li>
-</ul>
-<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
-<h3 id="条件格式：">条件格式：</h3><ol>
-<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
-<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
-<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
-<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
-</ol>
-<blockquote>
-<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
-</blockquote>
-<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
-<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
-<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
-<p>ps:</p>
-<ol>
-<li>函数调用之前必须先定义</li>
-</ol>
-<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/SHELL/">SHELL</a>
-    </span>
-    
-
+      </time>
     
     
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/shell/">shell</a>
-    </span>
+    | 
+    <a href='/tags/shell/'>shell</a>
     
-
-    </div>
-
     
-  </div>
-</article>
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        
+shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。
 
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/03/22/linux-shell-command-line-control-key/"><span>linux命令行控制字符汇总</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/03/22/linux-shell-command-line-control-key/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
+独特的开头一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的&lt;?php, jsp语言的&lt;%jsp。shell也有自己独特的开头。比如#! /bin/bash, 不过跟其他语言表示自
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2014/03/22/linux-shell-programe1/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2014/03/22/linux-shell-command-line-control-key/">linux命令行控制字符汇总</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2014-03-21T16:00:00.000Z" itemprop="datePublished">
           2014-03-22
-        </time>
-      </a>
-    </span>
-  </div>
+      </time>
+    
+    
+    | 
+    <a href='/tags/linux/'>linux</a>
+    
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        
+我们经常在linux终端下输入命令行，就像我们使用vi等编辑器一样频繁，vi有很多快捷键提高我们的输入效率，命令行下有没有一些快捷键也能提高我们的输入效率呢？当然有～，下面就介绍一下这些快捷键，掌握了这些就可以让你在命令行下输入命令的效率有质的飞跃了～
+
+linux命令行字符功能汇总
 
 
-  
+命令
+名称
+作用
 
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>我们经常在linux终端下输入命令行，就像我们使用vi等编辑器一样频繁，vi有很多快捷键提高我们的输入效率，命令行下有没有一些快捷键也能提高我们的输入效率呢？当然有～，下面就介绍一下这些快捷键，掌握了这些就可以让你在命令行下输入命令的效率有质的飞跃了～</p>
-</blockquote>
-<h2 id="linux命令行字符功能汇总">linux命令行字符功能汇总</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>名称</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ctl-A</td>
-<td>回行首</td>
-<td>使光标回到一行的行首</td>
-</tr>
-<tr>
-<td>ctl-B</td>
-<td>退格(非破坏性的)</td>
-<td>向前移动光标</td>
-</tr>
-<tr>
-<td>ctl-C</td>
-<td>break</td>
-<td>终止当前运行前台程序</td>
-</tr>
-<tr>
-<td>ctl-D</td>
-<td>删除字符/退出</td>
-<td>删除光标所在的字符, 当无字符可删除时相当于logout</td>
-</tr>
-<tr>
-<td>ctl-F</td>
-<td>前行</td>
-<td>光标向前移动</td>
-</tr>
-<tr>
-<td>ctl-G</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>ctl-H</td>
-<td>退格(破坏性的)</td>
-<td>向前移动光标的同时删除字符</td>
-</tr>
-<tr>
-<td>ctl-I</td>
-<td>水平制表</td>
-<td>相当于tab键</td>
-</tr>
-<tr>
-<td>ctl-J</td>
-<td>重起一行</td>
-<td>相当于回车键</td>
-</tr>
-<tr>
-<td>ctl-K</td>
-<td>垂直制表</td>
-<td>删除光标所在处到行尾的所有字符</td>
-</tr>
-<tr>
-<td>ctl-L</td>
-<td>清屏</td>
-<td>相当于clear命令</td>
-</tr>
-<tr>
-<td>ctl-M</td>
-<td>回车</td>
-<td>相当于回车键</td>
-</tr>
-<tr>
-<td>ctl-N</td>
-<td>向下查找命令</td>
-<td>对于输入过的命令，<br> 可以通过这个命令向下查找输入过的命令</td>
-</tr>
-<tr>
-<td>ctl-O</td>
-<td>回车</td>
-<td>相当于回车键</td>
-</tr>
-<tr>
-<td>ctl-P</td>
-<td>向上查找命令</td>
-<td>对于输入过的命令，<br> 可以通过这个命令向上查找输入过的命令</td>
-</tr>
-<tr>
-<td>ctl-Q</td>
-<td>恢复</td>
-<td>在终端中恢复stdin</td>
-</tr>
-<tr>
-<td>ctl-R</td>
-<td>历史命令查找</td>
-<td>输入ctl-R会提示查找历史命令，<br> 然后输入字符，会时时现实匹配到的命令，<br> 按回车就可以执行历史命令</td>
-</tr>
-<tr>
-<td>ctl-S</td>
-<td>挂起</td>
-<td>在终端中冻结stdin, 于ctl+Q正好相反</td>
-</tr>
-<tr>
-<td>ctl-T</td>
-<td>交换</td>
-<td>交换光标所在处的字符与光标前面的一个字符的位置</td>
-</tr>
-<tr>
-<td>ctl-U</td>
-<td>删除字符到行首</td>
-<td>删除光标所在的字符到行首，于ctl+K正好方向相反</td>
-</tr>
-<tr>
-<td>ctl-V</td>
-<td>允许插入控制字符</td>
-<td>如果想要输入控制字符，需要先输入ctr+V然后在输入控制字符</td>
-</tr>
-<tr>
-<td>ctl-W</td>
-<td>删除光标前字符到空格处</td>
-<td>删除光标所在的字符到左边的空格处</td>
-</tr>
-<tr>
-<td>ctl-X</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>ctl-Y</td>
-<td>粘贴</td>
-<td>把刚刚暂存区的字符粘贴到终端</td>
-</tr>
-<tr>
-<td>ctl-Z</td>
-<td>挂起</td>
-<td>暂停前台作业</td>
-</tr>
-</tbody>
-</table>
 
-      
+
+
+ctl-A
+回行首
+使光标回到一行的行首
+
+
+ctl-B
+退格(非破坏性的)
+向前移动光标
+
+
+ctl-C
+break
+终
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2014/03/22/linux-shell-command-line-control-key/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <nav class="pagination" role="pagination">
+          <a class="pull-left" href="/page/3/">← Newer Posts</a>
+          <a class="pull-right" href="/page/5/">Older Posts →</a>
+        </nav>
     </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/SHELL/">SHELL</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/linux/">linux</a>
-    </span>
-    
-
+</section>
+<section id="statement">
+    <div class="container text-center wow fadeInUp" data-wow-delay="0.5s">
+        <div class="row">
+            <p>虽然还没想好写点什么，但是总觉得这里放句话比较和谐。</p>
+        </div>
     </div>
+</section>
+<!-- ============================ END Content =========================== -->
 
-    
-  </div>
-</article>
+      
+<!-- ============================ Footer =========================== -->
 
-
-
-
-<nav class="pagination">
-  
-  <a href="/page/3/" class="pagination-prev">上一页</a>
-  
-  
-  <a href="/page/5/" class="pagination-next">下一页</a>
-  
-</nav>
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2016 sean chen
-    
-  </p>
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By sean chen. All Rights Reserved.
+                </p>
+                <p>Theme By <a href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
 </footer>
-    
-  </div>
-</div>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/jquery.flexslider-min.js"></script><!-- Flexslider plugin -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<!-- Initiate flexslider plugin -->
+<script type="text/javascript">
+    $(document).ready(function($) {
+      (function(){
+        console.log('font');
+        var getCss = function(path) {
+          var head = document.getElementsByTagName('head')[0];
+          link = document.createElement('link');
+          link.href = path;
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          head.appendChild(link);
+        };
+        getCss('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+        getCss('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
+      })();
+      $('.flexslider').flexslider({
+        animation: "fade",
+        prevText: "",
+        nextText: "",
+        directionNav: true
+      });
+    });
+</script>
+
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
