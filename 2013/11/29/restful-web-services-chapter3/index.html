@@ -1,202 +1,91 @@
-<!DOCTYPE html>
-<!--[if lte IE 8 ]>
-<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<!--
-***************  *      *     *
-      8          *    *       *
-      8          *  *         *
-      8          **           *
-      8          *  *         *
-      8          *    *       *
-      8          *      *     *
-      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
--->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<!--<![endif]-->
-
+<!DOCTYPE HTML>
+<html>
 <head>
-  <title>chapter3:REST式服务有什么特别不同 | OohCode</title>
-  <!-- Meta data -->
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content="OohCode">
-    <meta name="author" content="sean chen">
-    <meta name="description" content="好奇的码农~" />
-    <meta name="keywords" content="" />
+  <meta charset="utf-8">
+  
+  <title>chapter3:REST式服务有什么特别不同 | OohCode | 好奇的码农~</title>
 
-    <!-- Favicon, (keep icon in root folder) -->
-    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+  
+  <meta name="author" content="sean chen">
+  
 
-    <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
-    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
-    
-    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
-    
+  
+  <meta name="description" content="前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
 
-    <!--[if IE 8]>
-    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
-    <![endif]-->
-
-    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
-    <script src="/js/jquery-1.11.1.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
-
-    <!-- Load these in the <head> for quicker IE8+ load times -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/js/html5shiv.min.js"></script>
-    <script src="/js/respond.min.js"></script>
-    <![endif]-->
+资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是">
+  
 
   
   
+  <meta name="keywords" content="">
   
 
-  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="chapter3:REST式服务有什么特别不同"/>
+
+  <meta property="og:site_name" content="OohCode"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-<!--
-<body class="post-template">
--->
-<body id="index" class="lightnav animsition">
 
-      <!-- ============================ Off-canvas navigation =========================== -->
+<body>
+<div class="blog">
+  <div class="content">
 
-    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
-        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
-            <img src="/img/close.png" alt="Close"/>
-        </div>
-        <!-- Lists in Slidebars -->
-        <ul class="sb-menu">
-            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
-            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
-            <!-- Dropdown Menu -->
-			 
-            
-        	<li>
-        		<a class="sb-toggle-submenu">Categories<span class="sb-caret"></span></a>
-            	<ul class="sb-submenu">
-				  	
-				    <li><a href="/categories/APUE/" class="animsition-link">APUE<small>(3)</small></a></li>
-				    
-				    <li><a href="/categories/C/" class="animsition-link">C<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/CSAPP/" class="animsition-link">CSAPP<small>(9)</small></a></li>
-				    
-				    <li><a href="/categories/DB/" class="animsition-link">DB<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/PHP/" class="animsition-link">PHP<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/RESTful-Web-Services/" class="animsition-link">RESTful Web Services<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/SHELL/" class="animsition-link">SHELL<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/UML/" class="animsition-link">UML<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/blog/" class="animsition-link">blog<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/computer-system/" class="animsition-link">computer system<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/coreseek/" class="animsition-link">coreseek<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/blog/jekyll/" class="animsition-link">jekyll<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/liquid/" class="animsition-link">liquid<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/python/" class="animsition-link">python<small>(6)</small></a></li>
-				    
-				    <li><a href="/categories/restful-web-services/" class="animsition-link">restful web services<small>(6)</small></a></li>
-				    
-				    <li><a href="/categories/tools/" class="animsition-link">tools<small>(5)</small></a></li>
-				    
-				    <li><a href="/categories/uml/" class="animsition-link">uml<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/web/" class="animsition-link">web<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/设计模式/" class="animsition-link">设计模式<small>(2)</small></a></li>
-				    
-				</ul>
-        	</li>
-			
-            
-        </ul>
-        <!-- Lists in Slidebars -->
-        <ul class="sb-menu secondary">
-            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
-            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
-        </ul>
-    </div>
-    
-    <!-- ============================ END Off-canvas navigation =========================== -->
-
-    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
-
-    <div id="sb-site">
-        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
-
-        <!-- ============================ Header & Logo bar =========================== -->
-
-        <div id="navigation" class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <!-- Nav logo -->
-                    <div class="logo">
-                        <a href="/" title="Logo" class="animsition-link">
-                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
-                        </a>
-                    </div>
-                    <!-- // Nav logo -->
-                    <!-- Info-bar -->
-                    <nav>
-                        <ul class="nav">
-                            <li><a href="/" class="animsition-link">OohCode</a></li>
-                            <li class="nolink"><span>Always </span>Creative.</li>
-                            
-                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
-                            
-                            
-                            
-                            
-                            
-                            <li class="nolink"><span>Welcome!</span></li>
-                        </ul>
-                    </nav>
-                    <!--// Info-bar -->
-                </div>
-                <!-- // .container -->
-                <div class="learnmore sb-toggle-right">More</div>
-                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar before"></span>
-                <span class="icon-bar main"></span>
-                <span class="icon-bar after"></span>
-                </button>
-            </div>
-            <!-- // .navbar-inner -->
-        </div>
-
-        <!-- ============================ Header & Logo bar =========================== -->
-
-
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
       
-<section id="intro">
-    <div class="container">
-        <div class="row col-md-offset-2">
-            <div class="col-md-8">
-    			<span class="post-meta">
-      <time datetime="2013-11-28T16:00:00.000Z" itemprop="datePublished">
-          2013-11-29
-      </time>
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
     
-</span>
-                <h1>chapter3:REST式服务有什么特别不同</h1>
-            </div>
-        </div>
-        <div class="col-md-8 col-md-offset-2">
-      		<blockquote>
+    <h3 class="article-title"><span>chapter3:REST式服务有什么特别不同</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/29/restful-web-services-chapter3/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-28T16:00:00.000Z">
+          2013-11-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
 <p><em>前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。</em></p>
 </blockquote>
 <h2 id="资源">资源</h2><p>Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：</p>
@@ -244,150 +133,49 @@
 <h2 id="使用S3客户端">使用S3客户端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># !/usr/bin/ruby -w&#10;#  s3-sample-client.rb&#10;require &#39;S3lib&#39;&#10;&#10;# &#25910;&#38598;&#21629;&#20196;&#34892;&#21442;&#25968;&#10;bucket_name, object_name, object_value = ARGV&#10;unless bucket_name&#10;    puts &#34;Usage: #&#123;0&#125; [bucket name] [object name] [object value]&#34;&#10;    exit&#10;end&#10;&#10;# &#25214;&#21040;&#25110;&#21019;&#24314;&#26742;&#10;buckets = S3::BucketList.new.get    #GET /&#10;bucket = buckets.detect&#123; |b| b.name == bucket_name &#125;&#10;if bucket&#10;    puts &#34;Found bucket #(bucket_name).&#34;&#10;else&#10;    puts &#34;Could not find bucket #&#123;bucket_name&#125;, creating it&#34;&#10;    bucket = S3::Bucket.new(bucket_name)&#10;    bucket.put&#10;end&#10;&#10;# &#21019;&#24314;&#23545;&#35937;&#10;object = S3:Object.new(bucket, object_name)&#10;object.metadata[&#39;content-type&#39;] = &#39;text/plain&#39;&#10;object.value = object_value&#10;object.put                              #PUT /&#123;bucket&#125;/&#123;object&#125;&#10;&#10;# &#23545;&#26742;&#37324;&#30340;&#27599;&#20010;&#23545;&#35937;...&#10;bucket.get[0].each do |o|               #GET /&#123;bucket&#125;&#10;    #...&#25171;&#21360;&#20986;&#26377;&#20851;&#35813;&#23545;&#35937;&#30340;&#20449;&#24687;&#10;    puts &#34;Name: #&#123;o.name&#125;&#34;&#10;    puts &#34;Value: #&#123;o.value&#125;&#34;            #GET /&#123;bucket&#125;/&#123;object&#125;&#10;    puts &#34;Metadata hash: #&#123;o.metadata.inspect&#125;&#34;&#10;    puts&#10;end</span><br></pre></td></tr></table></figure>
 <h2 id="用ActiveResource创建透明的客户端">用ActiveResource创建透明的客户端</h2><p>安装ruby on rails，然后利用rails生成一个创建一个自己的app，根据书里的过程并参考《Ruby On Ralis 3 Toturial》中的例子就可以完成。建立完成后可以在页面中看到notes的操作了，可以增加，编辑，删除note,可以到在views里可以看到这么一段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;td&#62;&#60;%= link_to &#39;Destroy&#39;, note, method: :delete, data: &#123; confirm: &#39;Are you sure?&#39; &#125; %&#62;&#60;/td&#62;</span><br></pre></td></tr></table></figure><br>ruby中前端是通过method来指定HTTP请求的发送类型的，但是我在web端看到的请求是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Request Method:POST&#10;Form Data:&#10;_method:delete</span><br></pre></td></tr></table></figure><br>从这里来看ruby并没有在HTTP请求的方法中就变为DELETE，而是在from里传了一个参数，这并不是符合标准的REST架构的。鉴于我对ROR还不了解，现在可能有些不太明白，先看着后面的章节，等了解后再完善本章内容。</p>
 
-            <div class="clearfix"></div>
-            <hr class="nogutter">
-        </div>
-        <nav class="pagination" role="pagination">
-    
-    <a class="pull-left" href="/2013/12/04/restful-web-services-chapter4/" style="float: left;">
-        ← chapter4:面向资源的架构
-    </a>
-    
-    
-    <a class="pull-right" href="/2013/11/27/restful-web-services-chapter2/">
-        chapter2:编写Web服务客户端 →
-    </a>
-    
-</nav>
-
-        <div class="duoshuo">
-
-
-</div>
-    </div>
-</section>
-
-
       
-<!-- ============================ Footer =========================== -->
+    </div>
 
-<footer>
-    <div class="container">
-            <div class="copy">
-                <p>
-                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By sean chen. All Rights Reserved.
-                </p>
-                <p>Theme By <a href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
-            </div>
-            <div class="social">
-                <ul>
-                    
-                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
-                    
-                    
-                    
-                    
-                    
-                </ul>
-            </div>
-            <div class="clearfix"> </div>
-        </div>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/restful-web-services/">restful web services</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 sean chen
+    
+  </p>
 </footer>
-
-<!-- ============================ END Footer =========================== -->
-      <!-- Load our scripts -->
-<!-- Resizable 'on-demand' full-height hero -->
-<script type="text/javascript">
-    var resizeHero = function () {
-        var hero = $(".cover,.heightblock"),
-            window1 = $(window);
-        hero.css({
-            "height": window1.height()
-        });
-    };
-
-    resizeHero();
-
-    $(window).resize(function () {
-        resizeHero();
-    });
-</script>
-<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
-<script src="/js/jquery.flexslider-min.js"></script><!-- Flexslider plugin -->
-<script src="/js/scripts.js"></script><!-- Theme scripts -->
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$('#intro').find('img').each(function(){
-  var alt = this.alt;
-
-  if (alt){
-    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
-  }
-
-  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
-});
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-<!-- Initiate flexslider plugin -->
-<script type="text/javascript">
-    $(document).ready(function($) {
-      (function(){
-        console.log('font');
-        var getCss = function(path) {
-          var head = document.getElementsByTagName('head')[0];
-          link = document.createElement('link');
-          link.href = path;
-          link.rel = 'stylesheet';
-          link.type = 'text/css';
-          head.appendChild(link);
-        };
-        getCss('https://fonts.googleapis.com/css?family=Montserrat:400,700');
-        getCss('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
-      })();
-      $('.flexslider').flexslider({
-        animation: "fade",
-        prevText: "",
-        nextText: "",
-        directionNav: true
-      });
-    });
-</script>
-
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+    
+  </div>
+</div>
 </body>
 </html>

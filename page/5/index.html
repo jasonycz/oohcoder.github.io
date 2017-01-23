@@ -1,500 +1,605 @@
-<!DOCTYPE html>
-<!--[if lte IE 8 ]>
-<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<!--
-***************  *      *     *
-      8          *    *       *
-      8          *  *         *
-      8          **           *
-      8          *  *         *
-      8          *    *       *
-      8          *      *     *
-      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
--->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<!--<![endif]-->
-
+<!DOCTYPE HTML>
+<html>
 <head>
-  <title>OohCode</title>
-  <!-- Meta data -->
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content="OohCode">
-    <meta name="author" content="sean chen">
-    <meta name="description" content="好奇的码农~" />
-    <meta name="keywords" content="" />
-
-    <!-- Favicon, (keep icon in root folder) -->
-    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
-
-    <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
-    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
-    
-    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
-    
-
-    <!--[if IE 8]>
-    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
-    <![endif]-->
-
-    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
-    <script src="/js/jquery-1.11.1.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
-
-    <!-- Load these in the <head> for quicker IE8+ load times -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/js/html5shiv.min.js"></script>
-    <script src="/js/respond.min.js"></script>
-    <![endif]-->
+  <meta charset="utf-8">
+  
+  <title>第 5 页 | OohCode | 好奇的码农~</title>
 
   
-  
+  <meta name="author" content="sean chen">
   
 
-  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="OohCode"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-<!--
-<body class="home-template">
--->
-<body id="index" class="lightnav animsition">
 
-      <!-- ============================ Off-canvas navigation =========================== -->
+<body>
+<div class="blog">
+  <div class="content">
 
-    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
-        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
-            <img src="/img/close.png" alt="Close"/>
-        </div>
-        <!-- Lists in Slidebars -->
-        <ul class="sb-menu">
-            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
-            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
-            <!-- Dropdown Menu -->
-			 
-            
-        	<li>
-        		<a class="sb-toggle-submenu">Categories<span class="sb-caret"></span></a>
-            	<ul class="sb-submenu">
-				  	
-				    <li><a href="/categories/APUE/" class="animsition-link">APUE<small>(3)</small></a></li>
-				    
-				    <li><a href="/categories/C/" class="animsition-link">C<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/CSAPP/" class="animsition-link">CSAPP<small>(9)</small></a></li>
-				    
-				    <li><a href="/categories/DB/" class="animsition-link">DB<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/PHP/" class="animsition-link">PHP<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/RESTful-Web-Services/" class="animsition-link">RESTful Web Services<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/SHELL/" class="animsition-link">SHELL<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/UML/" class="animsition-link">UML<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/blog/" class="animsition-link">blog<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/computer-system/" class="animsition-link">computer system<small>(2)</small></a></li>
-				    
-				    <li><a href="/categories/coreseek/" class="animsition-link">coreseek<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/blog/jekyll/" class="animsition-link">jekyll<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/liquid/" class="animsition-link">liquid<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/python/" class="animsition-link">python<small>(6)</small></a></li>
-				    
-				    <li><a href="/categories/restful-web-services/" class="animsition-link">restful web services<small>(6)</small></a></li>
-				    
-				    <li><a href="/categories/tools/" class="animsition-link">tools<small>(5)</small></a></li>
-				    
-				    <li><a href="/categories/uml/" class="animsition-link">uml<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/web/" class="animsition-link">web<small>(1)</small></a></li>
-				    
-				    <li><a href="/categories/设计模式/" class="animsition-link">设计模式<small>(2)</small></a></li>
-				    
-				</ul>
-        	</li>
-			
-            
-        </ul>
-        <!-- Lists in Slidebars -->
-        <ul class="sb-menu secondary">
-            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
-            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
-        </ul>
-    </div>
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
     
-    <!-- ============================ END Off-canvas navigation =========================== -->
+  <article>
 
-    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
-
-    <div id="sb-site">
-        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
-
-        <!-- ============================ Header & Logo bar =========================== -->
-
-        <div id="navigation" class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <!-- Nav logo -->
-                    <div class="logo">
-                        <a href="/" title="Logo" class="animsition-link">
-                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
-                        </a>
-                    </div>
-                    <!-- // Nav logo -->
-                    <!-- Info-bar -->
-                    <nav>
-                        <ul class="nav">
-                            <li><a href="/" class="animsition-link">OohCode</a></li>
-                            <li class="nolink"><span>Always </span>Creative.</li>
-                            
-                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
-                            
-                            
-                            
-                            
-                            
-                            <li class="nolink"><span>Welcome!</span></li>
-                        </ul>
-                    </nav>
-                    <!--// Info-bar -->
-                </div>
-                <!-- // .container -->
-                <div class="learnmore sb-toggle-right">More</div>
-                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar before"></span>
-                <span class="icon-bar main"></span>
-                <span class="icon-bar after"></span>
-                </button>
-            </div>
-            <!-- // .navbar-inner -->
-        </div>
-
-        <!-- ============================ Header & Logo bar =========================== -->
-
-
-      <!-- ============================ Hero Image =========================== -->
-
-<section id="hero" class="scrollme">
-    <div class="container-fluid element-img" style="background: url(/img/bg_img.jpg) no-repeat center center fixed;background-size: cover">
-        <div class="row">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 vertical-align cover boost text-center">
-                <div class="center-me animateme" data-when="exit" data-from="0" data-to="0.6" data-opacity="0" data-translatey="100">
-                    <div>
-                        
-                        <h2>YOU'VE MADE A <span>BRAVE</span> DECISION, WELCOME.</h2>
-                        <p></p>
-                        
-                        <h2></h2>
-                        <p>每一个不曾起舞的日子都是对生命的辜负。</p>
-                        
-
-                    </div>
-                </div>
-            </div>
-            <!-- // .col-md-12 -->
-        </div>
-        <div class="herofade beige-dk"></div>
-    </div>
-</section>
-
-<!-- Height spacing helper -->
-<div class="heightblock"></div>
-<!-- // End height spacing helper -->
-
-<!-- ============================ END Hero Image =========================== -->
-<!-- ============================ Content =========================== -->
-
-<section id="intro">
-    <div class="container">
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2014/02/13/csapp-chapter5/">csapp chapter5:优化程序性能</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2014-02-12T16:00:00.000Z" itemprop="datePublished">
-          2014-02-13
-      </time>
+  
     
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        
-编写高效程序需要几类活动：第一，我们必须选择一组合适的算法和数据结构。第二，我们必须编写出编译器能够优化以转化成高效可执行代码的源代码。本章重点讲的是第二个活动，利用我们对编译器的了解来写出让编译器编译出更高效的机器码的方法。
+    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
+    
+  
 
-优化编译器的能力和局限性程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。主要包括消除不必要的函数调用，条件测试和存储器引用。编译器本身通过复杂精细算法对程序编译时进行了优化。编译器的
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2014/02/13/csapp-chapter5/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2014/02/11/csapp-chapter4/">csapp chapter4:处理器体系结构</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2014-02-10T16:00:00.000Z" itemprop="datePublished">
-          2014-02-11
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        
-现代微处理器是人类创造的最复杂的系统之一。本章简要接受处理器硬件的设计。
-
-一个处理器支持的指令和指令的字节级编码称为它的指令集体系结构(Instruction-Set Architecture, ISA)
-Y86指令集体系结构Y86指令就是它规定的一些指令的叫法和功能。指令编码就是这些指令的字节级编码。每条指令的第一个字节表明指令的类型，分为两部分，高4位是代码(code)部分，低4位是功能(function)部分。需要操作数的指令
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2014/02/11/csapp-chapter4/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2014/02/06/apue-chapter2/">apue chapter2</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2014-02-05T16:00:00.000Z" itemprop="datePublished">
-          2014-02-06
-      </time>
-    
-    
-    | 
-    <a href='/tags/UNIX/'>UNIX</a>
-    
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        
-本章主要介绍UNIX系统的标准化及不同UNIX系统的实现。
-
-UNIX标准化UNIX系统由各自独立的组织执行了三个标准：ISO C、IEEE POSIX以及Single UNIX Specification。
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
+          2014-03-22
+        </time>
+      </a>
+    </span>
+  </div>
 
 
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2014/02/06/apue-chapter2/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2014/01/15/mysql-merge-engine/">mysql merge engine 介绍</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2014-01-14T16:00:00.000Z" itemprop="datePublished">
-          2014-01-15
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        
-最近由于项目需求，使用了Merge Engine这个Mysql数据库引擎，看着官方文档对其了解了一下。总结加翻译一下～
+  
 
-MERGE引擎初体验MERGE存储引擎又叫MRG_MyISAM存储引擎，可以把许多相同的MyISAM表可以聚集到一个表来使用。“相同”的意思是所有的表要有相同的列和相同的索引信息。MERGE引擎的另一个代替方案是分割(partitioned)表(把一个独立的分割后的表放到一个单独的文件中)。分割表是一个比MERGE
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2014/01/15/mysql-merge-engine/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2014/01/10/add-dot-language/">Jekyll 添加DOT language支持</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2014-01-09T16:00:00.000Z" itemprop="datePublished">
-          2014-01-10
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        
-plantuml是基于graphviz来做的，而graphviz支持DOT language,所以可不可以直接用plantuml支持DOT language来进行画图呢？这样的话岂不是更爽了～，折腾吧，骚年！
-
-DOT language的介绍及文档。在plantuml的官网找到了有关plantuml支持DOT的说明。根据这个说明的意思，开头的@startuml和结尾的@enduml需要换成@startdot和@enddot就可以了，然
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2014/01/10/add-dot-language/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <nav class="pagination" role="pagination">
-          <a class="pull-left" href="/page/4/">← Newer Posts</a>
-          <a class="pull-right" href="/page/6/">Older Posts →</a>
-        </nav>
-    </div>
-</section>
-<section id="statement">
-    <div class="container text-center wow fadeInUp" data-wow-delay="0.5s">
-        <div class="row">
-            <p>虽然还没想好写点什么，但是总觉得这里放句话比较和谐。</p>
-        </div>
-    </div>
-</section>
-<!-- ============================ END Content =========================== -->
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
+</blockquote>
+<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
+<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
+</ol>
+</blockquote>
+<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
+<ul>
+<li><code>$ ./script.sh</code></li>
+<li><code>$ sh ./script.sh</code></li>
+</ul>
+<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
+</ol>
+</blockquote>
+<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
+<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
+<ul>
+<li>变量被声明: <code>variable</code></li>
+<li>变量被赋值: <code>variable=12</code></li>
+<li>变量被unset: <code>unset variable</code></li>
+<li>变量被export: <code>export variable=23</code></li>
+</ul>
+<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
+<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
+<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
+<ol>
+<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
+<li>使用let赋值.<code>let a=2</code></li>
+<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
+</ol>
+<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
+<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
+<li>$0:代表脚本名称</li>
+<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
+<li>$#:表示参数的个数</li>
+</ul>
+</li>
+</ul>
+<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
+<h3 id="条件格式：">条件格式：</h3><ol>
+<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
+<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
+<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
+<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
+</ol>
+<blockquote>
+<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
+</blockquote>
+<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
+<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
+<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
+<p>ps:</p>
+<ol>
+<li>函数调用之前必须先定义</li>
+</ol>
+<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
 
       
-<!-- ============================ Footer =========================== -->
+    </div>
 
-<footer>
-    <div class="container">
-            <div class="copy">
-                <p>
-                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By sean chen. All Rights Reserved.
-                </p>
-                <p>Theme By <a href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
-            </div>
-            <div class="social">
-                <ul>
-                    
-                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
-                    
-                    
-                    
-                    
-                    
-                </ul>
-            </div>
-            <div class="clearfix"> </div>
-        </div>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/SHELL/">SHELL</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/shell/">shell</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2014/02/13/csapp-chapter5/"><span>csapp chapter5:优化程序性能</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/02/13/csapp-chapter5/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-12T16:00:00.000Z">
+          2014-02-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>编写高效程序需要几类活动：第一，我们必须选择一组合适的算法和数据结构。第二，我们必须编写出编译器能够优化以转化成高效可执行代码的源代码。本章重点讲的是第二个活动，利用我们对编译器的了解来写出让编译器编译出更高效的机器码的方法。</p>
+</blockquote>
+<h2 id="优化编译器的能力和局限性">优化编译器的能力和局限性</h2><p>程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。主要包括消除<strong>不必要</strong>的<em>函数调用</em>，<em>条件测试</em>和<em>存储器引用</em>。<br>编译器本身通过复杂精细算法对程序编译时进行了优化。编译器的优化有不同的级别，也是高程度的优化程序的执行效率就越高，但同时也可能增加程序的规模，也可能使标准的调试工具更难对程序进行调试。<br>编译器必须很小心的对程序只是用<em>安全</em>的优化，也就是说对于程序可能遇到的所有可能情况，在C语言标准提供的保证之下，优化后得到的程序和未优化的版本有一样的行为。<br>通过一个例子来理解决定一种程序转换是否安全的难度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += *yp;&#10;    *xp += *yp;&#10;&#125;&#10;&#10;void twiddle1(int *xp, int *yp)&#10;&#123;&#10;    *xp += 2* *yp;&#10;&#125;</span><br></pre></td></tr></table></figure><br>这两个过程似乎有相同的行为。而且twiddle2的效率更高一些，因为twiddle1需要6次存储器引用，而twiddle2只需要三次存储器引用。但是当xp与yp的值相同时，twiddle1中*xp的值时原来的4倍，twiddle2却是3倍。编译器并不知道它们会不会指向同一地址，所以不能进行从twiddle1到twiddle2的优化。<br>这种两个指针可能指向同一存储器位置的情况称为<em>存储器别名使用(memory aliasing)</em>。编译器对这种情况的优化能力是有限的，所以需要写程序的过程中进行优化。  </p>
+<h2 id="表示程序性能">表示程序性能</h2><p>引入度量标准<em>每元素的周期数(Cycles Per Element, CPE)</em>,作为一种表示程序性能并指导我们改进代码的方法。<br>处理器活动的顺序是由时钟控制的，时钟提供了某个频率的规律信号，通常用<em>千兆赫兹(GHz)</em>。就是我们常说的CPU的运行频率。时钟周期就是时钟频率的倒数。</p>
+<h2 id="程序示例">程序示例</h2><p>举例说明程序优化的效果,这里写出最后的运行函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine1(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    *dest = IDENT;&#10;    for (i=0; i &#60; vec_length(v); i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>看一下优化钱和优化后的效果，就可以看到，CPE从平均29左右降到了12左右，效果的确很明显啊。</p>
+<h2 id="消除循环的低效率">消除循环的低效率</h2><p>上面过程在执行for循环的时候调用vec_length函数左右循环测试的条件，也就是说每次执行条件测试的时候都要执行这个函数调用过程，这明显地影响了程序的性能。注意到向量的长度并不会随程序运行发生改变，所以可以考虑只计算一次向量的长度，然后条件测试都用这个值，如下函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine2(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        data_t val;&#10;        get_vec_element(v, i, &#38;val);&#10;        *dest = *dest OP val;&#10;    &#125;</span><br></pre></td></tr></table></figure><br>再看修改后的程序，CPE降到了8左右。<br>这个优化是一种常见的优化例子，称为<em>代码移动(code motion)</em>。这类优化包括识别要执行多次但是计算结果不会改变的计算。编译器会试着进行代码移动，但是对于会改变在哪里调用函数或调用多少次的变换，编译器通常都会非常小心。如果vec_length有某种副作用，那么combine1和combine2可能有不同的行为。为了改进代码，程序员必须经常帮助编译器显式地完成代码的移动。</p>
+<h2 id="减少过程调用">减少过程调用</h2><p>过程调用会带来相当大的开销，而且妨碍大多数形式的程序优化。<br>上面的combine2中，每次循环迭代都会调用get_vec_element来获取下一个向量元素，很明显会照成低效率。对其进行优化的思路就是减少过程的调用，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_t *get_vec_start(vec_ptr v)&#10;&#123;&#10;    return v-&#62;data;&#10;&#125;&#10;&#10;void combine3(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;&#10;    *dest = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        *dest = *dest OP data[i];&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure><br>得到的代码运行速度开得多，这是以损害一些程序的模块性为代价的。<br>实际情况是，得到的性能提高出乎意料的普通，这是因为5.11讲到的分支预测策略会预计函数的返回值，预测对的情况下直接执行，预测错误的话会有更多的处罚，如果分支预测策略比较好的话，预测正确的概率就高，所以带来的性能问题就越小。</p>
+<h2 id="消除不必要的存储器引用">消除不必要的存储器引用</h2><p>combine3过程中for循环对应的汇编代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L498:&#10;    movss   (%rbp), %xmm0           #&#20174;dest&#35835;&#21462;&#25968;&#25454;&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    movss   %xmm0, (%rbp)           #&#23384;&#20648;&#32467;&#26524;&#21040;dest&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %r12              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L498                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>上面的代码不断从(%rbp)处读取和操作数据，其实可以去掉这个中间寄存器以消除不必要的读写。可以直接利用%xmm0来保存积值。向下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.L488:&#10;    mulss   (%rax, %rdx, 4), %xmm0  #&#25968;&#25454;&#30456;&#20056;&#10;    addq    $1, %rdx                #&#21152;1&#10;    cmpq    %rdx, %rbp              #&#21028;&#26029;&#36793;&#30028;&#26465;&#20214;&#10;    jg      .L488                   # if &#62;, &#24490;&#29615;</span><br></pre></td></tr></table></figure><br>对应C代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void combine4(vec_ptr v, data_t *dest)&#10;&#123;&#10;    long int i;&#10;    long int lenght = vec_length(v);&#10;    data_t *data = get_vec_start(v);&#10;    data_t acc = IDENT;&#10;&#10;    for (i=0; i &#60; length; i++)&#123;&#10;        acc  = acc OP data[i];&#10;    &#125;&#10;&#10;    *dest = acc;&#10;&#125;</span><br></pre></td></tr></table></figure><br>编译器不会做出这样的优化还是因为前面提到的<em>存储器别名使用</em>带来的问题。例如：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v)+2);&#10;combine4(v, get_vec_start(v)+2);</span><br></pre></td></tr></table></figure>
+<p>执行这两个函数的时候结果就会出现不一致性。</p>
+<h2 id="理解现代处理器">理解现代处理器</h2><p>上面所说的都是从程序的调用角度考虑的，主要是减少不必要的指令执行，但是并没有运用目标机器的任何特性。随着试图进一步提高性能，我们必须考虑利用处理器<em>微体系结构</em>的变化，也就是处理器用来执行指令的底层系统设计。在实际的处理器中，是可以同时对多条指令求值的，这个现象称为<em>指令级并行</em>。现代处理器取得了不起的功绩之一就是：它们采用复杂而奇异的微处理器结构，其中，多条指令可以并行地执行，同时又呈现一种简单地顺序执行的表象。<br>程序的最大性能在处理器中主要受到下面两个重要因素的影响：</p>
+<ul>
+<li>当一系列操作必须严格顺序执行时，就会遇到<em>延迟界限(latency bound)</em>。因为在下一条指令开始之前，这条指令必须结束。</li>
+<li><em>吞吐量界限(throughput bound)</em>刻画了处理器功能但愿的原始计算能力。这个界限是程序性能的终极限制。</li>
+</ul>
+<p>下面通过一些例子说明如何利用现代处理器的流水线，指令级并行等特性提高程序性能：</p>
+<ul>
+<li><p>例子1， 下面代码是对一个数据组求和，根据下面的代码可以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//combine 1&#10;for(i = 0; i&#60; limit; i++) &#10;&#123;&#10;    acc = acc * data[i];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是这段代码对应的在系统中运行的过程：<br><img src="/assets/img/csapp/fig5.13.png" alt=""><br>下面是过程的简化：<br><img src="/assets/img/csapp/fig5.14.png" alt=""><br>其中寄存器<code>xmm0</code>是变量<code>acc</code>对应。可见这段代码中，制约性能的瓶颈就是每次都要进行mul运算，更新acc的值，然后进入下一个循环周期。如何提高这样的程序性能呢？这个运算已经是最简洁的了，但是可不可以考虑减少循环的次数来优化呢？请看下面的这段代码.</p>
+</li>
+<li><p>例子2， 减少循环周期也可以这么做：<br>//combine 2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#123;&#10;    acc = (acc * data[i]) * data[i+1];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码看似把循环周期减少了一般，但其实性能并没有得到提高，通过他的计算过程可以看到：<br><img src="/assets/img/csapp/fig5.20.png" alt=""><br>虽然周期减少了一半，但是每个周期却进行了两次运算，而且每次运算都依赖上次计算的结果，也就是acc的值，所以性能并未得到改善。再看例子3。</p>
+</li>
+<li><p>例子3， 多变量提高并行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#10;&#123;&#10;    acc0 = acc0 * data[i];&#10;    acc1 = acc1 * data[i+1];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码跟上一段代码的区别是增加了一个变量，也就是增加了对寄存器的使用，其过程如下：<br><img src="/assets/img/csapp/fig5.24.png" alt=""><br>可以看到同样是减少了周期，但是每个周期的运算使用了不同的计算器，每个计算都不依赖同一周期内的其他值，利用了计算器的并行性，从而提高了程序的性能。还有其它的方式。</p>
+</li>
+<li><p>例子4, 重新结合变换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(i = 0; i &#60; limit; i+=2) &#123;&#10;    acc = acc * (data[i] * data[i+1]);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码跟例子2很像，只不过改变了运算结合的顺序，程序的性能却得到了很大的提高，这是为什么呢？可以看到这个程序在计算机中计算的过程如下：<br><img src="/assets/img/csapp/fig5.29.png" alt=""><br>可以看到每个周期也是两个mul操作，为什么会快呢？这是因为第一个mul操作并不依赖寄存器的值，也就是说其实对于data数组之间的运算可以通过流水线并行计算，制约性能的只是acc所在的寄存器的计算，所以性能主要因素还是一个mul的操作。<br>从上面可以看到利用多个寄存器可以提高性能，那是不是利用的越多越好呢？答案是：NO.因为计算机的寄存器个数是有限的，如果需要的寄存器的个超过了寄存器的个数，那就只能把这些值放入到栈中，这样就会急剧降低程序的性能。</p>
+</li>
+</ul>
+<h2 id="一些限制因素">一些限制因素</h2><p>影响程序性能的限制因素有下面几个：</p>
+<ul>
+<li>寄存器溢出：就是上面最后一段介绍的寄存器不够用时的情况。</li>
+<li>分支预测和预测错误处罚：这回提高程序的代价。</li>
+<li>其它：如加载的性能，存储的性能等。</li>
+</ul>
+<h2 id="提高性能的技术">提高性能的技术</h2><ol>
+<li>高级设计: 为遇到的问题选择适当的算法和数据结构。</li>
+<li>基本编码原则:<ul>
+<li>消除连续的函数调用</li>
+<li>消除不必要的存储器引用：引入临时变量来保持中间结果。只有在最后的值计算出来时，才将结果存放到数组或全局变量中。</li>
+</ul>
+</li>
+<li>低级优化<ul>
+<li>展开循环，降低开销，并且使得进一步优化成为可能。</li>
+<li>通过使用例如多个累积变量和重新结合技术，找到方法提高指令级并行。</li>
+<li>用功能得风格重写条件操作，使得编译采用条件数据传送。</li>
+</ul>
+</li>
+</ol>
+<p>(本章完 2014-05-17 22:57:27)</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/CSAPP/">CSAPP</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2014/02/11/csapp-chapter4/"><span>csapp chapter4:处理器体系结构</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/02/11/csapp-chapter4/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-10T16:00:00.000Z">
+          2014-02-11
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>现代微处理器是人类创造的最复杂的系统之一。本章简要接受处理器硬件的设计。</p>
+</blockquote>
+<p>一个处理器支持的指令和指令的字节级编码称为它的<em>指令集体系结构(Instruction-Set Architecture, ISA)</em></p>
+<h2 id="Y86指令集体系结构">Y86指令集体系结构</h2><p>Y86指令就是它规定的一些指令的叫法和功能。指令编码就是这些指令的字节级编码。每条指令的第一个字节表明指令的类型，分为两部分，高4位是<em>代码(code)</em>部分，低4位是<em>功能(function)</em>部分。需要操作数的指令编码更长一些,例如<code>rmmovl %esp, 0x12345(%edx)</code>的字节编码<strong>40*</strong>42*45230100(注意是16进制, 每一位代表4个bit位),因为rmmovl第一个字节位40; 第二个字节应该是rArB(r代表源的类型，r:寄存器，m:存储器, 这里r是寄存器;A\B代表目的类型),%esp对应的数字为4，%edx对应的数字为2,所以第二个字节是：42;，最后4字节是偏移量0x12345的编码，首先补0填充为4字节：00 01 23 45， 然后反序插入：45230100。最后连起来就是404245230100。</p>
+<h3 id="Y86的顺序实现">Y86的顺序实现</h3><h4 id="将处理组织成阶段">将处理组织成阶段</h4><p>将处理组织成阶段主要：</p>
+<ul>
+<li><strong>取指(fetch)</strong>:取指阶段从存储器读取指令字节，地址为程序计数器(PC)的值。它按顺序方式计算当前指令的下一条指令的地址valP(等于PC的值加上已取出指令的长度)。</li>
+<li><strong>译码(decode)</strong>:译码阶段从寄存器文件读入最多两个操作数, 得到值valA或／和valB。</li>
+<li><strong>执行(excute)</strong>:执行阶段，算术/逻辑单元要么执行指令指明的操作，计算存储器引用的有效地址，要么增加或减少栈指针。</li>
+<li><strong>访存(memory)</strong>:访存阶段可以将数据写入存储器，或者从存储器读出数据。</li>
+<li><strong>写回(write back)</strong>:写回阶段最多可以写两个结果到寄存器文件。</li>
+<li><strong>更新PC(PC update)</strong>:将PC设置成下一条指令的地址。<br>例如：  </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>OPl rA, rB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取指</td>
+<td>icode:ifun&lt;-\(M_{1}\)[PC]</td>
+</tr>
+<tr>
+<td></td>
+<td>rA:rB&lt;-\(M_{1}\)[PC+1]</td>
+</tr>
+<tr>
+<td></td>
+<td>valP&lt;-PC+2</td>
+</tr>
+<tr>
+<td>译码</td>
+<td>valA&lt;-R[rA]</td>
+</tr>
+<tr>
+<td></td>
+<td>valB&lt;-R[rB]</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>valE&lt;-valB OP valA</td>
+</tr>
+<tr>
+<td></td>
+<td>Set CC</td>
+</tr>
+<tr>
+<td>访存</td>
+<td></td>
+</tr>
+<tr>
+<td>写回</td>
+<td>R[rB]&lt;-valE</td>
+</tr>
+<tr>
+<td>更新PC</td>
+<td>PC&lt;-valP</td>
+</tr>
+</tbody>
+</table>
+<h4 id="SEO硬件结构">SEO硬件结构</h4><p><img src="/assets/img/csapp/fig4.22.png" alt="">  </p>
+<p>硬件单元与各个处理阶段的关联：  </p>
+<ul>
+<li>取指：将程序计数器寄存器作为地址，指令存储器读取指令的字节。PC增加器(PC incrementer)计算valP,即增加了的程序计数器。</li>
+<li>译码：寄存器文件有两个读端口A和B,从这两个端口同事图去寄存器值valA和valB。</li>
+<li>执行：根据指令的类型，将算术/逻辑单元(ALU)用于不同的目的。</li>
+<li>访存：在执行访存操作时，数据存储器读出或写入一个存储器字。</li>
+<li>写回：寄存器文件有两个写端口。端口E用来写ALU计算出来的值，而端口M用来写从数据存储器中读出的值。</li>
+</ul>
+<h4 id="SEO的时序">SEO的时序</h4><p>SEO的实现包括组合逻辑和两种存储器设备：时钟寄存器(程序计数器和条件码寄存器), 随机访问存储器(寄存器文件、指令存储器和数据存储器)。组合逻辑不需要任何时序或控制——只要输入变化了，值就通过逻辑门网络传播。现在有四个硬件单元需要对它们的时序进行明确的控制——程序计数器、条件码寄存器、数据存储器和寄存器文件。这些单元通过一个时钟信号来控制，它触发将新值转载到寄存器以及将值写到随机访问存储器。每个时钟周期，程序计数器都会装载新的指令地址。只有在执行整数运算指令时，才会装载条件码寄存器。只有在执行rmmovl, pushl或call指令时，才会写数据存储器。根据下图来理解处理器活动的时序控制：<br><img src="/assets/img/csapp/fig4.25.png" alt=""><br>可以看出，其实所有的状态更新实际上同时发生，且只在时钟上升开始下一个周期时，保证这个等价性的原则是：<em>处理器从来不需要为了完成一条指令的执行而去读由该指令更新了的状态</em>,我对这句话的理解是，一个周期内（其实一个周期就是一条指令的执行）执行的指令所更新的数据不会成为该指令读取的数据。<br>上图中周期3通过组合逻辑算出了条件码的新值：000， ％ebx的新值,以及程序计数器的新值(0x00e)，但是这些都是一个临时状态，是组合逻辑的出口值，在下一个周期开始的时候，也就是电瓶上升沿，把这些临时的值更新到了xian相应的寄存器中,开始下一个逻辑运算。<br>SEO阶段的实现，就是以上每条指令逻辑运算的过程。不再说明。</p>
+<h2 id="流水线的通用原理">流水线的通用原理</h2><p>流水线化的一个重要特性就是增加了系统的<em>吞吐量（throughput)</em>。我理解吞吐量就是在单位时间内能够执行的命令个数。通过例子来说明：<br>非流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.32.png" alt=""><br>图中，I1,I2,I3表示的是三条指令。<br>一个组合逻辑需要300ps时间来进行运算，然后需要20ps的时间把数据加载到寄存器中，也就是一个<em>延迟(latency)</em>为320ps，所以可以计算处吞吐量：<br>\(吞吐量=\frac{1}{(300+20)*10^{-12}} \approx 3.12GIPS\)  </p>
+<p>流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.33.png" alt=""><br>图中，I1,I2,I3表示的是三条指令, A, B, C表示执行每条指令需要三个阶段。这里每个阶段为100ps, 也就是把300ps分成三次来执行。但是各个阶段之间需要放上<em>流水线寄存器(pipeline registers)</em>,每次加载寄存器都需要20ps, 所以可以看出执行一条指令需要3*（20+100）＝360ps, 比之前执行一条指令多出来40ps。但是看一下流水线的流程，A先执行I 1指令，执行完后，B开始执行I1指令，这时I2就可以进入A阶段进行执行了，最终的结果是A, B, C都在自行命令。也就是得到流水线的吞吐量是：<br>\(吞吐量=\frac{1}{(100+20)*10^{-12}} \approx 8.33GIPS\)<br>对于这三条指令可以看出，非流水线状态下一共执行了960ps, 流水线情况下执行了600ps， 提高了整个系统的执行效率。</p>
+<blockquote>
+<p>ps： 不是流水线的级数越多约好，因为级数增加的，每个阶段的执行时间减少，吞吐量增加了，但是整个执行过程的延迟也增加了，所以收益不一定会变好。所以实际过程中要兼顾吞吐量和时延两个指标。</p>
+</blockquote>
+<p>后面的内容说的是具体流水线的设计实现，这里就不再说了。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/CSAPP/">CSAPP</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2014/02/06/apue-chapter2/"><span>apue chapter2</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/02/06/apue-chapter2/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-02-05T16:00:00.000Z">
+          2014-02-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>本章主要介绍UNIX系统的标准化及不同UNIX系统的实现。</p>
+</blockquote>
+<h2 id="UNIX标准化">UNIX标准化</h2><p>UNIX系统由各自独立的组织执行了三个标准：ISO C、IEEE POSIX以及Single UNIX Specification。</p>
+<p><img src="/assets/img/apue/unix_chart_775.jpg" alt="unix系统家族树"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/APUE/">APUE</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/UNIX/">UNIX</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2014/01/15/mysql-merge-engine/"><span>mysql merge engine 介绍</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/01/15/mysql-merge-engine/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-01-14T16:00:00.000Z">
+          2014-01-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>最近由于项目需求，使用了Merge Engine这个Mysql数据库引擎，看着<a href="http://dev.mysql.com/doc/refman/5.6/en/merge-storage-engine.html" target="_blank" rel="external">官方文档</a>对其了解了一下。总结加翻译一下～</em></p>
+</blockquote>
+<h2 id="MERGE引擎初体验">MERGE引擎初体验</h2><p>MERGE存储引擎又叫MRG_MyISAM存储引擎，可以把许多相同的MyISAM表可以聚集到一个表来使用。“相同”的意思是所有的表要有相同的列和相同的索引信息。<br>MERGE引擎的另一个代替方案是分割(partitioned)表(把一个独立的分割后的表放到一个单独的文件中)。分割表是一个比MERGE更好的方案，具体请参考第18章<a href="http://dev.mysql.com/doc/refman/5.6/en/partitioning.html" target="_blank" rel="external">Partitioning</a>的内容。<br>当建立一个MERGE引擎表时，会产生两个文件：<code>.frm</code>文件存储的是表的格式,<code>.MRG</code>文件包含的是这个MERGE表所包含的MyISAM表的名字(这些表可以不在同一个数据库中)。<br>MERGE表中可以使用 SELECT, DELETE, UPDATE, 和INSERT等数据库操作语言。前提是对每个包含的表都有这些权限。</p>
+<blockquote>
+<p>注意:<br>如果一个用户有权限操作数据表t, 那么可以建立一个MERGE表m来访问t, 这时如果用户对t的权限没有了，仍然可以通过m来操作t。</p>
+</blockquote>
+<p>如果对MERGE使用DROP TABLE那么只是删除了MERGE表，对MERGE表包含的表没有任何影响。<br>建立一个MERGE表的时候可以使用参数<code>INSERT_METHOD</code>来决定INSERT一条数据是是如何插入MERGE表所包含的表的。</p>
+<blockquote>
+<p>INSERT_METHOD = last: 当插入一个记录时，实际插入的是union的最后一个table。<br>INSERT_METHOD = first: 当插入一个记录时，实际插入的是union的第一个table。<br>INSERT_METHOD = no: MERGE表不允许插入数据。</p>
+</blockquote>
+<p>如果MERGE表包含的数据表结构或者个数有变化，需要重新建立MERGE表，建立一个新的映射关系，方法有下面两种：</p>
+<ol>
+<li>删除这个MERGE表，重新create一个。</li>
+<li>使用<code>ALTER TABLE tbl_name UNION=(...)</code>, 改变所包含的表。</li>
+</ol>
+<h2 id="MERGE实现原理">MERGE实现原理</h2><p>由于文档没有说MERGE的内部实现原理，根据我的猜测应该是这样的，MERGE表只是记录了所包含的每个表的名字和表共同的结构，当我对表的内容进行检索时，其实MERGE是分别对它包含的每个表进行了检索，然后输出了结果，这个可以做个验证：<br>t是表t1，t2的MERGE表，一条记录分别在t1和t里检索<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; explain select * from t1 where a =1;&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;| id | select_type | table | type  | possible_keys | key     | key_len | ref   | rows | Extra |&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;|  1 | SIMPLE      | t1    | const | PRIMARY       | PRIMARY | 4       | const |    1 |       |&#10;+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+&#10;1 row in set (0.00 sec)&#10;mysql&#62; explain select * from t where a =1;&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+&#10;| id | select_type | table | type | possible_keys | key  | key_len | ref   | rows | Extra |&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+&#10;|  1 | SIMPLE      | t     | ref  | a             | a    | 4       | const |    2 |       |&#10;+----+-------------+-------+------+---------------+------+---------+-------+------+-------+</span><br></pre></td></tr></table></figure><br>发现，对于主键进行检索时，MERGE的检索此时总是等于它包含的表的数量，而单个表进行检索时是直接在本表进行检索的。也就是说其实MERGE表只是一个聚合结构，并不含索引和数据，其操作都是在它包含的表中逐个进行的，其复杂度是单个表的和。</p>
+<h2 id="MERGE_优缺点">MERGE 优缺点</h2><h3 id="优点：">优点：</h3><ul>
+<li>对分表的管理更加简单。比如log表,可以根据时间进行分别，然后对其进行压缩，最后通过建立MERGE表来操作数据。</li>
+<li>获取更快的速度。可以把一个很大的只读表拆分为多个独立的表，放到不同的磁盘上，通过MERGE表结构来查询的速度要比查一个大表快的多。 </li>
+<li>更有效的搜索。如果知道要搜索的数据在哪个表里，可以直接进行搜索，否则就可以在MERGE表中搜索，不需要对每个表都分别搜索。</li>
+<li>及时映射所有包含的表。MERGE表不需要包含索引，因为它用的是包含的表的索引。</li>
+<li>如果需要建立一个很大的表，可以见多个表然后再使用MERGE表。这样更加快而且更加节省空间（应该是索引所消耗的空间）。</li>
+<li>可以突破MyISAM表大小的限制。每个MyISAM表都有大小的限制，但是MERGE没有。</li>
+<li>对一个表也可以建立MERGE表，但是对性能并没有什么提升。only a couple of indirect calls and memcpy() calls for each read （这句话不知道如何翻译）</li>
+</ul>
+<h3 id="缺点：">缺点：</h3><ul>
+<li>MERGE表只能对MyISAM引擎的表建立。</li>
+<li>MERGE引擎不支持MyISAM引擎的一些特性。例如不能建立FULLTEXT索引，可以在MyISAM上建立，但是不能通过MERGE表来使用。</li>
+<li>如果MERGE表不是临时的，那么它包含的表也不能是临时的，如果MERGE表是临时的，那么它包含的表可以是任何临时和不临时的表的组合。</li>
+<li>MERGE表比MyISAM表需要更多的文件描述。 If 10 clients are using a MERGE table that maps to 10 tables, the server uses (10 × 10) + 10 file descriptors. (10 data file descriptors for each of the 10 clients, and 10 index file descriptors shared among the clients.)，这个也不太明白。</li>
+<li>读索引比较慢。当使用索引时，MERGE需要对它包含的每个表进行查询。这让MERGE表在eq_ref搜索时很慢，但是在ref搜索时不会太慢。</li>
+</ul>
+<h2 id="MERGE_存在的问题">MERGE 存在的问题</h2><p>捡总要的说了</p>
+<ul>
+<li>如果改变一个原来是MERGE引擎的表为非MERGE引擎，那么MERGE表的映射就没有了，所包含的表的所有数据都会copy的修改后的表中。</li>
+<li>MyISAM里的AUTO_INCREMENT字段对于MERGE来说没有用</li>
+<li>MERGE不能保持唯一索引，在MyISAM中是可以的。</li>
+<li></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/DB/">DB</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/4/" class="pagination-prev">上一页</a>
+  
+  
+  <a href="/page/6/" class="pagination-next">下一页</a>
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 sean chen
+    
+  </p>
 </footer>
-
-<!-- ============================ END Footer =========================== -->
-      <!-- Load our scripts -->
-<!-- Resizable 'on-demand' full-height hero -->
-<script type="text/javascript">
-    var resizeHero = function () {
-        var hero = $(".cover,.heightblock"),
-            window1 = $(window);
-        hero.css({
-            "height": window1.height()
-        });
-    };
-
-    resizeHero();
-
-    $(window).resize(function () {
-        resizeHero();
-    });
-</script>
-<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
-<script src="/js/jquery.flexslider-min.js"></script><!-- Flexslider plugin -->
-<script src="/js/scripts.js"></script><!-- Theme scripts -->
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$('#intro').find('img').each(function(){
-  var alt = this.alt;
-
-  if (alt){
-    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
-  }
-
-  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
-});
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-<!-- Initiate flexslider plugin -->
-<script type="text/javascript">
-    $(document).ready(function($) {
-      (function(){
-        console.log('font');
-        var getCss = function(path) {
-          var head = document.getElementsByTagName('head')[0];
-          link = document.createElement('link');
-          link.href = path;
-          link.rel = 'stylesheet';
-          link.type = 'text/css';
-          head.appendChild(link);
-        };
-        getCss('https://fonts.googleapis.com/css?family=Montserrat:400,700');
-        getCss('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
-      })();
-      $('.flexslider').flexslider({
-        animation: "fade",
-        prevText: "",
-        nextText: "",
-        directionNav: true
-      });
-    });
-</script>
-
+    
+  </div>
+</div>
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
