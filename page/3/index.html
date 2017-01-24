@@ -59,6 +59,85 @@
 
   
     
+    <h3 class="article-title"><a href="/2014/11/27/observer-pattern/"><span>设计模式-观察者模式</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/11/27/observer-pattern/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-11-26T16:00:00.000Z">
+          2014-11-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>在学习js事件的时候，说js事件其实就是观察者模式，所以打算先把观察者模式了解一下，这样就能更好的理解事件机制了。</p>
+</blockquote>
+<p>由于观察者模式，其实比较好理解，这里就举<a href="http://zh.wikipedia.org/wiki/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F" target="_blank" rel="external">wikipedia的例子</a><br>观察者模式的UML类图如下:</p>
+<img src="http://www.plantuml.com/plantuml/svg/Iyv9B2vMy4ygJYqgIorIgERIpiiloKohrD3agkLA1ai6boPbfIQNWEGIKr9WIe4Aj5DISr9BKf5589gHH626EEVd9HSXANP4jieQfp8d_CgWJaCo38_LKCLEE1HZkb2tj42tnWuUE5oOZiEb0kukg08edml3AMZoy7ZGrSt7fSbHGK_F3ZCyCSt6fim90000">
+<p>分析一下这个类图。主要分为两种类。一个是观察者类(Observer), 一个是被观察者类(Subject), 被观察者类有三种方法分别是：</p>
+<ul>
+<li><code>addObserver()</code>: 添加观察者到被观察者类中</li>
+<li><code>deleteObserver()</code>: 从被观察者类中删除观察者</li>
+<li><code>notifyObserver()</code>: 通知已经注册过的观察者</li>
+</ul>
+<p>这里<code>ConcreteSubjectA</code>和<code>ConcreteSubjectB</code>是继承<code>Subject</code>的。当有多个被观察者类时可以用这种方式，当只有一个被观察者类时，可以直接用<code>Subject</code>进行实例话，不需要派生类。<br><code>Observer</code>是观察者的抽象类。所有的观察者都继承自这个类。每个观察者类都要实现一个<code>notify()</code>函数。这个函数是当被观察者发生变化需要通知观察者的时候调用的，也就是<code>notifyObserver()</code>调用的。</p>
+<h2 id="代码事例:">代码事例:</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">SplObserver</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$tipo</span> = <span class="string">"Student"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$nome</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$endereco</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$telefone</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$email</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$_classes</span> = <span class="keyword">array</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_tipo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;tipo;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_nome</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;nome;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_email</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;email;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_telefone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;nome;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(<span class="variable">$nome</span>)</span> </span>&#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;nome = <span class="variable">$nome</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">(SplSubject <span class="variable">$object</span>)</span></span>&#123;</span><br><span class="line">        <span class="variable">$object</span>-&gt;SET_log(<span class="string">"Comes from "</span>.<span class="variable">$this</span>-&gt;nome.<span class="string">": I'm a student of "</span>.<span class="variable">$object</span>-&gt;GET_materia());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Teacher</span> <span class="keyword">implements</span> <span class="title">SplObserver</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$tipo</span> = <span class="string">"Teacher"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$nome</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$endereco</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$telefone</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$email</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$_classes</span> = <span class="keyword">array</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_tipo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;tipo;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_nome</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;nome;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_email</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;email;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_telefone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;nome;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(<span class="variable">$nome</span>)</span> </span>&#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;nome = <span class="variable">$nome</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">(SplSubject <span class="variable">$object</span>)</span></span>&#123;</span><br><span class="line">        <span class="variable">$object</span>-&gt;SET_log(<span class="string">"Comes from "</span>.<span class="variable">$this</span>-&gt;nome.<span class="string">": I teach in "</span>.<span class="variable">$object</span>-&gt;GET_materia());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span> <span class="keyword">implements</span> <span class="title">SplSubject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$nome_materia</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$_observadores</span> = <span class="keyword">array</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$_log</span> = <span class="keyword">array</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GET_materia</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;nome_materia;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">SET_log</span><span class="params">(<span class="variable">$valor</span>)</span> </span>&#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;_log[] = <span class="variable">$valor</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">GET_log</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$this</span>-&gt;_log;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(<span class="variable">$nome</span>)</span> </span>&#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;nome_materia = <span class="variable">$nome</span>;</span><br><span class="line">        <span class="variable">$this</span>-&gt;_log[] = <span class="string">" Subject $nome was included"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* Adiciona um observador */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">attach</span><span class="params">(SplObserver <span class="variable">$classes</span>)</span> </span>&#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;_classes[] = <span class="variable">$classes</span>;</span><br><span class="line">        <span class="variable">$this</span>-&gt;_log[] = <span class="string">" The "</span>.<span class="variable">$classes</span>-&gt;GET_tipo().<span class="string">" "</span>.<span class="variable">$classes</span>-&gt;GET_nome().<span class="string">" was included"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* Remove um observador */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">detach</span><span class="params">(SplObserver <span class="variable">$classes</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$this</span>-&gt;_classes <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$obj</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$obj</span> == <span class="variable">$classes</span>) &#123;</span><br><span class="line">                <span class="keyword">unset</span>(<span class="variable">$this</span>-&gt;_classes[<span class="variable">$key</span>]);</span><br><span class="line">                <span class="variable">$this</span>-&gt;_log[] = <span class="string">" The "</span>.<span class="variable">$classes</span>-&gt;GET_tipo().<span class="string">" "</span>.<span class="variable">$classes</span>-&gt;GET_nome().<span class="string">" was removed"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* Notifica os observadores */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">notify</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$this</span>-&gt;_classes <span class="keyword">as</span> <span class="variable">$classes</span>) &#123;</span><br><span class="line">            <span class="variable">$classes</span>-&gt;update(<span class="variable">$this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$subject</span> = <span class="keyword">new</span> Subject(<span class="string">"Math"</span>);</span><br><span class="line"><span class="variable">$marcus</span> = <span class="keyword">new</span> Teacher(<span class="string">"Marcus Brasizza"</span>);</span><br><span class="line"><span class="variable">$rafael</span> = <span class="keyword">new</span> Student(<span class="string">"Rafael"</span>);</span><br><span class="line"><span class="variable">$vinicius</span> = <span class="keyword">new</span> Student(<span class="string">"Vinicius"</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Include observers in the math Subject</span></span><br><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$rafael</span>);</span><br><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$vinicius</span>);</span><br><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$marcus</span>);</span><br><span class="line"> </span><br><span class="line"><span class="variable">$subject2</span> = <span class="keyword">new</span> Subject(<span class="string">"English"</span>);</span><br><span class="line"><span class="variable">$renato</span> = <span class="keyword">new</span> Teacher(<span class="string">"Renato"</span>);</span><br><span class="line"><span class="variable">$fabio</span> = <span class="keyword">new</span> Student(<span class="string">"Fabio"</span>);</span><br><span class="line"><span class="variable">$tiago</span> = <span class="keyword">new</span> Student(<span class="string">"tiago"</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Include observers in the english Subject</span></span><br><span class="line"><span class="variable">$subject2</span>-&gt;attach(<span class="variable">$renato</span>);</span><br><span class="line"><span class="variable">$subject2</span>-&gt;attach(<span class="variable">$vinicius</span>);</span><br><span class="line"><span class="variable">$subject2</span>-&gt;attach(<span class="variable">$fabio</span>);</span><br><span class="line"><span class="variable">$subject2</span>-&gt;attach(<span class="variable">$tiago</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Remove the instance "Rafael from subject"</span></span><br><span class="line"><span class="variable">$subject</span>-&gt;detach(<span class="variable">$rafael</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Notify both subjects</span></span><br><span class="line"><span class="variable">$subject</span>-&gt;notify();</span><br><span class="line"><span class="variable">$subject2</span>-&gt;notify();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"First Subject &lt;br /&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;</span><br><span class="line">print_r(<span class="variable">$subject</span>-&gt;GET_log());</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;/pre&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;hr&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Second Subject &lt;br /&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;</span><br><span class="line">print_r(<span class="variable">$subject2</span>-&gt;GET_log());</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;/pre&gt;"</span>;</span><br></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//First Subject</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Array</span> (</span><br><span class="line"></span><br><span class="line">   [<span class="number">0</span>] =&gt;  Subject Math was included</span><br><span class="line">   [<span class="number">1</span>] =&gt;  The Student Rafael was included</span><br><span class="line">   [<span class="number">2</span>] =&gt;  The Student Vinicius was included</span><br><span class="line">   [<span class="number">3</span>] =&gt;  The Teacher Marcus Brasizza was included</span><br><span class="line">   [<span class="number">4</span>] =&gt;  The Student Rafael was removed</span><br><span class="line">   [<span class="number">5</span>] =&gt; Comes from Vinicius: I<span class="string">'m a student of Math</span><br><span class="line">   [6] =&gt; Comes from Marcus Brasizza: I teach in Math</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//Second Subject</span><br><span class="line"></span><br><span class="line">Array (</span><br><span class="line"></span><br><span class="line">   [0] =&gt;  Subject English was included</span><br><span class="line">   [1] =&gt;  The Teacher Renato was included</span><br><span class="line">   [2] =&gt;  The Student Vinicius was included</span><br><span class="line">   [3] =&gt;  The Student Fabio was included</span><br><span class="line">   [4] =&gt;  The Student tiago was included</span><br><span class="line">   [5] =&gt; Comes from Renato: I teach in English</span><br><span class="line">   [6] =&gt; Comes from Vinicius: I'</span>m a student of English</span><br><span class="line">   [<span class="number">7</span>] =&gt; Comes from Fabio: I<span class="string">'m a student of English</span><br><span class="line">   [8] =&gt; Comes from tiago: I'</span>m a student of English</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>结合代码我们再具体分析。上面的代码中有<code>SplObserver</code>是观察者基类,观察者类<code>Student</code>和<code>Teacher</code>都继承它。被观察者<code>Subject</code>继承自<code>SplSubject</code>基类,实现了三个函数:添加观察者的<code>attach</code>、删除观察者的<code>detach</code>及通知观察者的<code>notify</code>。我们还注意到每个观察者类都有一个<code>update</code>函数，这个函数是被观察者通知观察者时的接口，由<code>notify</code>函数调用并传递被观察者的信息到观察者。这就是一个完整的观察者模式的代码实例。</p>
+<p>我们再看如何使用:<br>开始的时候初始化观察者和被观察者类:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$subject</span> = <span class="keyword">new</span> Subject(<span class="string">"Math"</span>);</span><br><span class="line"><span class="variable">$marcus</span> = <span class="keyword">new</span> Teacher(<span class="string">"Marcus Brasizza"</span>);</span><br><span class="line"><span class="variable">$rafael</span> = <span class="keyword">new</span> Student(<span class="string">"Rafael"</span>);</span><br><span class="line"><span class="variable">$vinicius</span> = <span class="keyword">new</span> Student(<span class="string">"Vinicius"</span>);</span><br></pre></td></tr></table></figure>
+<p>然后把观察者注册到被观察者中:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$rafael</span>);</span><br><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$vinicius</span>);</span><br><span class="line"><span class="variable">$subject</span>-&gt;attach(<span class="variable">$marcus</span>);</span><br></pre></td></tr></table></figure>
+<p>接着又把<code>$rafael</code>从观察者类中删除了:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$subject</span>-&gt;detach(<span class="variable">$rafael</span>);</span><br></pre></td></tr></table></figure>
+<p>最后由被观察者通知注册的观察者做出改变:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$subject</span>-&gt;notify();</span><br></pre></td></tr></table></figure>
+<p>所以最后的结果如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Array</span> (</span><br><span class="line"></span><br><span class="line">   [<span class="number">0</span>] =&gt;  Subject Math was included</span><br><span class="line">   [<span class="number">1</span>] =&gt;  The Student Rafael was included</span><br><span class="line">   [<span class="number">2</span>] =&gt;  The Student Vinicius was included</span><br><span class="line">   [<span class="number">3</span>] =&gt;  The Teacher Marcus Brasizza was included</span><br><span class="line">   [<span class="number">4</span>] =&gt;  The Student Rafael was removed</span><br><span class="line">   [<span class="number">5</span>] =&gt; Comes from Vinicius: I<span class="string">'m a student of Math</span><br><span class="line">   [6] =&gt; Comes from Marcus Brasizza: I teach in Math</span><br><span class="line">)</span></span><br></pre></td></tr></table></figure>
+<p>第二个分析方法相同,不在赘述了。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/设计模式/">设计模式</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2014/11/21/factory-pattern/"><span>设计模式-工厂模式</span></a></h3>
     
   
@@ -354,119 +433,6 @@
     <span class="post-categories">
       <i class="icon-categories"></i>
         <a href="/categories/coreseek/">coreseek</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/05/26/csapp-chapter8/"><span>csapp chapter8:异常控制流</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/05/26/csapp-chapter8/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-05-25T16:00:00.000Z">
-          2014-05-26
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>程序运行的顺序是根据程序计数器（PC）的值而定的，PC从一个地址到另一个地址的过渡称为<em>控制转移(control transfer)</em>,这样的控制转移序列叫做处理器的<em>控制流(flow of control或 control flow)</em>。一般如果PC是按照顺序地址进行过渡的，控制流是一个平滑的序列，但是有些情况下PC是来回跳转的，这些突变称为<em>异常控制流(Exceptional Control Flow 简称EFC)</em>,EFC发生在计算机系统的各个层次。本章主要分析这种异常控制流。</p>
-</blockquote>
-<h2 id="异常">异常</h2><p>异常(exception)就是控制流中的突变,用来响应处理器状态中的某些变化。<br>下面通过一个图来理解异常.<br><img src="/assets/img/csapp/fig8.1.png" alt=""><br>可以看到程序在执行到<em> \(I_{curr}\) </em>时发生了一个异常，导致程序从原来该执行<em> \(I_{next}\)</em> ，变为了执行异常处理, 在执行完异常出理由程序后有下面三种可能：</p>
-<ul>
-<li>处理程序将控制返回给当前指令\(I_{curr}\), 即当事件发生时正在执行的命令。</li>
-<li>处理程序将控制权返回给\(I_{next}\), 即如果没有发生异常将会执行的下一条指令。</li>
-<li>处理程序终止被中断的程序。</li>
-</ul>
-<p>在任何情况下，当处理器检测到有事件发生时，它就会通过一张<em>异常表</em>的跳转表,进行一个间接过程调用(异常)，到一个专门设计用来处理这类事件的操作系统子程序(异常处理程序(exception handler))。</p>
-<h2 id="异常处理">异常处理</h2><p>系统为每个异常的类型都分配了一个唯一的非负整数的<em>异常号(exception number)</em>, 每个异常处理号都对应了一个异常处理程序，这些异常处理程序有些是处理器设计者分配的，有些事操作系统内核的设计者分配的，前者主要包括被零除，缺页，存储器访问违例、断点以及算术溢出，后者主要包括系统调用和来自外部I/O设备的信号。<br>在系统启动时，操作系统分配和初始化一张称为<em>异常表</em>的跳转表，如下：<br><img src="/assets/img/csapp/fig8.2.png" alt=""><br>这个图显示了如何利用根据异常号来找异常处理程序，并执行。  </p>
-<p><strong>异常与过程调用的区别</strong>：</p>
-<ul>
-<li>异常调用时，在跳转处理器之前，处理器将返回地址压入栈中。返回地址是根据异常的类型而定的，可能是当前指令的地址，也可能是下一条指令的地址。过程调用一般入栈的是下一条指令的地址。</li>
-<li>处理器把一些额外的处理器状态压到栈里，当处理程序返回时，重新开始被中断的程序会需要这些状态。</li>
-<li>如果控制从一个用户程序转移到内核，那么所有的这些项目都被压入内核栈中，而不是压到用户栈中。</li>
-<li>异常处理程序运行在内核模式下。这意味着它们对所有的系统资源具有完全的访问权限。</li>
-</ul>
-<p><strong>异常的类别</strong>:</p>
-<ul>
-<li><strong>中断</strong>:当前指令执行完后，会发现中断引脚的电压高了，就从系统总线读取处理程序。这种异常一般都是由外部的设备引起的，跟处理程序之间没有必然的联系，所以是异步的。下面的都是程序运行过程中自己有意或无意的引起的，所以事同步的行为。</li>
-<li><strong>陷阱</strong>:是一个有意的异常，是执行一条指令引起的，引起异常的指令一般都是系统调用函数（如fork, single, exit, waitpid等），这些函数调用使程序从用户模式切换到了内核模式。</li>
-<li><strong>故障</strong>:故障是由程序运行中的错误造成的，它能够被捕获并被故障处理程序修正。这种故障如缺页异常等。</li>
-<li><strong>终止</strong>:这种异常一般是指不会恢复的致命错误。通常是一些硬件错误。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th>原因</th>
-<th>异步/同步</th>
-<th>返回行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>中断</td>
-<td>来自I/O设备的信号</td>
-<td>异步</td>
-<td>总是返回到下一条指令</td>
-</tr>
-<tr>
-<td>陷阱</td>
-<td>有意的异常</td>
-<td>同步</td>
-<td>总是返回到下一条指令</td>
-</tr>
-<tr>
-<td>故障</td>
-<td>潜在可恢复的错误</td>
-<td>同步</td>
-<td>可能返回当前指令</td>
-</tr>
-<tr>
-<td>终止</td>
-<td>不可恢复的错误</td>
-<td>同步</td>
-<td>不会返回</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/CSAPP/">CSAPP</a>
     </span>
     
 

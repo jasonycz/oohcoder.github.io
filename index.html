@@ -59,6 +59,100 @@
 
   
     
+    <h3 class="article-title"><a href="/2017/01/23/gc-base/"><span>垃圾回收基本算法</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/01/23/gc-base/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-01-23T06:24:36.000Z">
+          2017-01-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>本章介绍GC的基本算法:GC标记-清除法，引用计数法, GC复制算法。这三种我认为是GC的三个方向的基本思维。其他方法都是围绕这个些基本方法展开的。</p>
+</blockquote>
+<h2 id="GC标记-清除法">GC标记-清除法</h2><h3 id="基本方法">基本方法</h3><p>所谓的标记-清除法，依据其字面意思就是，先做标记，然后在清除。这个过程分为两个阶段，标记阶段就是把所有活动对象坐上标记，清除阶段就是把那些没有做标记的对象，也就是非活动对象回收的阶段。利用伪代码表示就是:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mark_sweep() &#123;</span><br><span class="line">    mark_phase()</span><br><span class="line">    sweep_phase()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>标记阶段: 这个阶段从<code>根</code>出发，利用深度优先遍历(不用广度优先是因为深度优先搜索比广度优先搜索更能压低内存使用量。), 对每个能到达的活动对象都坐上标记(用一个位来表示)。这个阶段所花费的时间与”活动对象的总数”成正比。标记阶段伪代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mark_phase() &#123;</span><br><span class="line">    <span class="comment">#遍历根节点, 进行标记</span></span><br><span class="line">    <span class="keyword">for</span>(r: $roots)</span><br><span class="line">        mark(*r)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#标记函数</span></span><br><span class="line">mark(obj) &#123;</span><br><span class="line">    <span class="keyword">if</span>(obj.mark == FALSE)</span><br><span class="line">        obj.mark = TRUE</span><br><span class="line">        <span class="comment">#深度优先遍历</span></span><br><span class="line">        <span class="keyword">for</span>(child : children(obj))</span><br><span class="line">            mark(*child)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>清除阶段: 清除阶段主要工作是通过遍历整个堆，把未被标记的对象(非活动对象)回收再利用。回收对象就是把对象作为分块，连接到被称为”空闲链表”的单向链表。之后进行分配时遍历空闲链表就可以找到分块了。两个相邻的分块如果地址是连续的，就会对其进行<strong>合并</strong>, 合并操作可以减少碎片的发生。清除阶段的伪代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sweep_phase() &#123;</span><br><span class="line">    sweeping = $heap_start</span><br><span class="line">    <span class="comment">#遍历堆</span></span><br><span class="line">    <span class="keyword">while</span>(sweeping &lt; $head_end)</span><br><span class="line">        <span class="keyword">if</span>(sweeping.mark == TRUE)</span><br><span class="line">            sweeping.mark == FALSE</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="comment">#放入空闲链表</span></span><br><span class="line">            <span class="keyword">if</span>(sweeping.mark == $free_list + $free_list.size)</span><br><span class="line">                <span class="comment">#合并</span></span><br><span class="line">                $free_list.size += sweeping.size</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                sweeping.next = $free_list</span><br><span class="line">                $free_list = sweeping</span><br><span class="line">            sweeping += sweeping.size</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分配: 进行mutator申请分块时，搜索空闲链表并找到合适大小的分块，这个过程就叫做分配。找到合适的分块大小有三种策略:</p>
+<ol>
+<li>First-fit: 找到最初发现大于等于size的分块就立刻返回。考虑到分配所需的时间，标记清除法选择的就是这种方法。</li>
+<li>Best-fit: 遍历空闲链表，找到大于等于size的最小分块返回。</li>
+<li>Worst-fit: 找出最大的分块，把分块分割成size大小和剩余分块。<br>分配阶段的伪代码:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size) &#123;</span><br><span class="line">    chunk = pickup_chunk(size, $free_list)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        allocation_fail()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="优点/缺点">优点/缺点</h3><ul>
+<li>优点:<ol>
+<li>实现简单</li>
+<li>与保守式GC算法兼容: 保守式算法就是不知道对象是否是指针，所以移动对象会造成错误(后面会讲到), 而标记清除算法是不会移动对象的，所以是兼容的。</li>
+</ol>
+</li>
+<li>缺点:<ol>
+<li>碎片化: 由于非活动对象分布不均匀，容易照成堆内的内存空间碎片化，不利于mutator的执行。</li>
+<li>分配速度: 由于分配时需要遍历空闲链表，查找速度取决于要分配的块和空闲链表的分布。后面要讲到的复制算法和标记-压缩算法由于分块是连续内存分布的，所以速度要快。</li>
+<li>与写时复制技术不兼容： 因为每次GC都要修改活动对象的标记位，导致写操作的发生，从而产生复制。</li>
+</ol>
+</li>
+</ul>
+<h3 id="多个空闲链表">多个空闲链表</h3><p>为了提高<strong>分配速度</strong>，一个改进就是把分块按照大小分为多个空闲链表，这样在分配的时候就可以根据要分配的空间的大小去对应的空闲链表中寻找，大大减少了查找分块的时间。<br>下面是利用多个空闲链表的new_obj()函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size)&#123;</span><br><span class="line">    <span class="comment">#index 是一个要分配的字的大小</span></span><br><span class="line">    index = size / (WORD_LENGTH / BYTE_LENGTH)</span><br><span class="line">    <span class="comment">#空闲链表一共有101个，0-100都是按照字精确分配到对应的$free_list[index]中，</span></span><br><span class="line">    <span class="comment">#大于100的字都分配到$free_list[101]中</span></span><br><span class="line">    <span class="keyword">if</span>(index &lt;= <span class="number">100</span>)</span><br><span class="line">        <span class="keyword">if</span>($free_list[index] != NULL)</span><br><span class="line">            <span class="comment">#直接找到对应的空闲链表</span></span><br><span class="line">            chunk = $free_list[index]</span><br><span class="line">            $free_list[index] = $free_list[index].next</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="comment">#大于100的需要遍历$free_list[101]找到合适大小的块</span></span><br><span class="line">        chunk = pickup_chunk(size, $free_list[<span class="number">101</span>])</span><br><span class="line">        <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line"></span><br><span class="line">    allocation_fail()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="BiBOP法">BiBOP法</h3><p>针对标记-清除算法的<strong>碎片化</strong>问题, 可以把堆先分割成大小固定的块，让每个块只能配置同样大小的对象，这就是BiBOP法。如果某个大小字的活动对象很少，其他的字活动对象很多的话，这种情况也不能提高堆的利用率，无法解决碎片化的问题。</p>
+<h3 id="位图标记法">位图标记法</h3><p>上面还说道标记-清除法不能够与写时复制技术兼容是因为修改标记位会引起复制发生，为了解决这个问题，位图标记法采用只收集各个对象的标志位并表格化，不跟对象一起管理。也就是把对象和标记位进行了分离。这样做有两个好处:</p>
+<ol>
+<li>与写时复制技术兼容: 因为GC的时候改变了标记位也不会引起对象的复制, 而位图表格非常小，所以即使被复制也不会有什么大的影响。</li>
+<li>清除操作更高效: 在遍历堆的时候不需要取消标志位，可以最后在位图表格中设置。</li>
+</ol>
+<h3 id="延迟清除法">延迟清除法</h3><p>延迟清除法(Lazy Sweep)是缩减因清除操作而导致的mutator最大暂停时间的方法。这个方法的伪代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size)&#123;</span><br><span class="line">    <span class="comment">#用延迟清除法找到对应的块</span></span><br><span class="line">    chunk = lazy_sweep(size)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="comment">#没有找到合适的，进行一次标记操作</span></span><br><span class="line">    mark_phase()</span><br><span class="line">    <span class="comment">#再用延迟清除法找到对应的块 </span></span><br><span class="line">    chunk = lazy_sweep(size)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">     </span><br><span class="line">    allocation_fail()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lazy_sweep(size)&#123;</span><br><span class="line">    <span class="keyword">while</span>($sweeping &lt; $head_end)</span><br><span class="line">        <span class="keyword">if</span>($sweeping.mark == TRUE)</span><br><span class="line">            $sweeping.mark == FALSE</span><br><span class="line">        <span class="comment">#找到和大小合适的块</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>($sweeping.size &gt; size)</span><br><span class="line">            chunk = $sweeping</span><br><span class="line">            $sweeping += $sweeping + $sweeping.size</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line">        <span class="comment">#没找到继续往下找</span></span><br><span class="line">        $sweeping += $sweeping + $sweeping.size</span><br><span class="line">    <span class="comment">#遍历完了也没找到，$sweeping置为从头开始</span></span><br><span class="line">    $sweeping = $heap_start</span><br><span class="line">    <span class="keyword">return</span> NULL</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里跟之前不同的是$sweeping是一个全局变量，每次执行lazy_sweep的时候都会从当前$sweeping的位置往后查找。如果第一次没有找到，第二次就会从头开始查找，如果第二次也没有查到，那就是没有可以分配的块了。一般情况下第一次查找范围变小了，mutator的执行时间就短了。但是有一个问题是就是当数据分配不均，比如说后面的都是活动对象，前面的都是空的，反而会增加mutator的时间。如何改善这个问题，后面会再说到。</p>
+<h2 id="引用计数法">引用计数法</h2>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/gc/">gc</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2017/01/22/gc/"><span>垃圾回收算法总结</span></a></h3>
     
   
@@ -106,7 +200,7 @@
 </ol>
 </li>
 </ul>
-<h2 id="垃圾回收算法总览">垃圾回收算法总览</h2><p>首先先上一张垃圾回收算法的总概括图:<br><img src="/assets/img/gc/GC.png" alt="垃圾回收算法总览"><br>上面列举和好多算法及对应的细节。其实GC最基本的思想就是三种算法(GC标记-清楚法, 引用计数法, GC复制算法), 其他算法都算是这几个算法的延伸和组合。</p>
+<h2 id="垃圾回收算法总览">垃圾回收算法总览</h2><p>首先先上一张垃圾回收算法的总概括图:<br><img src="/assets/img/gc/GC.png" alt="垃圾回收算法总览"><br>上面列举和好多算法及对应的细节。其实GC最基本的思想就是三种算法(GC标记-清除法, 引用计数法, GC复制算法), 其他算法都算是这几个算法的延伸和组合。</p>
 
       
     </div>
@@ -395,70 +489,6 @@
     <span class="post-tags">
       <i class="icon-tags"></i>
         <a href="/tags/apache/">apache</a><a href="/tags/nginx/">nginx</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2015/09/15/PHP-array-hash-key-overflow/"><span>PHP数组的key溢出问题</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/09/15/PHP-array-hash-key-overflow/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-09-15T02:52:49.000Z">
-          2015-09-15
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>作为PHP最重要的数据类型HashTable其key值是有一定的范围的，如果设置的key值过大就会出现溢出的问题，下面根据其内部结构及实现原理详细探讨一下key值溢出问题。</p>
-</blockquote>
-<p>下面先给出一个key溢出的例子:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="variable">$arr</span>[<span class="number">1</span>] = <span class="string">'1'</span>;</span><br><span class="line"><span class="variable">$arr</span>[<span class="number">18446744073708551617333333333333</span>] = <span class="string">'18446744073708551617333333333333'</span>;</span><br><span class="line"><span class="variable">$arr</span>[] = <span class="string">'test'</span>;</span><br><span class="line"><span class="variable">$arr</span>[<span class="number">4294967296</span>] = <span class="string">'test'</span>;</span><br><span class="line"><span class="variable">$arr</span>[<span class="number">9223372036854775807</span>] = <span class="string">'test'</span>;</span><br><span class="line"><span class="variable">$arr</span>[<span class="number">9223372036854775808</span>] = <span class="string">'test'</span>;</span><br><span class="line">var_dump(<span class="variable">$arr</span>);</span><br></pre></td></tr></table></figure></p>
-<p>上面代码的输出结果如下:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="number">6</span>) &#123;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  string(<span class="number">1</span>) <span class="string">"1"</span></span><br><span class="line">  [-<span class="number">999799117276250112</span>]=&gt;</span><br><span class="line">  string(<span class="number">32</span>) <span class="string">"18446744073708551617333333333333"</span></span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  string(<span class="number">4</span>) <span class="string">"test"</span></span><br><span class="line">  [<span class="number">4294967296</span>]=&gt;</span><br><span class="line">  string(<span class="number">4</span>) <span class="string">"test"</span></span><br><span class="line">  [<span class="number">9223372036854775807</span>]=&gt;</span><br><span class="line">  string(<span class="number">4</span>) <span class="string">"test"</span></span><br><span class="line">  [-<span class="number">9223372036854775808</span>]=&gt;</span><br><span class="line">  string(<span class="number">4</span>) <span class="string">"test"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>我们可以看到当key值比较小是没有问题，当key值很大时输出的值溢出了，临界点是<code>9223372036854775807</code>这个数字。<br>下面分析一下原因 。首先我们先分析一下HashTable的结构(本文分析的是php-5.5.15版本的源码),可以通过源码看一下:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* file: Zend/zend_hash.h */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> bucket &#123;</span><br><span class="line">    ulong h;                        <span class="comment">/* Used for numeric indexing */</span> <span class="comment">/*对char *key进行hash后的值，或者是用户指定的数字索引值，可能会溢出*/</span></span><br><span class="line">    uint nKeyLength; <span class="comment">/*hash关键字的长度，如果数组索引为数字，此值为0*/</span></span><br><span class="line">    <span class="keyword">void</span> *pData; <span class="comment">/*指向value,一般是用户数据的副本，如果是指针数据，则指向pDataPtr*/</span></span><br><span class="line">    <span class="keyword">void</span> *pDataPtr; <span class="comment">/*如果是指针数据，此值会指向真正的value,同时上面pData会指向此值*/</span></span><br><span class="line">    <span class="keyword">struct</span> bucket *pListNext; <span class="comment">/*整个hash表的下一个元素*/</span></span><br><span class="line">    <span class="keyword">struct</span> bucket *pListLast; <span class="comment">/*整个hash表该元素的上一个元素*/</span></span><br><span class="line">    <span class="keyword">struct</span> bucket *pNext; <span class="comment">/*存放在同一个hash Bucket的下一个元素*/</span></span><br><span class="line">    <span class="keyword">struct</span> bucket *pLast; <span class="comment">/*同一个hash bucket的上一个元素*/</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *arKey; <span class="comment">/*保存当前值所对于的key字符串,这个字段只能定义在最后,实现变长结构体*/</span></span><br><span class="line">&#125; Bucket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> _hashtable &#123;</span><br><span class="line">    uint nTableSize; <span class="comment">/*hash Bucket的大小，最小为8，最以2*x增长*/</span></span><br><span class="line">    uint nTableMask; <span class="comment">/*nTableSize-1, 索引取值的优化*/</span></span><br><span class="line">    uint nNumOfElements; <span class="comment">/*hash Bucket中当前存在的元素个数， count()函数会直接返回此值*/</span></span><br><span class="line">    ulong nNextFreeElement; <span class="comment">/*下一个数字索引的位置*/</span></span><br><span class="line">    Bucket *pInternalPointer;   <span class="comment">/* Used for element traversal ,当前遍历的指针，foreach比for快的原因之一,这个指针指向当前激活的元素*/</span></span><br><span class="line">    Bucket *pListHead; <span class="comment">/*存储数组头元素指针*/</span></span><br><span class="line">    Bucket *pListTail; <span class="comment">/*存储数组尾元素指针*/</span></span><br><span class="line">    Bucket **arBuckets; <span class="comment">/*存储hash数组*/</span></span><br><span class="line">    <span class="keyword">dtor_func_t</span> pDestructor; <span class="comment">/*在删除元素时执行的回调函数，用于资源的释放*/</span></span><br><span class="line">    zend_bool persistent; <span class="comment">/*指出了Bucket内存分配的方式。如果persistent为TRUE，则使用操作系统本身的内存分配函数为Bucket分配内存，否则使用PHP的内存分配函数*/</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> nApplyCount; <span class="comment">/*标记当前hash Bucket被递归访问的次数(防止多次递归)*/</span></span><br><span class="line">    zend_bool bApplyProtection; <span class="comment">/*标记当前hash桶允许不允许多次访问。不允许时，最多只能递归3次*/</span></span><br><span class="line"><span class="preprocessor"># <span class="keyword">if</span> ZEND_DEBUG</span></span><br><span class="line">    <span class="keyword">int</span> inconsistent;</span><br><span class="line"><span class="preprocessor"># <span class="keyword">endif</span></span></span><br><span class="line">&#125; HashTable;</span><br></pre></td></tr></table></figure>
-<p>假设我们已经对源码有了一定的了解了，我们可以知道<code>bucket.h</code>就是我们存储的key值，<code>bucket.h</code>的生成方法是根据<code>time33</code>算法获取的,对应到代码实现如下:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对于字符串类型的key</span></span><br><span class="line">ZEND_API <span class="keyword">int</span> _zend_hash_add_or_update(HashTable *ht, <span class="keyword">const</span> <span class="keyword">char</span> *arKey, uint nKeyLength, <span class="keyword">void</span> *pData, uint nDataSize, <span class="keyword">void</span> **pDest, <span class="keyword">int</span> flag ZEND_FILE_LINE_DC)</span><br><span class="line">&#123;</span><br><span class="line">    ulong h;</span><br><span class="line">    uint nIndex;</span><br><span class="line">    Bucket *p;</span><br><span class="line"><span class="preprocessor"># <span class="keyword">ifdef</span> ZEND_SIGNALS</span></span><br><span class="line">    TSRMLS_FETCH();</span><br><span class="line"><span class="preprocessor"># <span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    IS_CONSISTENT(ht);</span><br><span class="line"></span><br><span class="line">    ZEND_ASSERT(nKeyLength != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    CHECK_INIT(ht);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//算出来hash key后需要根据hashTable的长度，把nIndex限制在这个长度内(通过nTableMask)</span></span><br><span class="line">    h = zend_inline_hash_func(arKey, nKeyLength);</span><br><span class="line">    nIndex = h &amp; ht-&gt;nTableMask;</span><br><span class="line"></span><br><span class="line">    p = ht-&gt;arBuckets[nIndex];</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//对于数字类型的key</span></span><br><span class="line">ZEND_API <span class="keyword">int</span> _zend_hash_index_update_or_next_insert(HashTable *ht, ulong h, <span class="keyword">void</span> *pData, uint nDataSize, <span class="keyword">void</span> **pDest, <span class="keyword">int</span> flag ZEND_FILE_LINE_DC)</span><br><span class="line">&#123;</span><br><span class="line">    uint nIndex;</span><br><span class="line">    Bucket *p;</span><br><span class="line"><span class="preprocessor"># <span class="keyword">ifdef</span> ZEND_SIGNALS</span></span><br><span class="line">    TSRMLS_FETCH();</span><br><span class="line"><span class="preprocessor"># <span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    IS_CONSISTENT(ht);</span><br><span class="line">    CHECK_INIT(ht);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 如果是新增元素(如$arr[] = 'hello'), 则使用nNextFreeElement值作为hash值,否则直接使用传入的key h 最为hash值 */</span></span><br><span class="line">    <span class="keyword">if</span> (flag &amp; HASH_NEXT_INSERT) &#123;</span><br><span class="line">        h = ht-&gt;nNextFreeElement;</span><br><span class="line">    &#125;</span><br><span class="line">    nIndex = h &amp; ht-&gt;nTableMask;</span><br><span class="line"></span><br><span class="line">    p = ht-&gt;arBuckets[nIndex];</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//字符串的hash函数</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> ulong <span class="title">zend_inline_hash_func</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *arKey, uint nKeyLength)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">register</span> ulong hash = <span class="number">5381</span>; <span class="comment">//这个常量是哪儿来的？</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* variant with the hash unrolled eight times */</span></span><br><span class="line">    <span class="keyword">for</span> (; nKeyLength &gt;= <span class="number">8</span>; nKeyLength -= <span class="number">8</span>) &#123;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">        hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">switch</span> (nKeyLength) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">7</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="comment">/* fallthrough... */</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>: hash = ((hash &lt;&lt; <span class="number">5</span>) + hash) + *arKey++; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">break</span>;</span><br><span class="line">EMPTY_SWITCH_DEFAULT_CASE()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面函数主要是插入或更新hashTable的函数，当插入的key是数字时，这个数字就是hastTable的索引值，其key值不经过hash算法，只经过<code>nIndex = h &amp; ht-&gt;nTableMask;</code>来确保存储的值范围属于hastTable的范围内，所以可以看出索引值<code>key</code> ,与其对应的时<code>nIndex</code>这个值，正在存储的槽位就是<code>nIndex</code>这个地方。</p>
-<p>这个key类型是<code>ulong</code>，也就是<code>unsigned long</code>类型。由于我们的机器是64位的，所以<code>unsigned long</code>类型的取值范围应该是<code>0~1844674407370955161</code>。PHP有两个预定义的变量<code>PHP_INT_MAX</code>和<code>PHP_INT_SIZE</code>对于64位的机器他们的值分别是9223372036854775807和8，这恰好是hasttable所能表示key的最大值,到这里也许你会有一个疑问:为什么<code>PHP_INT_MAX</code>的值比<code>key</code>的范围不一致?<br>要回答这个问题首先要知道，hastTable的key输出可以是负值，这是怎么做到的呢？其实一个hashTable的hash值一定是一个正整数才行，但是输出的数和hash值只是一个对应关系，不需要都为正整数， 虽然我们定义的参数为<code>unsigned long</code>,其实我们却可以传一个负数,比如<code>$arr[-1] = &#39;test&#39;</code>，这时候也是和传递一个正数的处理过程是一样的。这时候<code>h</code>的值其实是<code>-1</code>的补码。再回到上面的问题，为什么<code>PHP_INT_MAX</code>的值比<code>key</code>范围不一致。当我们负值 PHP_INT_MAX时，其值是<code>9223372036854775807</code>，当赋值再比这个大时,输出的却是负数。这其实跟我们使用<code>var_dump</code>这个函数有关系, 下面代码是使用var_dump输出数组时所使用的方法:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">php_array_element_dump</span><span class="params">(zval **zv TSRMLS_DC, <span class="keyword">int</span> num_args, va_list args, zend_hash_key *hash_key)</span> <span class="comment">/* &#123;&#123;&#123; */</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> level;</span><br><span class="line"></span><br><span class="line">    level = va_arg(args, <span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (hash_key-&gt;nKeyLength == <span class="number">0</span>) &#123; <span class="comment">/* numeric key */</span></span><br><span class="line">        php_printf(<span class="string">"%*c[%ld]=&gt;\n"</span>, level + <span class="number">1</span>, <span class="string">' '</span>, hash_key-&gt;h);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">/* string key */</span></span><br><span class="line">        php_printf(<span class="string">"%*c[\""</span>, level + <span class="number">1</span>, <span class="string">' '</span>);</span><br><span class="line">        PHPWRITE(hash_key-&gt;arKey, hash_key-&gt;nKeyLength - <span class="number">1</span>);</span><br><span class="line">        php_printf(<span class="string">"\"]=&gt;\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    php_var_dump(zv, level + <span class="number">2</span> TSRMLS_CC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，当key为数字时输出的格式时<code>%ld</code>,值是<code>hash_key-&gt;h</code>，这就是问题所在了，存储的是一个<code>unsigned long</code>，输出的却是<code>long</code>，当值比<code>long</code>大时，自然输出的就是负数了。</p>
-<p>总结: PHP的hastTable是通过链表法实现的，按说是不会存在溢出的问题，但是其索引值表示的范围有限，当超出索引值时就会造成溢出，这个溢出只存在当索引值为数字时，输入的数字为正，输出却为负值的原因是函数参数与输出的类型不一致导致的。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/php/">php</a>
     </span>
     
 

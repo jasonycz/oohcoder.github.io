@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>垃圾回收基本算法 | OohCode | 好奇的码农~</title>
+
+  
+  <meta name="author" content="sean chen">
+  
+
+  
+  <meta name="description" content="本章介绍GC的基本算法:GC标记-清除法，引用计数法, GC复制算法。这三种我认为是GC的三个方向的基本思维。其他方法都是围绕这个些基本方法展开的。
+
+GC标记-清除法基本方法所谓的标记-清除法，依据其字面意思就是，先做标记，然后在清除。这个过程分为两个阶段，标记阶段就是把所有活动对象坐上标记，清除">
+  
+
+  
+  
+  <meta name="keywords" content="gc">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="垃圾回收基本算法"/>
+
+  <meta property="og:site_name" content="OohCode"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="OohCode" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">OohCode</a>
+    </h1>
+    <p class="site-description">好奇的码农~</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>垃圾回收基本算法</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/01/23/gc-base/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-01-23T06:24:36.000Z">
+          2017-01-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>本章介绍GC的基本算法:GC标记-清除法，引用计数法, GC复制算法。这三种我认为是GC的三个方向的基本思维。其他方法都是围绕这个些基本方法展开的。</p>
+</blockquote>
+<h2 id="GC标记-清除法">GC标记-清除法</h2><h3 id="基本方法">基本方法</h3><p>所谓的标记-清除法，依据其字面意思就是，先做标记，然后在清除。这个过程分为两个阶段，标记阶段就是把所有活动对象坐上标记，清除阶段就是把那些没有做标记的对象，也就是非活动对象回收的阶段。利用伪代码表示就是:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mark_sweep() &#123;</span><br><span class="line">    mark_phase()</span><br><span class="line">    sweep_phase()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>标记阶段: 这个阶段从<code>根</code>出发，利用深度优先遍历(不用广度优先是因为深度优先搜索比广度优先搜索更能压低内存使用量。), 对每个能到达的活动对象都坐上标记(用一个位来表示)。这个阶段所花费的时间与”活动对象的总数”成正比。标记阶段伪代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mark_phase() &#123;</span><br><span class="line">    <span class="comment">#遍历根节点, 进行标记</span></span><br><span class="line">    <span class="keyword">for</span>(r: $roots)</span><br><span class="line">        mark(*r)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#标记函数</span></span><br><span class="line">mark(obj) &#123;</span><br><span class="line">    <span class="keyword">if</span>(obj.mark == FALSE)</span><br><span class="line">        obj.mark = TRUE</span><br><span class="line">        <span class="comment">#深度优先遍历</span></span><br><span class="line">        <span class="keyword">for</span>(child : children(obj))</span><br><span class="line">            mark(*child)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>清除阶段: 清除阶段主要工作是通过遍历整个堆，把未被标记的对象(非活动对象)回收再利用。回收对象就是把对象作为分块，连接到被称为”空闲链表”的单向链表。之后进行分配时遍历空闲链表就可以找到分块了。两个相邻的分块如果地址是连续的，就会对其进行<strong>合并</strong>, 合并操作可以减少碎片的发生。清除阶段的伪代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sweep_phase() &#123;</span><br><span class="line">    sweeping = $heap_start</span><br><span class="line">    <span class="comment">#遍历堆</span></span><br><span class="line">    <span class="keyword">while</span>(sweeping &lt; $head_end)</span><br><span class="line">        <span class="keyword">if</span>(sweeping.mark == TRUE)</span><br><span class="line">            sweeping.mark == FALSE</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="comment">#放入空闲链表</span></span><br><span class="line">            <span class="keyword">if</span>(sweeping.mark == $free_list + $free_list.size)</span><br><span class="line">                <span class="comment">#合并</span></span><br><span class="line">                $free_list.size += sweeping.size</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                sweeping.next = $free_list</span><br><span class="line">                $free_list = sweeping</span><br><span class="line">            sweeping += sweeping.size</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分配: 进行mutator申请分块时，搜索空闲链表并找到合适大小的分块，这个过程就叫做分配。找到合适的分块大小有三种策略:</p>
+<ol>
+<li>First-fit: 找到最初发现大于等于size的分块就立刻返回。考虑到分配所需的时间，标记清除法选择的就是这种方法。</li>
+<li>Best-fit: 遍历空闲链表，找到大于等于size的最小分块返回。</li>
+<li>Worst-fit: 找出最大的分块，把分块分割成size大小和剩余分块。<br>分配阶段的伪代码:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size) &#123;</span><br><span class="line">    chunk = pickup_chunk(size, $free_list)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        allocation_fail()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="优点/缺点">优点/缺点</h3><ul>
+<li>优点:<ol>
+<li>实现简单</li>
+<li>与保守式GC算法兼容: 保守式算法就是不知道对象是否是指针，所以移动对象会造成错误(后面会讲到), 而标记清除算法是不会移动对象的，所以是兼容的。</li>
+</ol>
+</li>
+<li>缺点:<ol>
+<li>碎片化: 由于非活动对象分布不均匀，容易照成堆内的内存空间碎片化，不利于mutator的执行。</li>
+<li>分配速度: 由于分配时需要遍历空闲链表，查找速度取决于要分配的块和空闲链表的分布。后面要讲到的复制算法和标记-压缩算法由于分块是连续内存分布的，所以速度要快。</li>
+<li>与写时复制技术不兼容： 因为每次GC都要修改活动对象的标记位，导致写操作的发生，从而产生复制。</li>
+</ol>
+</li>
+</ul>
+<h3 id="多个空闲链表">多个空闲链表</h3><p>为了提高<strong>分配速度</strong>，一个改进就是把分块按照大小分为多个空闲链表，这样在分配的时候就可以根据要分配的空间的大小去对应的空闲链表中寻找，大大减少了查找分块的时间。<br>下面是利用多个空闲链表的new_obj()函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size)&#123;</span><br><span class="line">    <span class="comment">#index 是一个要分配的字的大小</span></span><br><span class="line">    index = size / (WORD_LENGTH / BYTE_LENGTH)</span><br><span class="line">    <span class="comment">#空闲链表一共有101个，0-100都是按照字精确分配到对应的$free_list[index]中，</span></span><br><span class="line">    <span class="comment">#大于100的字都分配到$free_list[101]中</span></span><br><span class="line">    <span class="keyword">if</span>(index &lt;= <span class="number">100</span>)</span><br><span class="line">        <span class="keyword">if</span>($free_list[index] != NULL)</span><br><span class="line">            <span class="comment">#直接找到对应的空闲链表</span></span><br><span class="line">            chunk = $free_list[index]</span><br><span class="line">            $free_list[index] = $free_list[index].next</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="comment">#大于100的需要遍历$free_list[101]找到合适大小的块</span></span><br><span class="line">        chunk = pickup_chunk(size, $free_list[<span class="number">101</span>])</span><br><span class="line">        <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line"></span><br><span class="line">    allocation_fail()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="BiBOP法">BiBOP法</h3><p>针对标记-清除算法的<strong>碎片化</strong>问题, 可以把堆先分割成大小固定的块，让每个块只能配置同样大小的对象，这就是BiBOP法。如果某个大小字的活动对象很少，其他的字活动对象很多的话，这种情况也不能提高堆的利用率，无法解决碎片化的问题。</p>
+<h3 id="位图标记法">位图标记法</h3><p>上面还说道标记-清除法不能够与写时复制技术兼容是因为修改标记位会引起复制发生，为了解决这个问题，位图标记法采用只收集各个对象的标志位并表格化，不跟对象一起管理。也就是把对象和标记位进行了分离。这样做有两个好处:</p>
+<ol>
+<li>与写时复制技术兼容: 因为GC的时候改变了标记位也不会引起对象的复制, 而位图表格非常小，所以即使被复制也不会有什么大的影响。</li>
+<li>清除操作更高效: 在遍历堆的时候不需要取消标志位，可以最后在位图表格中设置。</li>
+</ol>
+<h3 id="延迟清除法">延迟清除法</h3><p>延迟清除法(Lazy Sweep)是缩减因清除操作而导致的mutator最大暂停时间的方法。这个方法的伪代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">new_obj(size)&#123;</span><br><span class="line">    <span class="comment">#用延迟清除法找到对应的块</span></span><br><span class="line">    chunk = lazy_sweep(size)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">    <span class="comment">#没有找到合适的，进行一次标记操作</span></span><br><span class="line">    mark_phase()</span><br><span class="line">    <span class="comment">#再用延迟清除法找到对应的块 </span></span><br><span class="line">    chunk = lazy_sweep(size)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">     </span><br><span class="line">    allocation_fail()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lazy_sweep(size)&#123;</span><br><span class="line">    <span class="keyword">while</span>($sweeping &lt; $head_end)</span><br><span class="line">        <span class="keyword">if</span>($sweeping.mark == TRUE)</span><br><span class="line">            $sweeping.mark == FALSE</span><br><span class="line">        <span class="comment">#找到和大小合适的块</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>($sweeping.size &gt; size)</span><br><span class="line">            chunk = $sweeping</span><br><span class="line">            $sweeping += $sweeping + $sweeping.size</span><br><span class="line">            <span class="keyword">return</span> chunk</span><br><span class="line">        <span class="comment">#没找到继续往下找</span></span><br><span class="line">        $sweeping += $sweeping + $sweeping.size</span><br><span class="line">    <span class="comment">#遍历完了也没找到，$sweeping置为从头开始</span></span><br><span class="line">    $sweeping = $heap_start</span><br><span class="line">    <span class="keyword">return</span> NULL</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里跟之前不同的是$sweeping是一个全局变量，每次执行lazy_sweep的时候都会从当前$sweeping的位置往后查找。如果第一次没有找到，第二次就会从头开始查找，如果第二次也没有查到，那就是没有可以分配的块了。一般情况下第一次查找范围变小了，mutator的执行时间就短了。但是有一个问题是就是当数据分配不均，比如说后面的都是活动对象，前面的都是空的，反而会增加mutator的时间。如何改善这个问题，后面会再说到。</p>
+<h2 id="引用计数法">引用计数法</h2>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/gc/">gc</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 sean chen
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

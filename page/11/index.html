@@ -59,6 +59,67 @@
 
   
     
+    <h3 class="article-title"><a href="/2013/11/14/pip-and-easy_install/"><span>python打包高级进阶:pip and easy_install</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/14/pip-and-easy_install/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-13T16:00:00.000Z">
+          2013-11-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="如何选择已经安装的不同版本？">如何选择已经安装的不同版本？</h2><p>其实很简单。以myproject为例：<code>easy_install myproject==version</code> 就可以了，默认是先从本地开始找，如果本地找不到就会从远程源上找。</p>
+<h2 id="能不能指定安装路径？">能不能指定安装路径？</h2><p>经过再次了解，发现其实是可以的,<code>easy_install -h</code>命令可以看到有以下两条：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--install-dir (-d)             install package to DIR&#10;--script-dir (-s)              install scripts to DIR&#10;--prefix                       installation prefix</span><br></pre></td></tr></table></figure><br>第一个其实就是可以指定默认搜索路径的。第二个是可以指定二进制脚本的安装路径，如果指定了第一个而没有指定第二个那就会默认都安装到第一个,第三个是实际包的安装路径，但是只是路径前缀，默认会加上lib/python2.6/site-packages<br>还有一个问题，如果按照路径不在PYTHONPATH里，那么就会报错，可以通过先把你要制定的路径加入进去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/python/packages&#34;&#10;PYTHONPATH=&#34;$&#123;PYTHONPATH&#125;:/search/sean/lib/python2.6/site-packages&#34;&#10;export PYTHONPATH</span><br></pre></td></tr></table></figure><br>然后再次安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">easy_install -d /search/sean/python/packages/ -s /search/sean/python/ --prefix /search/sean  myproject==1.9</span><br></pre></td></tr></table></figure><br>可以看到-d需要PYTHONPATH 而-s并不需要，安装完后可以在两个目录中找到安装后的文件<br>更正：之前说安装多版本的时候会有一个去掉版本的文件夹，其实这个是pip的实现方式，而easy_install的实现方式是：每次安装都会把easy-install.pth路径修改了，python就会去找修改过的路径。<br>具体pip的版本选择和安装路径的问题时间限制先不发了，研究后再补充~</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/python/">python</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2013/11/13/django-nginx-fastcgi/"><span>django+nginx+fastcgi 配置</span></a></h3>
     
   
@@ -312,72 +373,6 @@
     <span class="post-tags">
       <i class="icon-tags"></i>
         <a href="/tags/python/">python</a><a href="/tags/setuptools/">setuptools</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/10/14/python-pypi-install/"><span>python pypi 私有源搭建</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/10/14/python-pypi-install/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-10-13T16:00:00.000Z">
-          2013-10-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>今天学习了pypi的私有源的搭建。过程很曲折，出现了很多问题，这里做个记录，希望以后的人能有所借鉴，自己也做一下总结……</em></p>
-</blockquote>
-<h2 id="什么是pypi">什么是pypi</h2><p>这个问题可以从<a href="https://pypi.python.org/pypi" target="_blank" rel="external">官方文档</a>得到答案。pypi的全称是：The Python Package Index，翻译过来就是一个python包的索引，python包存储在一个统一管理的仓库中，然后为所有在这个仓库的软件生成一个列表,这就是pypi.</p>
-<h2 id="如何使用pypi">如何使用pypi</h2><p>用过python的同学都知道，通过下面三个命令都可以安装python包。但是它们之间的区别又是什么呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. python setup.py  install</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2. pip install packagename</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3. easy_install packagename</span><br></pre></td></tr></table></figure><br>第一种方式就是先把要安装的包的模块下载到本地，然后进入解压目录，执行上面的命令。<br>第二种和第三种都是直接输入命令，就会自动从pipy库中下载相应的包然后安装的预先定义好的路径。<br>如果不是要修改源码，第二种和第三种方式无疑是最好的。这里先不深入他们的原理，以后再讲。</p>
-<h2 id="为什么要搭建pypi私有源">为什么要搭建pypi私有源</h2><p>既然有了官方的pypi源，为什么我们还要搭建自己的私有源呢？这个问题其实很好理解。公司内部开发的软件包希望能够通过这种方式让大家安装，但如果上传到官方的源无疑是公司所不希望的，这时私有源就发挥作用了。它只在公司内部服务器上存在，安装方式和官方的源一样，既简单有安全，何乐而不为呢~</p>
-<h2 id="如何搭建自己的私有源">如何搭建自己的私有源</h2><p>终于到了正题了，如何搭建我们自己的私有源呢？这里我主要参考了<a href="http://yijingping.github.io/2013/07/25/setting-up-your-own-pypi-server.html" target="_blank" rel="external">易先生的世界</a>这篇博客。<br>从中我们可以得知python的私有源解决方案有很多种，这些解决方案可以在python关于私有源的<a href="https://wiki.python.org/moin/PyPiImplementations" target="_blank" rel="external">官方文档</a>中找到。这里我们选择了据说是最简单好用的一个<a href="https://pypi.python.org/pypi/pypiserver" target="_blank" rel="external">pypiserver</a>,下面就这个私有源的安装过程进行一个说明(ps:我的软件都是用virtualenv方式安装的）：<br><strong>顺利的安装方式</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#36827;&#20837;virtualenv&#30446;&#24405;&#12290;&#25191;&#34892;&#65306;&#10;virtualenv pypienv&#10;# &#28982;&#21518;&#36827;&#20837;pypienv&#29615;&#22659;&#10;source pypienv/bin/activate&#10;# &#23433;&#35013;pypiserver&#10;pip install pypiserver&#10;# &#24314;&#31435;&#19968;&#20010;&#23384;&#25918;&#36719;&#20214;&#21253;&#30340;&#30446;&#24405;,&#36825;&#20010;&#30446;&#24405;&#36335;&#24452;&#21487;&#25353;&#29031;&#33258;&#24049;&#30340;&#38656;&#27714;&#24314;&#31435;&#10;mkdir /PATH/packages&#10;# &#21551;&#21160;pypi-server &#31471;&#21475;&#21495;&#33258;&#23450;&#20041; &#21518;&#25509;&#21253;&#30340;&#19978;&#20256;&#22320;&#22336;&#10;exec pypi-server -p 3141 /search/ziyuan/pypiserver/packages</span><br></pre></td></tr></table></figure><br>到这里其实pypi-server的安装已经完成了。但是我们安装好了要用，这才是重点。<br><strong>上传package</strong><br>假设我们已经做好了一个package，如何上传到指定的私有源呢？<br>首先上传需要用户名和密码，这个需要在服务端生成，密码文件使用命令htpasswd生成。首先安装passlib模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install passlib</span><br></pre></td></tr></table></figure><br>然后安装apache2-utils模块。由于我使用的readhat,并没有在yum中找到apache2-utils源，只有自己下载安装了。<a href="http://download.opensuse.org/factory/repo/src-oss/suse/src/apache2-2.4.6-7.3.src.rpm" target="_blank" rel="external">下载地址</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh apache2-2.4.6-7.3.src.rpm</span><br></pre></td></tr></table></figure><br>最后生成用户名和密码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htpasswd -sc /PATH/.htaccess user #&#22238;&#36710;&#36755;&#20837;&#23494;&#30721;&#12290;&#36755;&#20837;&#65306;123</span><br></pre></td></tr></table></figure><br>用户名密码都生成了，接下来就是从新启动pypiserver，让他读入设置好的用户名密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec pypi-server -p 3141 -P /PATH/.htaccess /search/ziyuan/pypiserver/packages</span><br></pre></td></tr></table></figure><br>用户上传软件包之前要指定上传的的地址，否则就会传到官方的默认路径去，执行路径的配置文件要放在用户主目录下，文件名.pypirc,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[distutils]&#10;index-servers =&#10;   local #&#27880;&#24847;&#65306;&#36825;&#20010;&#32553;&#36827;&#24517;&#39035;&#35201;&#26377;&#65292;&#19981;&#28982;&#23601;&#20250;&#25253;&#38169;&#65292;&#35299;&#26512;&#19981;&#20102;&#37197;&#32622;&#25991;&#20214; &#10;&#10;[local]&#10;repository:http://127.0.0.1:3141&#10;username:user&#10;password:123</span><br></pre></td></tr></table></figure><br>这是就可以在和发布的软件包中域名命令上传软件包到私有源了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py sdist upload -r local</span><br></pre></td></tr></table></figure><br><strong>下载package</strong><br>前面也提到了有两种下载方式可以直接从源中下载，根据打包的方式不同。它们分别是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i http://localhost:3141/simple/ packagename&#10;easy_install -i http://localhost:3141/simple/ packagename</span><br></pre></td></tr></table></figure><br>到这里，pypiserver的安装和使用已经完成了，但是其原理还需要研究，以后要做到定制一些功能~</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/python/">python</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/pypi/">pypi</a><a href="/tags/python/">python</a>
     </span>
     
 
