@@ -162,7 +162,10 @@ GC标记-清除法基本方法所谓的标记-清除法，依据其字面意思�
 </li>
 </ul>
 <p>这么做可以在溢出后依然回收，而且没有对循环引用页适用，但是需要重置计数器。查找对象时没有设置标记位，而只是增量计数器，会出现多次查找活动对象的问题。比起一般的GC标记-清除算法需要更多的时间，吞吐量也会变小。</p>
-
+<h3 id="1位引用计数法">1位引用计数法</h3><p>1位引用计数法(1 bit Reference Counting)是Sticky引用计数法的极端例子，计数器只有1位大小。这里的计数器不在表示引用的个数，而是表示有一个引用还是多个引用。</p>
+<pre><code>1. 当计数器值为0，表示对象引用数为1，这种状态称为<span class="keyword">*</span><span class="keyword">*</span>UNIQUE<span class="keyword">*</span><span class="keyword">*</span>
+2. 当计数器值为1， 表示引用数为复数, 这种状态称为<span class="keyword">*</span><span class="keyword">*</span>MULTIPLE<span class="keyword">*</span><span class="keyword">*</span>
+</code></pre>
       
     </div>
 
