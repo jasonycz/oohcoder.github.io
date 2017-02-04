@@ -59,6 +59,203 @@
 
   
     
+    <h3 class="article-title"><a href="/2014/05/10/stdarg-function/"><span>C语言：可变参数函数</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/05/10/stdarg-function/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-05-09T16:00:00.000Z">
+          2014-05-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>函数一般的参数都是固定的，但是有些时候我们需要让函数的参数是可变的，为了满足这个需求，C语言提供了库函数stdarg.h来满足要求。</p>
+</blockquote>
+<h2 id="可变参数参数简介">可变参数参数简介</h2><h2 id="使用方法">使用方法</h2><p>可变参数函数的使用要求比较严谨，必须按照下面的方法进行使用：</p>
+<ol>
+<li>在函数原型中使用省略号。</li>
+<li>在函数定义中创建一个va_list类型的变量。</li>
+<li>用宏将改变量初始化为一个参数列表。</li>
+<li>用宏访问这个参数列表。</li>
+<li>用宏完成清理工作。</li>
+</ol>
+<h2 id="函数原型">函数原型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void f1(int n, ...); //&#21512;&#27861;&#10;int f2(int n, const char *s, ...);  //&#21512;&#27861;&#10;char f3(char c1, ..., char c2); //&#26080;&#25928;&#65292;&#30465;&#30053;&#21495;&#24517;&#39035;&#26159;&#26368;&#21518;&#19968;&#20010;&#21442;&#37327;&#10;doubel f3(); //&#26080;&#25928;&#65292;&#27809;&#26377;&#20219;&#20309;&#21442;&#37327;</span><br></pre></td></tr></table></figure>
+<h2 id="程序举例">程序举例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># include &#60;stdio.h&#62;&#10;# include &#60;stdarg.h&#62;&#10;&#10;double sum(int , ...);&#10;void printSth(int, const char *, ...);&#10;&#10;int main(void)&#10;&#123;&#10;    double s, t;&#10;&#10;    s = sum(3, 1.1, 2.5, 13.3);&#10;    t = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    u = sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(3, 1.1, 2.5, 13.3):    %g\n&#34;,s);&#10;    printf(&#34;return value for &#34;&#10;            &#34;sum(6, 1.1, 2.1, 13.1, 4.1, 5.1, 6.1)  %g\n&#34;, t); &#10;    &#10;    return 0;&#10;&#125;&#10;&#10;&#10;double sum(int lim, ...)&#10;&#123;&#10;    va_list ap; //&#22768;&#26126;&#29992;&#25143;&#23384;&#25918;&#21442;&#25968;&#30340;&#21464;&#37327;&#10;    double tot = 0;&#10;    int i;&#10;    va_start(ap, lim);  //&#25226;ap&#21021;&#22987;&#21270;&#20026;&#21442;&#25968;&#21015;&#34920;&#10;    for(i = 0; i &#60; lim; i++)&#10;        tot += va_arg(ap, double); //&#35775;&#38382;&#21442;&#25968;&#21015;&#34920;&#20013;&#30340;&#27599;&#19968;&#20010;&#39033;&#30446;&#10;    va_end(ap); //&#28165;&#29702;&#24037;&#20316;&#10;    return tot;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="程序分析">程序分析</h2><ul>
+<li>具有可变参数的函数<code>sum</code>的第一个参数是表示一共有多少个不确定的参数，在调用的时候传递。这个参数主要是高数<code>var_arg</code>能够取多少次传递的参数。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm" target="_blank" rel="external"><code>va_start()</code></a>第一个参数是va_list类型的，第二个参数是这个函数确定的参数中最有一个参数，var_start()函数的作用就是把最有一个确定参数后面的所有不确定参数做一个参数列表存储到va_list类型的变量中。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_arg.htm" target="_blank" rel="external"><code>va_arg</code></a>的目的是从未知参数列表中取出参数，每次调用取一个，按照参数顺序取。第一个参数是存储参数列表的变量，第二个参数标识要去的参数的类型，类型决定了要从内存栈中读取多少位。</li>
+<li>函数<a href="http://www.tutorialspoint.com/c_standard_library/c_macro_va_end.htm" target="_blank" rel="external"><code>va_end</code></a>函数主要是做清理工作,主要是释放动态分配的用于存放参数的内存。</li>
+</ul>
+<h2 id="运用">运用</h2><p>我在学了《C Primer Plus》这本书之后打算看看redis源码的时候发现redis的源码中，所有的系统log的记录都是通过这中函数来实现的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void redisLog(int level, const char *fmt, ...) &#123;&#10;    va_list ap;                &#10;    char msg[REDIS_MAX_LOGMSG_LEN]; &#10;    &#10;    if ((level&#38;0xff) &#60; server.verbosity) return;&#10;    &#10;    va_start(ap, fmt);         &#10;    vsnprintf(msg, sizeof(msg), fmt, ap);&#10;    va_end(ap);                &#10;    &#10;    redisLogRaw(level,msg);    &#10;&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/C/">C</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
+          2014-03-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
+</blockquote>
+<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
+<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
+</ol>
+</blockquote>
+<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
+<ul>
+<li><code>$ ./script.sh</code></li>
+<li><code>$ sh ./script.sh</code></li>
+</ul>
+<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
+</ol>
+</blockquote>
+<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
+<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
+<ul>
+<li>变量被声明: <code>variable</code></li>
+<li>变量被赋值: <code>variable=12</code></li>
+<li>变量被unset: <code>unset variable</code></li>
+<li>变量被export: <code>export variable=23</code></li>
+</ul>
+<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
+<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
+<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
+<ol>
+<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
+<li>使用let赋值.<code>let a=2</code></li>
+<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
+</ol>
+<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
+<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
+<li>$0:代表脚本名称</li>
+<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
+<li>$#:表示参数的个数</li>
+</ul>
+</li>
+</ul>
+<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
+<h3 id="条件格式：">条件格式：</h3><ol>
+<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
+<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
+<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
+<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
+</ol>
+<blockquote>
+<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
+</blockquote>
+<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
+<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
+<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
+<p>ps:</p>
+<ol>
+<li>函数调用之前必须先定义</li>
+</ol>
+<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/SHELL/">SHELL</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/shell/">shell</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2014/03/22/linux-shell-command-line-control-key/"><span>linux命令行控制字符汇总</span></a></h3>
     
   
@@ -242,131 +439,6 @@
     <span class="post-tags">
       <i class="icon-tags"></i>
         <a href="/tags/linux/">linux</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
-          2014-03-22
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
-</blockquote>
-<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
-<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
-</ol>
-</blockquote>
-<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
-<ul>
-<li><code>$ ./script.sh</code></li>
-<li><code>$ sh ./script.sh</code></li>
-</ul>
-<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
-</ol>
-</blockquote>
-<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
-<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
-<ul>
-<li>变量被声明: <code>variable</code></li>
-<li>变量被赋值: <code>variable=12</code></li>
-<li>变量被unset: <code>unset variable</code></li>
-<li>变量被export: <code>export variable=23</code></li>
-</ul>
-<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
-<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
-<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
-<ol>
-<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
-<li>使用let赋值.<code>let a=2</code></li>
-<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
-</ol>
-<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
-<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
-<li>$0:代表脚本名称</li>
-<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
-<li>$#:表示参数的个数</li>
-</ul>
-</li>
-</ul>
-<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
-<h3 id="条件格式：">条件格式：</h3><ol>
-<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
-<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
-<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
-<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
-</ol>
-<blockquote>
-<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
-</blockquote>
-<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
-<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
-<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
-<p>ps:</p>
-<ol>
-<li>函数调用之前必须先定义</li>
-</ol>
-<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/SHELL/">SHELL</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/shell/">shell</a>
     </span>
     
 
@@ -608,70 +680,6 @@
     </span>
     
 
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/02/06/apue-chapter2/"><span>apue chapter2</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/02/06/apue-chapter2/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-02-05T16:00:00.000Z">
-          2014-02-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>本章主要介绍UNIX系统的标准化及不同UNIX系统的实现。</p>
-</blockquote>
-<h2 id="UNIX标准化">UNIX标准化</h2><p>UNIX系统由各自独立的组织执行了三个标准：ISO C、IEEE POSIX以及Single UNIX Specification。</p>
-<p><img src="/assets/img/apue/unix_chart_775.jpg" alt="unix系统家族树"></p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/APUE/">APUE</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/UNIX/">UNIX</a>
-    </span>
     
 
     </div>

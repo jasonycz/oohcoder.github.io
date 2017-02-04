@@ -59,6 +59,74 @@
 
   
     
+    <h3 class="article-title"><a href="/2013/12/06/restful-web-services-chapter7/"><span>chapter7-12:REST章节总结</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/12/06/restful-web-services-chapter7/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-12-05T16:00:00.000Z">
+          2013-12-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="第七章：一个服务实现">第七章：一个服务实现</h2><blockquote>
+<p><em>本章主要是根据前面的给出的一些介绍和原则进行，用ROR对其进行一个简单的实现。其中最重要的是作者分析需求的过程以及如何根据这些需求与ROA架构进行融合。本章是设计ROA服务步骤的具体实践过程,是对第六章的一个继承。</em></p>
+</blockquote>
+<h2 id="第八章：REST和ROA最佳实践">第八章：REST和ROA最佳实践</h2><p>本章主要讲REST和ROA的实现过程中遇到的一些问题，以及如何应对这些问题：</p>
+<ul>
+<li>GET请求与HEAD请求是安全的，它们不应导致服务器状态发生改变。</li>
+<li>GET、HEAD、PUT与DELETE请求应该是幂等的，想一个URL发送多次应该与只做过一次请求的效果一样。</li>
+<li>POST既不是安全的也不是幂等的。</li>
+<li>遇到不支持PUT或DELETE请求的的情况，要用重载的POST请求来实现。</li>
+<li>HTTP异步操作可以通过返回状态码202告诉客户端已接受到请求，正在等待处理</li>
+<li>HTTP如何实现事务操作的过程比较复杂。</li>
+<li>复杂请求遵循的原则是：如果无法用统一接口适应多个动作，那就把它本身暴露为资源。</li>
+<li>URL的设计要考虑到新旧版本的更迭。</li>
+</ul>
+<p>其它涉及到HTTP缓存和认真等是HTTP本身的特性，不在这里介绍了。</p>
+<h2 id="第九章：服务的技术构件">第九章：服务的技术构件</h2><p>本章第一部分是介绍在使用rest 服务是数据的表示方式，这不再说了，第二部分是如何定义请求与返回状态码。第三部分结束了WADL这个web应用描述语言，类似于SOAP的WSDL语言但它是基于REST的，虽然用法上感觉差不多，但其实是有着本质的区别的，我的理解是：WSDL和WADL都是为了简化编程，但是WSDL是根据SOAP的风格规定了调用的函数，传递的参数等，而WSDL则是遵循REST风格，规定了请求的方法、地址及请求的参数。</p>
+<h2 id="第十章：面向资源的架构VS大Web服务">第十章：面向资源的架构VS大Web服务</h2>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/restful-web-services/">restful web services</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2013/12/05/restful-web-services-chapter5/"><span>chapter5:设计只读的面向资源的服务</span></a></h3>
     
   
@@ -340,85 +408,6 @@
 <p><strong>获取对象元数据(HEAD方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#33719;&#21462;&#23545;&#35937;&#30340;&#20803;&#25968;&#25454;hash&#10;def metadata&#10;    #&#22914;&#26524;&#27809;&#26377;&#20803;&#25968;&#25454;...&#10;    unless @metadata&#10;        #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;&#19968;&#20010;HEAD&#35831;&#27714;&#65292;&#24182;&#20174;&#21709;&#24212;&#30340;HTTP&#25253;&#22836;&#37324;&#35835;&#21462;&#20803;&#25968;&#25454;&#10;        begin&#10;            store_metadata(open(uri, :method =&#62; :head).meta)&#10;        rescue OpenURI::HTTPError =&#62; e&#10;            if e.io.status == [&#34;404&#34;, &#34;Not Found&#34;]&#10;                #&#20551;&#22914;&#27809;&#26377;&#20803;&#25968;&#25454;&#26159;&#22240;&#20026;&#23545;&#35937;&#19981;&#23384;&#22312;&#65292;&#36825;&#19981;&#31639;&#38169;&#35823;&#10;                @metadata = &#123;&#125;&#10;            else&#10;                #&#20854;&#20182;&#24773;&#20917;&#65292;&#20570;&#38169;&#35823;&#22788;&#29702;&#10;                raise e&#10;            end&#10;        end&#10;    end&#10;    return @metadata&#10;end</span><br></pre></td></tr></table></figure><br><strong>获取对象数据(GET方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#33719;&#21462;&#23545;&#35937;&#30340;&#20540;&#21644;&#20803;&#25968;&#25454;&#10;def value&#10;    #&#22914;&#26524;&#27809;&#26377;&#20540;...&#10;    unless @value&#10;        #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;GET&#35831;&#27714;&#10;        response = opne(uri)&#10;        #&#20174;&#30456;&#24212;&#30340;HTTP&#25253;&#22836;&#37324;&#35835;&#21462;&#20803;&#25968;&#25454;&#10;        store_metadata(respons.meta) unless @metadata&#10;        #&#20174;&#23454;&#20307;&#20027;&#20307;&#37324;&#35835;&#21462;&#20540;&#10;        @value = response.read&#10;    end&#10;    return @value&#10;end</span><br></pre></td></tr></table></figure><br><strong>保存对象数据(PUT方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#22312;S3&#19978;&#20445;&#23384;&#23545;&#35937;&#10;def put(acl_policy=nil)&#10;    #&#20197;&#21407;&#22987;&#20803;&#25968;&#25454;&#30340;&#21103;&#26412;&#24320;&#22987;&#65292;&#25110;&#32773;&#10;    #&#22914;&#26524;&#27809;&#26377;&#20803;&#25968;&#25454;&#30340;&#35805;&#65292;&#23601;&#20197;&#31354;hash&#24320;&#22987;&#12290;&#10;    args = @metadata ? @metadata.cloen &#65306;&#123;&#125;&#10;    #&#35774;&#32622;HTTP&#26041;&#27861;&#12289;&#23454;&#20307;&#20027;&#20307;&#21450;&#19968;&#20123;&#21478;&#22806;&#30340;HTTP&#25253;&#22836;&#10;    args[:method] = :put&#10;    args[&#34;x-amz-acl&#34;] = acl_policy if acl_policy&#10;    if @value&#10;        args[&#34;Content-Lenght&#34;] = @value.size.to_s&#10;        args[:body] = @value&#10;    end&#10;&#10;    #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;PUT&#35831;&#27714;&#10;    open(uri, args)&#10;    return self&#10;end</span><br></pre></td></tr></table></figure><br><strong>删除对象数据(DELETE方法)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#21024;&#38500;&#23545;&#35937;&#10;def delete&#10;    #&#21521;&#23545;&#35937;&#30340;URI&#21457;&#36865;DELETE&#35831;&#27714;&#10;    open(uri,:method =&#62; :delete)&#10;end</span><br></pre></td></tr></table></figure><br>通过上面这些例子的介绍，我们对每个方法的使用都有了一个大致的印象，知道每个方法对应的应用场景。实际的使用过程中是如何把他们关联起来的呢？下面再对它们的应用通过一个例子做一个综合的介绍。</p>
 <h2 id="使用S3客户端">使用S3客户端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># !/usr/bin/ruby -w&#10;#  s3-sample-client.rb&#10;require &#39;S3lib&#39;&#10;&#10;# &#25910;&#38598;&#21629;&#20196;&#34892;&#21442;&#25968;&#10;bucket_name, object_name, object_value = ARGV&#10;unless bucket_name&#10;    puts &#34;Usage: #&#123;0&#125; [bucket name] [object name] [object value]&#34;&#10;    exit&#10;end&#10;&#10;# &#25214;&#21040;&#25110;&#21019;&#24314;&#26742;&#10;buckets = S3::BucketList.new.get    #GET /&#10;bucket = buckets.detect&#123; |b| b.name == bucket_name &#125;&#10;if bucket&#10;    puts &#34;Found bucket #(bucket_name).&#34;&#10;else&#10;    puts &#34;Could not find bucket #&#123;bucket_name&#125;, creating it&#34;&#10;    bucket = S3::Bucket.new(bucket_name)&#10;    bucket.put&#10;end&#10;&#10;# &#21019;&#24314;&#23545;&#35937;&#10;object = S3:Object.new(bucket, object_name)&#10;object.metadata[&#39;content-type&#39;] = &#39;text/plain&#39;&#10;object.value = object_value&#10;object.put                              #PUT /&#123;bucket&#125;/&#123;object&#125;&#10;&#10;# &#23545;&#26742;&#37324;&#30340;&#27599;&#20010;&#23545;&#35937;...&#10;bucket.get[0].each do |o|               #GET /&#123;bucket&#125;&#10;    #...&#25171;&#21360;&#20986;&#26377;&#20851;&#35813;&#23545;&#35937;&#30340;&#20449;&#24687;&#10;    puts &#34;Name: #&#123;o.name&#125;&#34;&#10;    puts &#34;Value: #&#123;o.value&#125;&#34;            #GET /&#123;bucket&#125;/&#123;object&#125;&#10;    puts &#34;Metadata hash: #&#123;o.metadata.inspect&#125;&#34;&#10;    puts&#10;end</span><br></pre></td></tr></table></figure>
 <h2 id="用ActiveResource创建透明的客户端">用ActiveResource创建透明的客户端</h2><p>安装ruby on rails，然后利用rails生成一个创建一个自己的app，根据书里的过程并参考《Ruby On Ralis 3 Toturial》中的例子就可以完成。建立完成后可以在页面中看到notes的操作了，可以增加，编辑，删除note,可以到在views里可以看到这么一段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;td&#62;&#60;%= link_to &#39;Destroy&#39;, note, method: :delete, data: &#123; confirm: &#39;Are you sure?&#39; &#125; %&#62;&#60;/td&#62;</span><br></pre></td></tr></table></figure><br>ruby中前端是通过method来指定HTTP请求的发送类型的，但是我在web端看到的请求是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Request Method:POST&#10;Form Data:&#10;_method:delete</span><br></pre></td></tr></table></figure><br>从这里来看ruby并没有在HTTP请求的方法中就变为DELETE，而是在from里传了一个参数，这并不是符合标准的REST架构的。鉴于我对ROR还不了解，现在可能有些不太明白，先看着后面的章节，等了解后再完善本章内容。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/restful-web-services/">restful web services</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2013/11/27/restful-web-services-chapter2/"><span>chapter2:编写Web服务客户端</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/11/27/restful-web-services-chapter2/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-11-26T16:00:00.000Z">
-          2013-11-27
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>本章主要是介绍如何编写一个简单的Web Service客户端服务，但是其中涉及到一些知识是之前我没有注意和研究过的，所以这一章学习一下还是很有用的。</em></p>
-</blockquote>
-<h2 id="封装库、WADL和ActiveResource">封装库、WADL和ActiveResource</h2><p>web服务用的是HTTP请求，但是HTTP请求的过程却是大同小异的，所以如果每次请求都要自己写整个过程的话确实比较麻烦，而且容易出bug。最好的方法是对它们进行封装，<code>封装库</code>确实简化了web服务编程，但是还有一个问题就是这个封装库有很多种，没有一个统一的标准，于是又一个想法冒出来了：可不可以抽象服务间的差异，使一个封装库能够用于所有的REST式和混合式架构？答案当然是可以，了解SOAP的都知道有一个WSDL转本用来描述服务的格式。而REST社区就这个标准还没达成一致，这里作者推荐的是WADL作为面向资源的描述语言。</p>
-<h2 id="用HTTP库发送请求">用HTTP库发送请求</h2><p>不同的语言有不同的HTTP库来封装底层的HTTP请求，这里如果要构建一个完全通用的Web客户端，HTTP库需要具有以下特征：</p>
-<ul>
-<li>必须支持HTTPS和SSL证书验证。主要是为了安全传输。</li>
-<li>必须支持至少五个主要的HTTP方法：GET/HEAD/PUT/POST/DELETE。因为这是REST风格所必须的。</li>
-<li>必须允许定制PUT或POST请求的实体主体数据。</li>
-<li>必须允许定制请求的HTTP报头。</li>
-<li>必须能够获取HTTP响应的响应代码及报头。</li>
-<li>必须支持通过HTTP代理进行HTTP通信。</li>
-</ul>
-<p>可选特性：</p>
-<ul>
-<li>为了节省带宽，需要支持压缩的报头(Encoding)</li>
-<li>HTTP库能够自动把返回的响应缓存起来</li>
-<li>HTTP库应该透明的支持常见的HTTP认证形式</li>
-<li>HTTP库应该能够透明地作HTTP重定向</li>
-<li>HTTP库能够解析并创建HTTP cookie字符串</li>
-</ul>
-<h2 id="用XML解析器处理相应">用XML解析器处理相应</h2><p>这里重点的内容是XML的解析器的几种不同的原理。<br>有两种XML的解析策略：</p>
-<ul>
-<li>基于文档的(document-based)策略（如DOM等树式解析器）</li>
-<li>基于事件的(event-based)策略（如SAX及“拖”式解析器）</li>
-</ul>
-<p><strong>基于文档的策略</strong><br>这种策略是最简单的,先把整个文档加载进来，然后根据XPath等把整个文档转换为树式结构，然后就可以处理所需的节点了。这种方案的缺点就是必须要有完整的XML文档才行。<br><strong>SAX式或拖式（pull）解析器</strong><br>这种是把XML文档转换为事件流，而不是数据结构。首标签（staring tag）、尾标签（closing tag）、XML注释（comments）及实体声明（entity declaration）等都是事件（event）。<br>如果每个事件都要处理则拖式解析器是很有用的。拖式解析器允许一次处理一个事件，处理完一个事件后再从事件流拖出下一个事件，是一个类似先进先出的链表。<br>如果只关心部分事件，那么SAX则更有用。向SAX解析器注册一些回调方法。一旦定义好回调方法，解析器将按照既定的、跟文档无关的步骤执行下去：解析器将把XML文档转换为一系列事件，并连接处理文档中的每个事件；每当一个事件与回调方法所对应的事件匹配时，解析器就会触发该回调方法，执行你定义的代码；回调方法执行结束后，SAX解析器将接着继续处理事件序列。关于PHP的基于事件的XML解析器可以参考<a href="http://us3.php.net/manual/en/ref.xml.php" target="_blank" rel="external">php文档</a>中的说明。<br>基于文档的解析器优点是：可以随机访问文档中的内容；而对于基于事件的解析器，事件触发以后就没有机会再处理了。如果XML格式有问题，基于事件的解析器直到遇到错误的地方才会报错和崩溃。<br>实际使用过程中可以根据自己的需求选择不同的XML文档解析器。</p>
 
       
     </div>
