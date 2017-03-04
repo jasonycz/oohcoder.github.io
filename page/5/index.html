@@ -59,6 +59,81 @@
 
   
     
+    <h3 class="article-title"><a href="/2014/05/13/coreseek-install-doc/"><span>中文搜索引擎coreseek的安装使用</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/05/13/coreseek-install-doc/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-05-12T16:00:00.000Z">
+          2014-05-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>项目中原来使用的是solr,由于solr是java写的，团队中没有java的经验，并且原来维护的人离职了，所以改用<a href="http://sphinxsearch.com/" target="_blank" rel="external">sphinx search</a>来做项目的内部检索服务，由于中文的特殊性，我们选择了<a href="http://www.coreseek.cn/" target="_blank" rel="external">coreseek</a>这个基于sphinx的中文搜索引擎。但是好像这个好久没人维护了～一直停留在了4.1beta版本～</p>
+</blockquote>
+<h2 id="下载解压">下载解压</h2><p>源码下载地址<a href="http://www.coreseek.cn/uploads/csft/4.0/coreseek-4.1-beta.tar.gz" target="_blank" rel="external">oreseek-3.1-beta.tar.gz</a>;<br>解压下载的文件,进入目录<code>cd coreseek-4.1-beta</code>;</p>
+<h2 id="安装中文分词库mmseg">安装中文分词库mmseg</h2><ul>
+<li><code>cd mmseg-3.2.14/</code></li>
+<li><code>./bootstrap</code></li>
+<li><code>./configure --prefix=/usr/local/mmseg3</code></li>
+<li><code>make &amp;&amp; make install</code></li>
+</ul>
+<p>如果你幸运的话，这时候会提示错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;239&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;  &#10;css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;187&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;  &#10;css/SynonymsDict.cpp:94: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;191&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;</span><br></pre></td></tr></table></figure><br>可能是编译器的要求太严格导致的，只有更改源码了：<br>将rc/css/SynonymsDict.cpp文件94行的代码<code>char txtHead[3] = {239,187,191};</code>改为如下的形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char txtHead[3] = &#123;&#125;; &#10;txtHead[0] = (char)239;&#10;txtHead[1] = (char)187;&#10;txtHead[2] = (char)191;</span><br></pre></td></tr></table></figure><br>再次运行<code>make &amp;&amp; make install</code>会发现又出现了错误提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmseg_main.cpp: In function &#8216;int segment(const char*, css::Segmenter*)&#8217;:&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;239&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;187&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;&#10;mmseg_main.cpp:254: &#38169;&#35823;&#65306;&#22312; &#123;&#125; &#20869;&#23558;&#8216;191&#8217;&#20174;&#8216;int&#8217;&#36716;&#25442;&#20026;&#36739;&#31364;&#30340;&#31867;&#22411;&#8216;char&#8217;</span><br></pre></td></tr></table></figure><br>同样的办法修改<code>src/mmseg_main.cpp</code>文件的254行<code>char txtHead[3] = {239,187,191};</code>为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char txtHead[3] = &#123;&#125;; &#10;txtHead[0] = (char)239;&#10;txtHead[1] = (char)187;&#10;txtHead[2] = (char)191;</span><br></pre></td></tr></table></figure><br>再次运行<code>make &amp;&amp; make install</code>，终于成功了～<br>到这里mmseg就算安装成功了</p>
+<h2 id="安装coreseek">安装coreseek</h2><ul>
+<li><code>cd csft-4.1/</code></li>
+<li><code>sh buildconf.sh</code></li>
+<li><code>./configure --prefix=/usr/local/coreseek  --without-unixodbc   
+--with-mmseg --with-mmseg-includes=/usr/local/mmseg3/include/mmseg/   
+--with-mmseg-libs=/usr/local/mmseg3/lib/ --with-mysql</code></li>
+<li><code>make &amp;&amp; make install</code></li>
+</ul>
+<h2 id="测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN-UTF-8，确保正确显示中文）">测试mmseg分词，coreseek搜索（需要预先设置好字符集为zh_CN.UTF-8，确保正确显示中文）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd testpack&#10;$ cat var/test/test.xml    #&#27492;&#26102;&#24212;&#35813;&#27491;&#30830;&#26174;&#31034;&#20013;&#25991;&#10;$ /usr/local/mmseg3/bin/mmseg -d /usr/local/mmseg3/etc var/test/test.xml&#10;$ /usr/local/coreseek/bin/indexer -c etc/csft.conf --all&#10;$ /usr/local/coreseek/bin/search -c etc/csft.conf &#32593;&#32476;&#25628;&#32034;</span><br></pre></td></tr></table></figure>
+<p>上面是官方文档给的，需要说明的是，csft.conf是由sphinx.conf.dist复制而来的，里面的关于mysql的配置，自己按照实际情况修改。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="2014/05/13/coreseek-install-doc/#comment">评论</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2014/05/10/stdarg-function/"><span>C语言：可变参数函数</span></a></h3>
     
   
@@ -127,140 +202,6 @@
         <i class="icon-comments"></i>
         <span>
           <a href="2014/05/10/stdarg-function/#comment">评论</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
-          2014-03-22
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
-</blockquote>
-<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
-<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
-</ol>
-</blockquote>
-<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
-<ul>
-<li><code>$ ./script.sh</code></li>
-<li><code>$ sh ./script.sh</code></li>
-</ul>
-<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
-<blockquote>
-<p>ps小贴士：<br>&gt;</p>
-<ol>
-<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
-</ol>
-</blockquote>
-<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
-<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
-<ul>
-<li>变量被声明: <code>variable</code></li>
-<li>变量被赋值: <code>variable=12</code></li>
-<li>变量被unset: <code>unset variable</code></li>
-<li>变量被export: <code>export variable=23</code></li>
-</ul>
-<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
-<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
-<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
-<ol>
-<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
-<li>使用let赋值.<code>let a=2</code></li>
-<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
-</ol>
-<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
-<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
-<li>$0:代表脚本名称</li>
-<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
-<li>$#:表示参数的个数</li>
-</ul>
-</li>
-</ul>
-<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
-<h3 id="条件格式：">条件格式：</h3><ol>
-<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
-<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
-<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
-<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
-</ol>
-<blockquote>
-<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
-</blockquote>
-<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
-<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
-<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
-<p>ps:</p>
-<ol>
-<li>函数调用之前必须先定义</li>
-</ol>
-<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/SHELL/">SHELL</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/shell/">shell</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="2014/03/22/linux-shell-programe1/#comment">评论</a>
         </span>
       </span>
     </div>
@@ -481,6 +422,140 @@
 
   
     
+    <h3 class="article-title"><a href="/2014/03/22/linux-shell-programe1/"><span>linux shell 编程之语法学习</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/22/linux-shell-programe1/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-21T16:00:00.000Z">
+          2014-03-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>shell语法跟一般类C的语法有些相识，但是却有很多独特的地方，如果不能够好好理解这些语法特性，难免在编写shell脚本的过程中会遇到很多令人难以察觉的，头疼的问题。细节决定成败，这篇博客就根据我自己的学习过程做一下总结吧。</p>
+</blockquote>
+<h2 id="独特的开头">独特的开头</h2><p>一般的脚本语言都有一个基本表示自己是何方神圣的开头，比如php语言的<code>&lt;?php</code>, jsp语言的<code>&lt;%jsp</code>。shell也有自己独特的开头。比如<code>#! /bin/bash</code>, 不过跟其他语言表示自己的语言名称不一样，这里的开头表明shell要指明使用那个解释器。因为shell有很多标准，每个标准的解释器对shell的理解是不一样的，所有你写的shell脚本很可能是其他解释器不认识的内容，所以需要指明你自己使用哪个解释器。这里要注意的是如果写了<code>#! /bin/sh</code> 表明使用的是当前系统默认的解释器。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li><code>#!</code>一定要写在脚本第一行才能生效， 否则视为注释行, 不起任何作用</li>
+<li>这一行是会被执行的，如果写其他命令如<code>#! /bin/more</code> 则会执行相应的命令</li>
+</ol>
+</blockquote>
+<h2 id="执行shell脚本的方法">执行shell脚本的方法</h2><p>shell执行的方式不同，其与运行的远离也不同，参考<a href="http://learn.akae.cn/media/ch31s02.html" target="_blank" rel="external">Shell如何执行命令</a>这篇文章，进行介绍一下：<br>首先有一个脚本<code>script.sh</code>,内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ! /bin/sh&#10;&#10;cd ..&#10;ls</span><br></pre></td></tr></table></figure><br>执行这个脚本的方法有两种：</p>
+<ul>
+<li><code>$ ./script.sh</code></li>
+<li><code>$ sh ./script.sh</code></li>
+</ul>
+<p>但其实第一种方法会转化为第二种方法，比如如果用第一种方法执行脚本，实际上会转化为：<code>/bin/sh ./script.sh</code>。接下来就调用shell子进程来执行脚本了，在脚本执行的所有都是针对子进程的，不会对父进程产生影响，这点可以参考博客中举的例子。</p>
+<blockquote>
+<p>ps小贴士：<br>&gt;</p>
+<ol>
+<li>第一种方式执行脚本需要这个脚本具有可执行的权限, 第二种则不需要</li>
+</ol>
+</blockquote>
+<h2 id="变量的表示">变量的表示</h2><p>Bash变量像一般的脚本语言一样，不区分变量类型，本质上Bash变量都是字符串。  </p>
+<h3 id="变量替换">变量替换</h3><p>变量的名字就是变量保存值的地方，引用变量的值就叫<em>变量替换</em>。我们用<code>$+变量名称</code>来表示变量替换。下面几种情况变量不带<code>$</code>:</p>
+<ul>
+<li>变量被声明: <code>variable</code></li>
+<li>变量被赋值: <code>variable=12</code></li>
+<li>变量被unset: <code>unset variable</code></li>
+<li>变量被export: <code>export variable=23</code></li>
+</ul>
+<p><em>弱引用（部分引用）：</em>双引号(“”)括起来的变量。这种引用变量替换不会被阻止。<br><em>强引用（全引用）：</em>单引号（’’）括起来的变量。替换被阻止，解释为字符串。</p>
+<p>ps: $variable其实是${variable}的简写形式,但是有些时候简写形式不能够满足变量的更多特性（比如参数替换），这时候就要用全写形式了。</p>
+<h3 id="变量赋值:">变量赋值:</h3><p>变量赋值的方式也有多种：</p>
+<ol>
+<li>使用赋值操作:=(注意等号两边不能有空白，否则就是视为条件判断了)赋值.<code>a=12</code></li>
+<li>使用let赋值.<code>let a=2</code></li>
+<li>for循环中赋值(伪赋值).<code>for a in \</code>seq 100``</li>
+</ol>
+<h3 id="特殊的变量类型">特殊的变量类型</h3><ul>
+<li>位置参数： 命令行运行脚本可以传递参数，而脚本接受参数可以通过位置参数来获取。<ul>
+<li>$0:代表脚本名称</li>
+<li>$1:表示第一个传递的参数(依次类推, 但是$10开始需要需要用${10}来获取)</li>
+<li>$#:表示参数的个数</li>
+</ul>
+</li>
+</ul>
+<h2 id="条件判断">条件判断</h2><h3 id="条件判断格式：">条件判断格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#  1 &#19968;&#33324;&#30340;&#26684;&#24335;&#10;if &#26465;&#20214;&#10;then&#10;     ...&#10;else&#10;     ... &#10;fi&#10;&#10;#  2 &#20004;&#26465;&#35821;&#21477;&#20889;&#21040;&#19968;&#34892;&#26159;&#65292;&#35821;&#21477;&#38388;&#35201;&#29992;&#20998;&#21495;&#38548;&#24320;&#10;if &#26465;&#20214;; then&#10;    ...&#10;else&#10;    ...&#10;fi&#10;&#10;#  3 &#22810;&#20010;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    ...&#10;elif &#26465;&#20214;&#10;    ...&#10;fi&#10;&#10;#  4 &#23884;&#22871;&#26465;&#20214;&#21028;&#26029;&#10;if &#26465;&#20214;&#10;then&#10;    if &#26465;&#20214;&#10;    then&#10;        ...&#10;    fi&#10;fi</span><br></pre></td></tr></table></figure>
+<h3 id="条件格式：">条件格式：</h3><ol>
+<li><code>[ ... ]</code> : <code>[</code>是一个内建命令，其作用就是后面的表达式退出状态码为0则条件为真。</li>
+<li><code>[[ ... ]]</code>: <code>[[</code>是一个关键字，其作用就是和上面相同，但是其表达式的解释不同。</li>
+<li><code>(( ... ))</code>: 测试条件是一个算术表达式，表达式的结果为非零时条件为真。</li>
+<li><code>一般命令</code>: 可跟一般的shell命令，命令的退出状态码为测试条件。</li>
+</ol>
+<blockquote>
+<p>ps: <code>[]</code> 与<code>[[]]</code>的区别：<br>    <code>[</code>是一个内建命令, 其后面跟的是一般命令的参数和选项，比如<code>[ 1 -lt 2]</code>可以认为1和2是参数，-lt是一个选项。但是 <code>[ 1 &amp;&amp; 2 ]</code>则不正确，因为 &amp;&amp;不是一个有效的参数或者选项。<br>    <code>[[</code>是一个关键字，可以正确解释&amp;&amp;， 是一个更加通用的结构。</p>
+</blockquote>
+<h2 id="循环">循环</h2><p>循环的方式主要有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 1 &#22522;&#26412;&#32467;&#26500;&#10;for arg in [list]&#10;do&#10;commands...&#10;done&#10;&#10;# 2 &#20351;&#29992;$@(&#21363;&#20301;&#32622;&#21442;&#25968;)&#10;for arg&#10;do&#10;commands...&#10;done&#10;&#10;# 3 &#20351;&#29992;&#21629;&#20196;&#26367;&#25442;[list]&#10;for arg in `command`&#10;do&#10;commands...&#10;done&#10;&#10;# 4 &#20351;&#29992;C&#39118;&#26684;&#10;for ((a=1; a &#60;= LIMIT ; a++))&#10;do&#10;commands...&#10;done&#10;&#10;# 5 while&#10;while [condition] #&#19982;&#26465;&#20214;&#21028;&#26029;&#30340;condition&#19968;&#26679;&#10;do&#10;commands...&#10;done&#10;&#10;# 6 until &#31867;&#20284;&#20110;C&#30340;do...while&#10;until [condition]&#10;do&#10;commands...&#10;done&#10;&#10;# 7 &#23884;&#22871;&#24490;&#29615;&#19982;&#25511;&#21046;&#10;for a in [list]&#10;do&#10;    for b in [list]&#10;    do&#10;        for c in [list]&#10;        do&#10;            break 2 #&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#20174;&#26412;&#23618;&#31639;&#65292;&#24448;&#22806;&#21040;&#31532;&#20108;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        for d in [list]&#10;        do&#10;           continue #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#32487;&#32493;&#26412;&#23618;&#30340;&#24490;&#29615;&#10;        done&#10;        break  #&#19981;&#24102;&#23618;&#21442;&#25968;&#65306;&#36864;&#20986;&#26412;&#23618;&#24490;&#29615;&#10;    done&#10;done</span><br></pre></td></tr></table></figure></p>
+<h2 id="分支">分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># case &#10;case &#34;$variable&#34; in&#10;$condition1 ) command...;;&#10;$condition2 ) command...;;&#10;...&#10;$conditionn ) command...;;&#10;*) command ...;; #&#30456;&#24403;&#20110;default&#10;esac&#10;&#10;# select &#20171;&#20110;for&#21644;case&#20043;&#38388;&#30340;&#19968;&#20010;if&#35821;&#21477;&#10;select variable [in list] #&#28385;&#36275;&#26465;&#20214;&#21017;&#25191;&#34892;&#19979;&#38754;&#30340;&#21629;&#20196;, &#19981;&#20889;&#21518;&#38754;&#30340;&#21017;&#36319;for&#19968;&#26679;&#65292;&#21462;$@&#10;do&#10;commands...&#10;done</span><br></pre></td></tr></table></figure>
+<h2 id="函数">函数</h2><h3 id="函数定义的两种方式：">函数定义的两种方式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123;&#10;$1 #&#20301;&#32622;&#21442;&#25968;&#20316;&#20026;&#20256;&#36882;&#30340;&#21442;&#25968;&#10;$2&#10;command...&#10;&#125;&#10;&#10;function_name &#123;&#10;command...&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数调用">函数调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_name $arg1 $arg2</span><br></pre></td></tr></table></figure>
+<p>ps:</p>
+<ol>
+<li>函数调用之前必须先定义</li>
+</ol>
+<h2 id="结语">结语</h2><p>到这里一个shell的基本架构有了，但是shell学习才刚刚开始，以后陆续有文章就shell的某个点进行深入探讨～</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/SHELL/">SHELL</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/shell/">shell</a>
+    </span>
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="2014/03/22/linux-shell-programe1/#comment">评论</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2014/02/13/csapp-chapter5/"><span>csapp chapter5:优化程序性能</span></a></h3>
     
   
@@ -585,147 +660,6 @@
         <i class="icon-comments"></i>
         <span>
           <a href="2014/02/13/csapp-chapter5/#comment">评论</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2014/02/11/csapp-chapter4/"><span>csapp chapter4:处理器体系结构</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2014/02/11/csapp-chapter4/" rel="bookmark">
-        <time class="entry-date published" datetime="2014-02-10T16:00:00.000Z">
-          2014-02-11
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>现代微处理器是人类创造的最复杂的系统之一。本章简要接受处理器硬件的设计。</p>
-</blockquote>
-<p>一个处理器支持的指令和指令的字节级编码称为它的<em>指令集体系结构(Instruction-Set Architecture, ISA)</em></p>
-<h2 id="Y86指令集体系结构">Y86指令集体系结构</h2><p>Y86指令就是它规定的一些指令的叫法和功能。指令编码就是这些指令的字节级编码。每条指令的第一个字节表明指令的类型，分为两部分，高4位是<em>代码(code)</em>部分，低4位是<em>功能(function)</em>部分。需要操作数的指令编码更长一些,例如<code>rmmovl %esp, 0x12345(%edx)</code>的字节编码<strong>40*</strong>42*45230100(注意是16进制, 每一位代表4个bit位),因为rmmovl第一个字节位40; 第二个字节应该是rArB(r代表源的类型，r:寄存器，m:存储器, 这里r是寄存器;A\B代表目的类型),%esp对应的数字为4，%edx对应的数字为2,所以第二个字节是：42;，最后4字节是偏移量0x12345的编码，首先补0填充为4字节：00 01 23 45， 然后反序插入：45230100。最后连起来就是404245230100。</p>
-<h3 id="Y86的顺序实现">Y86的顺序实现</h3><h4 id="将处理组织成阶段">将处理组织成阶段</h4><p>将处理组织成阶段主要：</p>
-<ul>
-<li><strong>取指(fetch)</strong>:取指阶段从存储器读取指令字节，地址为程序计数器(PC)的值。它按顺序方式计算当前指令的下一条指令的地址valP(等于PC的值加上已取出指令的长度)。</li>
-<li><strong>译码(decode)</strong>:译码阶段从寄存器文件读入最多两个操作数, 得到值valA或／和valB。</li>
-<li><strong>执行(excute)</strong>:执行阶段，算术/逻辑单元要么执行指令指明的操作，计算存储器引用的有效地址，要么增加或减少栈指针。</li>
-<li><strong>访存(memory)</strong>:访存阶段可以将数据写入存储器，或者从存储器读出数据。</li>
-<li><strong>写回(write back)</strong>:写回阶段最多可以写两个结果到寄存器文件。</li>
-<li><strong>更新PC(PC update)</strong>:将PC设置成下一条指令的地址。<br>例如：  </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>OPl rA, rB</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>取指</td>
-<td>icode:ifun&lt;-\(M_{1}\)[PC]</td>
-</tr>
-<tr>
-<td></td>
-<td>rA:rB&lt;-\(M_{1}\)[PC+1]</td>
-</tr>
-<tr>
-<td></td>
-<td>valP&lt;-PC+2</td>
-</tr>
-<tr>
-<td>译码</td>
-<td>valA&lt;-R[rA]</td>
-</tr>
-<tr>
-<td></td>
-<td>valB&lt;-R[rB]</td>
-</tr>
-<tr>
-<td>执行</td>
-<td>valE&lt;-valB OP valA</td>
-</tr>
-<tr>
-<td></td>
-<td>Set CC</td>
-</tr>
-<tr>
-<td>访存</td>
-<td></td>
-</tr>
-<tr>
-<td>写回</td>
-<td>R[rB]&lt;-valE</td>
-</tr>
-<tr>
-<td>更新PC</td>
-<td>PC&lt;-valP</td>
-</tr>
-</tbody>
-</table>
-<h4 id="SEO硬件结构">SEO硬件结构</h4><p><img src="/assets/img/csapp/fig4.22.png" alt="">  </p>
-<p>硬件单元与各个处理阶段的关联：  </p>
-<ul>
-<li>取指：将程序计数器寄存器作为地址，指令存储器读取指令的字节。PC增加器(PC incrementer)计算valP,即增加了的程序计数器。</li>
-<li>译码：寄存器文件有两个读端口A和B,从这两个端口同事图去寄存器值valA和valB。</li>
-<li>执行：根据指令的类型，将算术/逻辑单元(ALU)用于不同的目的。</li>
-<li>访存：在执行访存操作时，数据存储器读出或写入一个存储器字。</li>
-<li>写回：寄存器文件有两个写端口。端口E用来写ALU计算出来的值，而端口M用来写从数据存储器中读出的值。</li>
-</ul>
-<h4 id="SEO的时序">SEO的时序</h4><p>SEO的实现包括组合逻辑和两种存储器设备：时钟寄存器(程序计数器和条件码寄存器), 随机访问存储器(寄存器文件、指令存储器和数据存储器)。组合逻辑不需要任何时序或控制——只要输入变化了，值就通过逻辑门网络传播。现在有四个硬件单元需要对它们的时序进行明确的控制——程序计数器、条件码寄存器、数据存储器和寄存器文件。这些单元通过一个时钟信号来控制，它触发将新值转载到寄存器以及将值写到随机访问存储器。每个时钟周期，程序计数器都会装载新的指令地址。只有在执行整数运算指令时，才会装载条件码寄存器。只有在执行rmmovl, pushl或call指令时，才会写数据存储器。根据下图来理解处理器活动的时序控制：<br><img src="/assets/img/csapp/fig4.25.png" alt=""><br>可以看出，其实所有的状态更新实际上同时发生，且只在时钟上升开始下一个周期时，保证这个等价性的原则是：<em>处理器从来不需要为了完成一条指令的执行而去读由该指令更新了的状态</em>,我对这句话的理解是，一个周期内（其实一个周期就是一条指令的执行）执行的指令所更新的数据不会成为该指令读取的数据。<br>上图中周期3通过组合逻辑算出了条件码的新值：000， ％ebx的新值,以及程序计数器的新值(0x00e)，但是这些都是一个临时状态，是组合逻辑的出口值，在下一个周期开始的时候，也就是电瓶上升沿，把这些临时的值更新到了xian相应的寄存器中,开始下一个逻辑运算。<br>SEO阶段的实现，就是以上每条指令逻辑运算的过程。不再说明。</p>
-<h2 id="流水线的通用原理">流水线的通用原理</h2><p>流水线化的一个重要特性就是增加了系统的<em>吞吐量（throughput)</em>。我理解吞吐量就是在单位时间内能够执行的命令个数。通过例子来说明：<br>非流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.32.png" alt=""><br>图中，I1,I2,I3表示的是三条指令。<br>一个组合逻辑需要300ps时间来进行运算，然后需要20ps的时间把数据加载到寄存器中，也就是一个<em>延迟(latency)</em>为320ps，所以可以计算处吞吐量：<br>\(吞吐量=\frac{1}{(300+20)*10^{-12}} \approx 3.12GIPS\)  </p>
-<p>流水线化的计算硬件：<br><img src="/assets/img/csapp/fig4.33.png" alt=""><br>图中，I1,I2,I3表示的是三条指令, A, B, C表示执行每条指令需要三个阶段。这里每个阶段为100ps, 也就是把300ps分成三次来执行。但是各个阶段之间需要放上<em>流水线寄存器(pipeline registers)</em>,每次加载寄存器都需要20ps, 所以可以看出执行一条指令需要3*（20+100）＝360ps, 比之前执行一条指令多出来40ps。但是看一下流水线的流程，A先执行I 1指令，执行完后，B开始执行I1指令，这时I2就可以进入A阶段进行执行了，最终的结果是A, B, C都在自行命令。也就是得到流水线的吞吐量是：<br>\(吞吐量=\frac{1}{(100+20)*10^{-12}} \approx 8.33GIPS\)<br>对于这三条指令可以看出，非流水线状态下一共执行了960ps, 流水线情况下执行了600ps， 提高了整个系统的执行效率。</p>
-<blockquote>
-<p>ps： 不是流水线的级数越多约好，因为级数增加的，每个阶段的执行时间减少，吞吐量增加了，但是整个执行过程的延迟也增加了，所以收益不一定会变好。所以实际过程中要兼顾吞吐量和时延两个指标。</p>
-</blockquote>
-<p>后面的内容说的是具体流水线的设计实现，这里就不再说了。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/CSAPP/">CSAPP</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="2014/02/11/csapp-chapter4/#comment">评论</a>
         </span>
       </span>
     </div>

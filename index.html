@@ -59,6 +59,99 @@
 
   
     
+    <h3 class="article-title"><a href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/"><span>Redis设计与实现总结——数据结构与对象</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-03-04T03:44:38.000Z">
+          2017-03-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="基本数据结构">基本数据结构</h3><h4 id="简单的动态字符串">简单的动态字符串</h4><p>Redis自己构建的一种名为简单动态字符串(simple dynamic string, SDS)的抽象类型，并将SDS用做Redis的默认字符串表示。<br>SDS的定义在<code>sds.h/sdshdr</code>结构中:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> sdshdr &#123;</span><br><span class="line"><span class="comment">// 记录buf数组中已使用的字节的数量</span></span><br><span class="line"><span class="comment">// 等于SDS所保存字符串的长度</span></span><br><span class="line"><span class="keyword">int</span> len;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 记录buf数组中未使用字节的数量</span></span><br><span class="line"><span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字节数组，用于保存字符串</span></span><br><span class="line"><span class="keyword">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/assets/img/redis/redis_sds.png" alt="SDS结构"><br>C字符串和SDS之间的区别:</p>
+<table>
+<thead>
+<tr>
+<th>C字符串</th>
+<th>SDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取字符串长度的复杂度为O(N)</td>
+<td>获取字符串长度的复杂度为O(1)</td>
+</tr>
+<tr>
+<td>API是不安全的，可能会造成缓冲区溢出</td>
+<td>API是安全的，不会造成缓冲区溢出</td>
+</tr>
+<tr>
+<td>修改字符串长度N次必然需要执行N次内存重分配</td>
+<td>修改字符串长度N次最多需要执行N次内存重分配</td>
+</tr>
+<tr>
+<td>只能保持文本数据</td>
+<td>可以保持文本或者二进制数据</td>
+</tr>
+<tr>
+<td>可以使用所有<string.h>库中的函数</string.h></td>
+<td>可以使用一部分<string.h>库中的函数</string.h></td>
+</tr>
+</tbody>
+</table>
+<h4 id="链表">链表</h4><p>链表提供了高效的节点重排能力，以及顺序性的节点访问方式，并且可以通过增删节点来灵活地调整链表的长度。链表在redis链表键，发布与订阅，慢查询，监视器等功能都用到了。<br>链表结构分为链表和链表节点，每个链表由多个链表的节点组合而成。每个节点都有一个指向前置节点和后置节点的指针，所以Redis的链表实现是一个双端链表。表头节点和表尾节点都指向NULL, 是一个无环链表。保存链表值的类型是void, 可以保持不同类型的值。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 链表定义adlist/list</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="built_in">list</span> &#123;</span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    listNode *head;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    listNode *tail;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 链表所浩瀚的节点数量 </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点复制函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*dup) (<span class="keyword">void</span> *ptr);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 节点释放函数</span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>) (<span class="keyword">void</span> *ptr);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 节点值对比函数</span></span><br><span class="line">    <span class="keyword">int</span> (*match) (<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);</span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//链表节点定义adlist.h/listNode</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> listNode &#123;</span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    <span class="keyword">struct</span> listNode *prev;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    <span class="keyword">struct</span> listNode *next;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点值</span></span><br><span class="line">    <span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/assets/img/redis/redis_list.png" alt="list结构"></p>
+<h4 id="字典">字典</h4><p>字典又称为符号表(symbol table), 关联数组(associative array)或映射(map),是一种用于保存键值对(key-value pair)的抽象数据结构。字典中的每一个键都是独一无二的。字典在Redis中应用相当广泛，比如Redis的数据库就是使用字典作为底层实现的，对数据库的CRUD也是建立在字典的操作上。字典还是哈希键的底层实现之一。<br><img src="/assets/img/redis/redis_dict.png" alt="dict结构"><br>字典的结构如上图所示，字典是由多个结构连接而成，首先是字典结构<code>dict.h/dict</code>：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dict &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 类型特定函数, 保存了一簇用于操作特定类型键值对的函数,</span></span><br><span class="line">    <span class="comment">// Redis会为用途不同的字典设置不同的类型特定函数</span></span><br><span class="line">    dictType *type;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 私有数据, 保存了需要传给那些类型特定的函数的可选参数</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 哈希表, 注意这里hash表定义两个，其中一个是实际中使用的，</span></span><br><span class="line">    <span class="comment">// 另一个是在扩展或收缩的时候使用的，类似于GC复制算法的原理</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// rehash 索引, 记录rehash目前的进度</span></span><br><span class="line">    <span class="comment">// 当rehash不在进行时，值为-1</span></span><br><span class="line">    <span class="keyword">int</span> trehashidx;</span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure></p>
+<p>字典所使用的哈希表<code>dict.h/dictht</code>：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictht &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 哈希表数组</span></span><br><span class="line">    dictEntry **table;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 哈希表大小</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 哈希表大小掩码，用于计算索引值</span></span><br><span class="line">    <span class="comment">// 总是等于size-1</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemark;    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;</span><br><span class="line">&#125; dictht;</span><br></pre></td></tr></table></figure></p>
+<p>哈希表节点:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictEntry &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 键</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 值 </span></span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 指向下个哈希表节点,形成链表</span></span><br><span class="line">    <span class="comment">// 使用next指针解决哈希冲突的问题</span></span><br><span class="line">    <span class="comment">// 哈希算法为MurmurHash2</span></span><br><span class="line">    <span class="keyword">struct</span> dictEntry *next;</span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure></p>
+<p>随着操作的不断执行，哈希表保存的键值对会逐渐的增多或减少，为了让哈希负载因子(load factor)维持在一个合理的范围之内，当哈希表保持的键值对对数量太多或太少时，程序需要对哈希表的大小进行相应的扩展或收缩。<br>为了避免rehash对服务器性能造成影响，服务器不是一次性将<code>ht[0]</code>里面的所有键值对全部<code>rehash</code>到<code>ht[1]</code>，而是分多次，渐进式地将<code>ht[0]</code>里面的键值对慢慢地<code>rehash</code>到<code>ht[1]</code>。</p>
+<h4 id="跳跃表">跳跃表</h4><p>跳跃表(skiplist)是一种有序数据结构, 它通过在每个节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。跳跃表支持平均O(longN)，最坏O(N)复杂度的节点查找，还可以通过顺序性操作来批量处理节点。更多介绍参考<a href="https://zh.wikipedia.org/wiki/%E8%B7%B3%E8%B7%83%E5%88%97%E8%A1%A8" target="_blank" rel="external">wiki</a>。<br>Redis使用跳跃表作为有序集合键的底层实现之一，如果一个有序集合包含的元素数量比较多，又或者有序集合中元素的成员是比较长的字符串时，Redis就会使用跳跃表来作为有序集合键的底层实现。</p>
+<h4 id="整数集合">整数集合</h4><h4 id="压缩列表">压缩列表</h4><h3 id="对象">对象</h3>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="2017/03/04/The-Design-and-Implementation-of-Redis-1/#comment">评论</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2017/02/03/gc-advanced/"><span>垃圾回收进阶算法</span></a></h3>
     
   
@@ -620,132 +713,6 @@ $rs |   |   |   |   |
         <i class="icon-comments"></i>
         <span>
           <a href="2016/08/23/phpenv-configuration-options/#comment">评论</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2015/10/14/InnoDB-Key-Features/"><span>InnoDB关键特性</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/10/14/InnoDB-Key-Features/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-10-14T14:10:14.000Z">
-          2015-10-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p>本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.</p>
-</blockquote>
-<h2 id="工作方式">工作方式</h2><p>首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。</p>
-<h3 id="体系架构">体系架构</h3><p>InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。</p>
-<img src="http://www.plantuml.com/plantuml/svg/AqfDBadCIyz9LNWshVt9xcqArLmAG92IM9AOb5YSgg044JPKWeZNOfKrmYkR1vUjvIg2M_UqhVNfsXbGwn32Iaydz3tjt_1yr_xdAxgLeD8Qled59Qb52Y4PHQc9APeGCKz_L7v1QL5wAgfGG29Gn3adDJ4FJNCjkgsUUNdvBav01prjMl5qpzHda_iWxdksSO4IqDdGiB7HjOEw6m00">  
-<h4 id="后台线程">后台线程</h4><p>上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他们的分工如下:</p>
-<ul>
-<li><code>Master Thread</code>: 是最核心的线程，主要负责将缓冲池中的数据异步刷新的磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲(INSERT BUFFER),UNDO页的回收等。下面几个线程其实是为了分担主线程的压力而在最新的版本中添加的。</li>
-<li><code>IO Thread</code>: InnoDB使用大量的异步IO来处理请求。IO Thread的主要工作就是负责IO请求的回调(call back)处理。异步IO可以分为4个，分别是:write, read, insert buffer 和 log IO thread。</li>
-<li><code>Purge Thread</code>: undo log是用来保证事务的，当一个事务正常提交后，这个undo log可能就不再使用了。purge thread就是用来清除这部分log已经分配的undo页的。 </li>
-<li><code>Page Cleaner Thread</code>: 主要是把脏页的刷新从主线程中拿到单独的线程，减轻主线程的压力，减少用户查询线程的阻塞，提高整体性能。</li>
-</ul>
-<h4 id="内存">内存</h4><p>由于InnoDB是基于磁盘存储的，为了使CPU与磁盘能够快的交互，提升整体性能而采用了缓冲池技术。<br>读数据简单的说可以用下面的流程图<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlUpgHkUzQwpvifCKz20i9_EMV5yp-IdRPkURLoWgL2IaPgde56PMgp9fG04LY_sJtawUnvCLsfESQg2Hbu-LFB9xhxdYnkVpvu1DFXf_pIOAh2SafjdXDBJZWrmiwsn6fYNafd6LLoINm00"><br>更新数据的流程则如下:<br><img src="http://www.plantuml.com/plantuml/svg/Aov9B2hXidgnVlVJzbtFfcvurhlEcYilloHLeIWpFQF4Ik75_fdFfczxsZ0J8lbaHyFJTREUpbdnVC_afssRdcrSy6J7sYUxshYiditUycpQ1cJXvxDQO2PQFTkzyCMspS_cBdooUzlxFJrFExO35J-TFU_vuiRdisTOSnMNv1S00000"><br>由缓冲池的作用可以看到，缓冲池越大所容纳的数据就越多，与磁盘的交互就会越少，性能也就越高。所以缓冲池的大小直接影响着数据库的整体性能。<br>InnoDB在内存中主要有以下几部分组成:<br><img src="http://www.plantuml.com/plantuml/svg/TP31IiD048RlVOeX9tqDyU8x2CkskmcBszsoZI1AmGXfFLW4sneH15FiHQYrKg5AeI_ZnEOjZDbMH9CvVz_yCx_XDPygJtBOKqhlxc0xnF5DCdXEkayuULjDOpYfG3Rc1tJIJXU3soGQuJBwNFIm_GBx2hOCPngazaZrq7MvsNRWdpYymuVhTSJqFhT45ikgX38cVA4LbQJEwwIXjIHDSSmBjjZ8pD-uDYztCjoU-pr_HVjL6h_cmOpw51hKAuoO3N4ns912CNvKXYQNLnYEVjKWL9CR7yfBw0SVopW99ZajTUq0X79r0RdgFAQdP_ZUnzuvpY_iKKx9MpYEC9pRpMkcLMbz0G00"><br>具体来看缓冲池中缓存的数据页类型有:</p>
-<ul>
-<li><code>索引页</code>: 缓存数据表索引</li>
-<li><code>数据页</code>: 缓存数据页，占缓冲池的绝大部分</li>
-<li><code>undo页</code>: undo页是保存事务，为回滚做准备的。</li>
-<li><code>插入缓冲(Insert buffer)</code>: 上面提到的插入数据时要先插入到缓存池中。</li>
-<li><code>自适应哈希索引(adaptive hash index)</code>: 除了B+ Tree索引外，在缓冲池还会维护一个哈希索引，以便在缓冲池中快速找到数据页。</li>
-<li><code>InnoDB存储的锁信息(lock info)</code>: </li>
-<li><code>数据字典(data dictionary)</code>:<br>内存中除了缓冲池外外还有:</li>
-<li><code>重做日志缓冲redo log</code>: 为了避免数据丢失的问题，当前数据库系统普遍采用了write ahead log策略，既当事务提交时先写重做日志，再修改写页。当由于发生宕机而导致数据丢失时，可以通过重做日志进行恢复。InnoDB先将重做日志放到这个缓冲区，然后按照一定的频率更新到重做日志文件中。重做日志一般在下列情况下会刷新内容到文件:<ul>
-<li>Master Thread每一秒将重做日志缓冲刷新到重做日志文件</li>
-<li>每个事务提交时会将重做日志缓冲刷新到重做日志文件</li>
-<li>当重做日志缓冲池剩余空间小于1/2时，重做日志缓冲刷新到重做日志文件</li>
-</ul>
-</li>
-<li><code>额外内存池</code>: InnoDB存储引擎中，对内存的管理师通过一种称为内存堆的方式进行的，在对一些数据结构本身的内存进行分配时，需要从额外的内存池中进行申请，当该区域的内存不够时，会从缓冲池中进行申请。</li>
-</ul>
-<p>缓冲池是一个很大的内存区域，InnoDB是如何对这些内存进行管理的呢。答案就使用LRU list。<br><a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm#Variants_on_LRU" target="_blank" rel="external">LRU</a>(Latest Recent Used, 最近最少使用)算法默认的是最近使用的放到表头，最早使用的放到表尾，依次排列。当有LRU填满时有新的进来就把最早的淘汰掉。InnoDB则是在这个基础上进行了修改:</p>
-<ol>
-<li>最近使用的不放到表头，而是根据配置放到一定比例处，这个地方叫做midpoint, midpoint之前的成为new列表，之后的成为old列表。淘汰的同样是表尾的页。</li>
-<li>为了保证new列表的不经常使用时能够淘汰，设置了一个超时时间:innodb_old_blocks_time，当数据在midpoint(我理解应该是在old列表中，不然这个点的页就一个，变化也比较频繁)的时间超过找个时间时就会被提升到表头，new列表的表尾页则被置换到old列表中。</li>
-</ol>
-<p>这么做的原因主要是因为常见的索引或数据的扫描操作会连续读取大量的页，甚至是全表扫描。如果采用原来的LRU算法就会更新全部的缓冲池，其他查询需要的热点数据就会被冲走，导致更多的磁盘读取操作，降低数据库的性能。<br>LRU是用来管理已经读取的页，当数据库启动时LRU是空列表,既只有表头，没有内容。这时页都放在Free List中。当需要有数据读写时要进行需要获取分页，这时要从Free List中删除分页，然后添加到LRU list中。到一定时间Free List中的分页就会被分配完毕，这时候就正常使用上面的LRU策略。<br>LRU列表中的页被修改后，称该页为脏页(dirty page),既缓冲池中的数据和磁盘上的数据产生了不一致，这时脏页会被加入到一个Flush 列表中(注意，同时存在两个列表中)。然后根据刷新的机制定时的刷新到磁盘中。</p>
-<h3 id="Checkpoint技术">Checkpoint技术</h3><p>checkpoint其实就是一个刷新缓冲到磁盘的触发机制，当满足一定的条件时就会刷新缓冲到磁盘，这样做可以解决以下几个问题:</p>
-<ul>
-<li>缩短数据库的恢复时间: 数据库恢复可以使用redo log，但是如果要恢复的数据很多就会很慢。如果使用checkpoint刷新到磁盘，只需要从checkpoint开始恢复就可以了，所以速度会变快。</li>
-<li>缓冲池不够用时，将脏页刷新到磁盘。我们知道缓冲池的大小是由限制的，为了能够高效的使用缓冲池需要把一部分数据刷新到磁盘。</li>
-<li>重做日志不可用时，刷新脏页。重做日志并不是无限增大的，而是循环利用的。当有些已经不需要的页存在时可以覆盖写，当可用的页放不下时就会触发checkpoint,刷新到磁盘一部分脏页到磁盘，这样就能覆盖掉一些不再使用的重做日志。</li>
-</ul>
-<p>checkpoint根据触发时间，刷新页的策略又可以分为:</p>
-<ul>
-<li><code>sharp checkpoint</code>:刷新所有的脏页到磁盘。一般发生在数据库关闭时，为了保证所有的数据能够正常持久化。</li>
-<li><code>fuzzy checkpoint</code>:只刷新部分脏页。运行时使用这种可以保证系统的性能。<h3 id="Master_Thread的工作方式">Master Thread的工作方式</h3></li>
-</ul>
-<h2 id="关键特性">关键特性</h2><h3 id="插入缓存">插入缓存</h3><p>这里所说的插入缓存也是Insert Buffer, 区别是这个插入缓存不是缓冲池中的插入缓存,这里的插入缓存和数据页一样，业务物理页的组成部分。在介绍插入缓存之前先了解<a href="http://www.cnblogs.com/lwzz/archive/2012/08/05/2620824.html" target="_blank" rel="external">聚集索引和非聚集索引</a>，他们之间最重要的区别就是:聚集索引的叶子节点存储的是数据，而且是按照物理顺序存储的;非聚集索引叶子节点是地址(也就是聚集索引键地址)，是按照逻辑顺序存储的(以上言论是从网上了解到的，但是本书P194特别指出，聚集索引也不是按照物理地址连续的，而是逻辑上连续的)。<br>知道这个差别后就知道，当不停的插入数据时，如果是聚集索引的数据，按照物理顺序(这个应该是一般情况下，因为是一般聚集索引是主键，顺序递增的，所以这时候地址就是顺序的)连续插入，代价比较小。而如果是非聚集索引的插入则物理地址是离散的，会导致很大的系统开销，所以对于非聚集索引InnoDB开创性设计了Insert Buffer。使用InnoDB的Insert Buffer需要以下两个条件:</p>
-<ul>
-<li>索引是辅助索引(非聚集索引 secondary index);</li>
-<li>索引不是唯一(unique)的。</li>
-</ul>
-<p>Insert Buffer的使用流程是:<br><img src="http://www.plantuml.com/plantuml/svg/LKvB2e906DxFAMPfLz1TkuuHD98G5iwqQ5U14j6Bx06zo22em5wOA5YdyH_r5WtOfc_vlIah6mp9V3m5yyXx2xxs-EAk84t5KhRTfPrLjhOIxm3HF7DUi3abaGtMap_sSU0MCAiI7KijGWi82yY9Y8-EUPk2I8qIBEdrdyXd7q77GJiEBYMT4eFXObDLYG6tC7queb39ZN1TyQN_RvaEqey9_NF-1SO-k9Eqtqsw8Knw4FhS7iRlZTZKAvgAAAitlW00"><br>要求索引不是唯一的是因为如果索引是唯一的，那么每次更新都要坚持是不是已经存在，每次还是要访问数据页，这就失去了使用Insert Buffer的优势。<br>后面还提到了Update buffer以及Merge的过程和Insert Buffer的实现，这里就不再一一说了。</p>
-<h3 id="两次写">两次写</h3><p>上面提到的Insert Buffer是提高了数据库的性能，doublewrite则是提高了数据库的可靠性。一个场景是当一个16k的数据页只写了一部分,比如4k,这时候突然断电，就会导致这个页的数据不全。所以就会导致这个页的数据丢失。我们知道重做日志是用来恢复数据的，但是重做日志记录的是对页的物理操作，如果这个页已经发生了损坏在对其进行重做是没有意义的。</p>
-<blockquote>
-<p>上面这段话，其实我并没有看懂，因为对页操作之前是先写重做日志的，当发生宕机时正在写数据页，证明这时候重做日志已经写完了。这时重做日志的记录的完整的，当用这个记录去恢复数据时，不管页是不是损坏，重做日志直接覆盖不就行了么？为什么不行呢？等到后面我更加深入的了解后再来补充。</p>
-</blockquote>
-<p>doublewrite有两部分组成，一部分是内存中的doublewrite buffer, 大小为2MB,另一部分是物理磁盘上共享表空间中连续的128个页，既两个区，大小同样为2MB<br>。对缓冲池的脏页进行刷新时，比不直接写磁盘，而是会通过memcpy函数将脏页先复制到内存中的doublewrite buffer, 之后通过doublewrite buffer再分两次，每次1MB的写入共享表空间的物理磁盘上，然后马上调用fsync函数，同步磁盘，避免缓冲写带来的问题。完成doublewrite页的写入后，再将doublewrite buffer中的页写入各个表空间文件中。</p>
-<p>如果磁盘写入时发生崩溃，可以从共享表空间的doublewrite中找到副本，将其复制到表空间文件，再应用重做日志。</p>
-<blockquote>
-<p>这个地方也有一个疑问，当doublewrite写入的过程中发生了崩溃，这时候数据该怎么办呢？</p>
-</blockquote>
-<h3 id="自适应哈希索引">自适应哈希索引</h3><p>对于缓冲池中的页，为了能够快速的查找，InnoDB跟情况对其建立了一个hash index。这样对于等值查询就能够利用这个索引更加快速的查找，提高了查找的性能。</p>
-<h3 id="异步IO">异步IO</h3><p>为了提高磁盘的操作性能，当前的数据库系统都采用异步IO的方式处理磁盘操作。用户可以在发出一个IO请求胡立即再发出另一个IO请求，当全部IO请求发送完毕后，等待所有IO操作完成，这就是AIO。<br>AIO的另一个优势是可以进行IO Merge操作，也就是将多个IO合并为1个IO, 这样可以提高IOPS的性能。</p>
-<h3 id="刷新临近页">刷新临近页</h3><p>Flush Neighbor Page(刷新临近页)是当刷新一个脏页时，InnoDB会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/mysql/">mysql</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="2015/10/14/InnoDB-Key-Features/#comment">评论</a>
         </span>
       </span>
     </div>
