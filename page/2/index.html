@@ -187,6 +187,115 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/14/InnoDB-Key-Features/" itemprop="url">
+                  InnoDB关键特性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2015-10-14T22:10:14+08:00" content="2015-10-14">
+              2015-10-14
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/14/InnoDB-Key-Features/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/14/InnoDB-Key-Features/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+本篇博客是《Mysql技术内幕 InnoDB存储引擎(第二版)》的阅读总结.
+
+工作方式首先Mysql进程模型是单进程多线程的。所以我们通过ps查找mysqld进程是只有一个。
+体系架构InnoDB存储引擎的架构如下图所以，是由多个内存块组成的内存池，同时又多个后台线程进行工作，文件是存储磁盘上的数据。
+  
+后台线程上面看到一共有四种后台线程，每种线程都在不停地做自己的工作，他们的分工如下:
+
+Master Thread: 是最核心的线程，主要负责将缓冲池中的数据异步刷新的磁盘，保证数据的一
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/14/InnoDB-Key-Features/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -587,105 +696,6 @@ HTTP缓存是web开发中经常碰到的问题，但是之前虽然看过，那�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/05/12/jekyll-to-hexo/" itemprop="url">
-                  从jekyll到hexo
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">發表於</span>
-            <time itemprop="dateCreated" datetime="2015-05-12T14:20:44+08:00" content="2015-05-12">
-              2015-05-12
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/05/12/jekyll-to-hexo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/jekyll-to-hexo/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-最近把博客从jekyll迁移到了hexo，告一段落后写个总结，給后来的人一个参考。
-
-为什么要迁移关于为什么把博客从 jekyll迁移到hexo，其原因其实跟这两个的优劣没有任何关系。每个人都有自己爱好，只要你用好了，其实本质上没什么差别，而我的原因则是因为最近团队前端人员极度缺人，只好让后台开发的人员也开始写js代码，不过自从写了js代码后我才发现js的天地是多么的广阔。通过写js代码我了解了的js语言的特性，以及前端的各种框架，比如require.js, grunt, angular,ex
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/05/12/jekyll-to-hexo/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -732,7 +742,7 @@ HTTP缓存是web开发中经常碰到的问题，但是之前虽然看过，那�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

@@ -187,15 +187,102 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/" itemprop="url">
+                  Redis设计与实现总结——数据结构与对象
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2017-03-04T11:44:38+08:00" content="2017-03-04">
+              2017-03-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/04/The-Design-and-Implementation-of-Redis-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        
-        
-        
       
 
       
-    
+        
+          
+          基本数据结构简单的动态字符串Redis自己构建的一种名为简单动态字符串(simple dynamic string, SDS)的抽象类型，并将SDS用做Redis的默认字符串表示。SDS的定义在sds.h/sdshdr结构中:1234567891011struct sdshdr &#123;// 记录buf数组中已使用的字节的数量// 等于SDS所保存字符串的长度int len;// 记录buf数组中未使用字节的数量int free;// 字节数组，用于保存字符串char buf[];&#125
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -298,6 +385,306 @@ L
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/23/gc-base/" itemprop="url">
+                  垃圾回收基本算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2017-01-23T14:24:36+08:00" content="2017-01-23">
+              2017-01-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/23/gc-base/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/23/gc-base/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+本章介绍GC的基本算法:GC标记-清除法，引用计数法, GC复制算法。这三种我认为是GC的三个方向的基本思维。其他方法都是围绕这个些基本方法展开的。
+
+GC标记-清除法基本方法所谓的标记-清除法，依据其字面意思就是，先做标记，然后在清除。这个过程分为两个阶段，标记阶段就是把所有活动对象坐上标记，清除阶段就是把那些没有做标记的对象，也就是非活动对象回收的阶段。利用伪代码表示就是:
+1234mark_sweep() &#123;    mark_phase()    sweep_phase()&#
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/01/23/gc-base/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/22/gc/" itemprop="url">
+                  垃圾回收算法总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2017-01-22T14:56:28+08:00" content="2017-01-22">
+              2017-01-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/22/gc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/22/gc/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+最近研读了《垃圾回收的算法与实现》这本书， 对来垃圾回收(GC)的来龙去脉及理论和实践有了一个概括性，深入性的了解，这里分多篇进行总结。首先本文先对GC的理论来一个总览性的回顾.
+
+什么是垃圾回收我们知道一台服务器的内存是有限的，而程序的运行需要占用内存空间，一个程序内部可能有些内存空间使用后不再使用，这部分不再使用的内从空间就被视为垃圾。而GC就是要
+
+找到内存空间里的垃圾
+回收垃圾，让程序员能够再次利用这部分空间
+
+如果没有GC的情况下需要程序员自己手动管理内存，例如C/C++等程序。这个
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/01/22/gc/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/23/phpenv-configuration-options/" itemprop="url">
+                  phpenv安装自定义配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2016-08-23T16:45:47+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/23/phpenv-configuration-options/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/23/phpenv-configuration-options/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          自定义配置在使用phpenv安装php是，有时候需要对内置扩展进行自定义控制是否开启，比如我要开启zts模块, 源码安装我么可以用./configure --enable-maintainer-zts来安装，但是phpenv不支持直接这么写，这时候就要phpenv自己的方式来安装了。可以在phpenv安装的路径里找到下面这个文件：~/.phpenv/plugins/php-build/bin/php-build, 这个文件就是phpenv install时运行的脚本，可以找到如下内容:12345
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/23/phpenv-configuration-options/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
@@ -344,7 +731,7 @@ L
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

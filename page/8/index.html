@@ -187,6 +187,123 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/12/20/csapp-chapter3/" itemprop="url">
+                  csapp chapter3:程序的机器级表示
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2013-12-20T00:00:00+08:00" content="2013-12-20">
+              2013-12-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSAPP/" itemprop="url" rel="index">
+                    <span itemprop="name">CSAPP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/20/csapp-chapter3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/20/csapp-chapter3/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          《深入理解计算机操作系统》英文名Computer Systems A programmer's Perspective的读书笔记
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/12/20/csapp-chapter3/">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -289,128 +406,6 @@ GET、HEAD、PUT与DELETE请求应该是幂等的，想一个URL发送多次应�
 
           <div class="post-more-link text-center">
             <a class="btn" href="/2013/12/06/restful-web-services-chapter7/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/12/05/restful-web-services-chapter5/" itemprop="url">
-                  chapter5:设计只读的面向资源的服务
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">發表於</span>
-            <time itemprop="dateCreated" datetime="2013-12-05T00:00:00+08:00" content="2013-12-05">
-              2013-12-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/restful-web-services/" itemprop="url" rel="index">
-                    <span itemprop="name">restful web services</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/12/05/restful-web-services-chapter5/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/05/restful-web-services-chapter5/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-本章主要是针对只读类型的ROA架构进行设计的，只读的HTTP方法包括GET和HEAD。通过一个地图的例子对具体的设计过程进行了介绍。
-
-资源设计RPC式架构设计方法是把系统分解为一个个的动作。REST式则是参考面向对象的程序设计,面向对象设计主要有类和方法，这里的资源设计策略可以称为：“极限面向对象”的策略，一个资源只暴露一个统一接口，最多支持六种HTTP方法。
-创建只读资源本章提出了一些列步骤来说明如何设计一个ROA的只读资源服务，它们是：
-
-规划数据集
-把数据集划分为资源 对其中的每种资源
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/12/05/restful-web-services-chapter5/#more" rel="contents">
               閱讀全文 &raquo;
             </a>
           </div>
@@ -576,6 +571,128 @@ HTML5以前FORM的method只支持GET和POST两种方式，没有PUT。为了能�
             
               
                 
+                <a class="post-title-link" href="/2013/12/05/restful-web-services-chapter5/" itemprop="url">
+                  chapter5:设计只读的面向资源的服务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2013-12-05T00:00:00+08:00" content="2013-12-05">
+              2013-12-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/restful-web-services/" itemprop="url" rel="index">
+                    <span itemprop="name">restful web services</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/05/restful-web-services-chapter5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/05/restful-web-services-chapter5/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+本章主要是针对只读类型的ROA架构进行设计的，只读的HTTP方法包括GET和HEAD。通过一个地图的例子对具体的设计过程进行了介绍。
+
+资源设计RPC式架构设计方法是把系统分解为一个个的动作。REST式则是参考面向对象的程序设计,面向对象设计主要有类和方法，这里的资源设计策略可以称为：“极限面向对象”的策略，一个资源只暴露一个统一接口，最多支持六种HTTP方法。
+创建只读资源本章提出了一些列步骤来说明如何设计一个ROA的只读资源服务，它们是：
+
+规划数据集
+把数据集划分为资源 对其中的每种资源
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/12/05/restful-web-services-chapter5/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2013/12/04/restful-web-services-chapter4/" itemprop="url">
                   chapter4:面向资源的架构
                 </a>
@@ -667,147 +784,6 @@ HTML5以前FORM的method只支持GET和POST两种方式，没有PUT。为了能�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/11/29/restful-web-services-chapter3/" itemprop="url">
-                  chapter3:REST式服务有什么特别不同
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">發表於</span>
-            <time itemprop="dateCreated" datetime="2013-11-29T00:00:00+08:00" content="2013-11-29">
-              2013-11-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/restful-web-services/" itemprop="url" rel="index">
-                    <span itemprop="name">restful web services</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/11/29/restful-web-services-chapter3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/29/restful-web-services-chapter3/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-前面讲了不少关于Rest的知识，但是现在大部分都是RPC或者REST-RPC混合的模式，这种并不是纯粹的Rest架构。本章就是为了介绍REST架构及面向资源的服务到底是什么样的。
-
-资源Amazon S3为例子进行介绍。S3提供SOAP和REST两种服务方式，一个桶就是一个放置资源的仓库，桶列表就是仓库的列表，一个对象就是放置到仓库里的一个资源。S3的资源及其方法如下：
-
-
-
-
-GET
-HEAD
-PUT
-DELETE
-
-
-
-
-桶列表
-列出所有桶
--
--
--
-
-
-一个桶
-列出桶里的对象
--
-创建
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/11/29/restful-web-services-chapter3/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -854,7 +830,7 @@ DELETE
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>
