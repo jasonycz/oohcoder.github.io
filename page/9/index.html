@@ -59,102 +59,6 @@
 
   
     
-    <h3 class="article-title"><a href="/2013/12/04/restful-web-services-chapter4/"><span>chapter4:面向资源的架构</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2013/12/04/restful-web-services-chapter4/" rel="bookmark">
-        <time class="entry-date published" datetime="2013-12-03T16:00:00.000Z">
-          2013-12-04
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
-<p><em>这一章说的是一个具体的REST式架构——面向资源的架构(Resource-Oriented Architecture, ROA)。ROA是一种把实际问题转换为REST式Web服务的方法：它令URI、HTTP和XML具有跟其他Web应用一样的工作方式，令程序员们容易是用它们。<br>这一章将面向资源的架构(ROA)的功能分成：资源、资源名称、资源的表示、资源间的链接。还将介绍ROA的特性：可寻址性(addressability)、无状态性(statelessness)、连通性(connectedness)和统一接口(uniform interface)。</em></p>
-</blockquote>
-<p>这里有一个容易混淆的地方：为什么有REST了还要用一个ROA呢？<strong>REST</strong>就是一个指导原则，只要满足REST原则，任何具体的设计都可以成为REST式架构。而<strong>ROA</strong>就是REST的一个具体的设计架构，可以称之为具体的架构。关于REST的设计原则请参考Roy Fielding的博士论文：《架构风格与基于网络的软件架构设计》及博客：<a href="http://www.infoq.com/cn/articles/understanding-restful-style" target="_blank" rel="external">理解本真的REST架构风格</a>。其中总结REST的架构的6个主要的特性如下：</p>
-<ul>
-<li><p>客户-服务器（Client-Server）<br>通信只能由客户端单方面发起，表现为请求-响应的形式。</p>
-</li>
-<li><p>无状态（Stateless）<br>通信的会话状态（Session State）应该全部由客户端负责维护。</p>
-</li>
-<li><p>缓存（Cache）<br>响应内容可以在通信链的某处被缓存，以改善网络效率。</p>
-</li>
-<li><p>统一接口（Uniform Interface）<br>通信链的组件之间通过统一的接口相互通信，以提高交互的可见性。</p>
-</li>
-<li><p>分层系统（Layered System）<br>通过限制组件的行为（即，每个组件只能“看到”与其交互的紧邻层），将架构分解为若干等级的层。</p>
-</li>
-<li><p>按需代码（Code-On-Demand，可选）<br>支持通过下载并执行一些代码（例如Java Applet、Flash或JavaScript），对客户端的功能进行扩展。</p>
-</li>
-</ul>
-<p>这些特性在介绍ROA的时候也会具体详细的介绍。<br>REST并不依赖于HTTP机制或URI结构，对于特定的服务来说比如Web服务来说明REST，则其具体的表现形式就是HTTP与URI，这些具体的架构形式就称之为ROA架构。如果一个REST式的服务不是基于Web的则可能不叫ROA,但是其遵循的原则都是一致的，只不过表现形式会有一些差别。</p>
-<h2 id="什么是资源">什么是资源</h2><p>这里的定义是：任何事物，只要具有被引用的必要，它就是一个资源(resource)。<br>资源的具体形式在计算机里就是体现为比特流的事物，如文档、数据库的记录、某程序的运行结果。</p>
-<h2 id="URIs">URIs</h2><p>在web里是什么令资源称得上为一个资源呢？那就是它必须至少有一个URI。URI既是资源的地址又是资源的名称，如果一则信息没有URI,那就不能称之为一个资源，而只能算是描述另一个资源的一些数据。<br>资源与URI的关系式：<br><strong>URI:资源——&gt; N:1</strong></p>
-<h2 id="可寻址性">可寻址性</h2><p><strong>ROA的第一个特性</strong>.这个很好理解，就是每个资源都有自己的URI,这个URI在一定时间内是固定不变的，在有效的时间内用户可以通过URI来找到该资源。</p>
-<h2 id="无状态性">无状态性</h2><p><strong>ROA的第二个特性</strong>.意味着每个HTTP请求都是完全孤立的。这个应该很好理解。<br>这里还有两个概念：<code>应用状态</code>和<code>资源状态</code>。应用状态是要保存到客户端的，资源状态是保存在服务端的。其实这两个状态是资源与客户端所拥有的资源的状态，每个资源之间是孤立的。</p>
-<h2 id="连通性">连通性</h2><p>这个特性是要求资源之间通过它们的表示彼此链接起来。这个特性主要是体现web的易用性。</p>
-<h2 id="统一接口">统一接口</h2><p>统一接口的意思就是要求对资源的操作要按照REST的要求进行，也就是特定的操作要使用对应的操作方法，而不是混乱的使用。<br>常用的HTTP方法已经介绍过了，但是有几点需要注意的是</p>
-<ul>
-<li><p>PUT与POST该用哪个？这个是很容易混淆的地方，一般来说POST表示的是增加新的资源，PUT表示修改已有的资源。但是还有下面几个原则：</p>
-<ul>
-<li>客户端负责决定新资源采用什么URI，就用PUT;服务器负责新资源采用什么URI,那就用POST。</li>
-<li>对现有资源进行追加信息的时候采用POST。</li>
-</ul>
-</li>
-<li><p>重载的POST不符合统一接口。<br>这点并不好理解。其实大部分的时候我们见到的都是这种：它们用POST向一个数据加工处理程序提供数据块（a block of data ）。其中一个最常见的例子就是form表单的提交。这种方法是通过单个HTTP方法表达无数个非HTTP方法。这种重载的POST不应该被用于掩饰拙略的资源设计，这个时候可以通过调整资源设计来做到统一接口。具体如何做，还要等了解再补充。</p>
-</li>
-</ul>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/restful-web-services/">restful web services</a>
-    </span>
-    
-
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="2013/12/04/restful-web-services-chapter4/#comment">评论</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
     <h3 class="article-title"><a href="/2013/11/29/restful-web-services-chapter3/"><span>chapter3:REST式服务有什么特别不同</span></a></h3>
     
   
@@ -494,6 +398,87 @@
         <i class="icon-comments"></i>
         <span>
           <a href="2013/11/26/restful-web-services-chapter0/#comment">评论</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2013/11/25/synchronous-asynchronous-blocking-non-blocking/"><span>同步与异步，阻塞与非阻塞</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2013/11/25/synchronous-asynchronous-blocking-non-blocking/" rel="bookmark">
+        <time class="entry-date published" datetime="2013-11-24T16:00:00.000Z">
+          2013-11-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p><em>同步异步及阻塞与非阻塞是在开发过程中经常遇到的名词，但是却经常容易混淆的名称，这里根据自己的理解对他们进行简要的介绍，以便自己能够清晰的记住他们之间的区别和联系</em></p>
+</blockquote>
+<p>说道同步与异步，阻塞与非阻塞这两个概念，我一直都很混淆，相信很多人也和我一样对它们之间的单个记起来很容易，但是放到一起的时候就晕了，这其实是对它们了解不清楚导致的。这里我根据自己的理解说下他们的本质区别：<br><strong>阻塞与非阻塞</strong>的区别就是一个进程在等待一个事情处理的时候能不能干其他的事情。<br>举个例子：假设一个进程为P,任务分为T1,T2,T3等。  </p>
+<ul>
+<li><strong>阻塞模式下</strong>：<br>P从T1开始执行,如果T1没有执行完返回则P一直在挂起状态，只有T1执行完了才重新唤醒P，执行T2任务。注意重点是：<code>这期间P只能等待，不能干其他的事情。</code>  </li>
+<li><strong>非阻塞模式下</strong>：<br>P从T1开始执行，这是不管T1有没有执行完毕都会返回一个结果，则P会继续执行其他任务，比如说T2,再执行T3等，也就是P不用关心所执行的任务是否执行完毕，只需要任务及时给出相应即可，这时如果T1执行完毕则会主动通知P，告诉P任务执行完了。可以看出P一直出去激活状态，不管是执行的一个任务还是多个任务，它不会因为一个任务没有执行完就等待。</li>
+</ul>
+<p><strong>异步与同步</strong>的区别就是进程在干多个事情的时候，这些事情是不是存在顺序关系。<br>举个例子：还是假设一个进程为P,任务分为T1,T2,T3等，每个任务又分为多个步骤，例如T1分为T1.1, T1.2, T1.3等步骤。  </p>
+<ul>
+<li><strong>同步模式下</strong>：<br>在同步模式下，任务的执行是有先后顺序之分的。比如T1，必须T1.1完了才能进行T1.2步骤，T1.2步骤完了才能进行T1.3步骤。所以当P执行T1的时候必须等T1.1执行完了才能执行T1.2,T1.3等任务。  </li>
+<li><strong>异步模式下</strong>：<br>异步模式是没有顺序之分的，P可以执行T1的步骤安装任何的顺序，因为这些步骤之间不存在依赖关系。  </li>
+</ul>
+<p>如果按照以上的理解(我得理解，如果有问题，恳请指出~)，我觉得其实他们之间的关系就可以分得很清楚了~ 下面再来看看他们的混合情况：</p>
+<ul>
+<li><strong>同步阻塞</strong>: 这个其实可以根据他们各自的定义来看，还以上面的为例。P执行T1三个阶段的任务以及T2,T3等任务，先执行T1.1,由于是同步所以，必须等T1.1执行完了才能继续往下进行，有由于是阻塞过程，所以在等待T1.1执行的过程中P是挂起的，T2,T3等任务必须处于等待状态。</li>
+<li><strong>同步非阻塞</strong>: 这个过程还是同步的。前面和同步阻塞一样，必须等T1.1执行完了才能执行T1.2和T1.3，但是T2和T3和T1并没有顺序关系，所以当等待T1.1执行的过程中，P可以继续执行T2和T3,这就是非阻塞。</li>
+<li><strong>异步阻塞</strong>:这个组合其实是不存在的。首先因为是异步的，也就是说P可以任意顺序执行T1,T2,T3，执行的过程中他们并不会相互等待，进程更不会挂起，所以没有这个组合。也有的说这个状态是存在的，因为执行T的过程虽然可以同时进行，但是等待消息的过程是可以是阻塞的，也就是任务同时发出，等待任务结果的这段时间进程是处于挂起状态的，我觉得这其实跟你执行的任务多少以及任务的执行时间是密切关联的，如果同时发出很多任务，而任务需要执行很长时间，那么应该有一段时间进程是挂起的，但是纵观整个过程来看，这样说并不合适，所以我认为不存在这种状态。</li>
+<li><strong>异步非阻塞</strong>: 异步非阻塞是执行效率最高的模式，一个进程可以同时发出很多任务，比如说T1,T2,T3等,而它们之间并无顺序关系，那个任务先执行完就可以先进行回调，执行其它任务。这样P的利用率就可以达到最大。</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/computer-system/">computer system</a>
+    </span>
+    
+
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="2013/11/25/synchronous-asynchronous-blocking-non-blocking/#comment">评论</a>
         </span>
       </span>
     </div>
