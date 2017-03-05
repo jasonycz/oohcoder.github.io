@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="产生文本摘要和高亮函数原型:function BuildExcerpts ( $docs, $index, $words, $opts=array() )
+相关文档:(官方文档)该函数用来产生文档片段（摘要）。连接到searchd，要求它从指定文档中产生片段（摘要），对命中词高亮，并返回结果。  
+
+$docs为包含各文档内容的数组。必须把需要高亮的文本内容以数组的形式传入到函数中，最后输出的是标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="coreseek使用手册">
+<meta property="og:url" content="http://oohcode.com/2014/07/05/coreseek-manual/index.html">
+<meta property="og:site_name" content="OohCode">
+<meta property="og:description" content="产生文本摘要和高亮函数原型:function BuildExcerpts ( $docs, $index, $words, $opts=array() )
+相关文档:(官方文档)该函数用来产生文档片段（摘要）。连接到searchd，要求它从指定文档中产生片段（摘要），对命中词高亮，并返回结果。  
+
+$docs为包含各文档内容的数组。必须把需要高亮的文本内容以数组的形式传入到函数中，最后输出的是标">
+<meta property="og:updated_time" content="2017-03-05T08:25:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="coreseek使用手册">
+<meta name="twitter:description" content="产生文本摘要和高亮函数原型:function BuildExcerpts ( $docs, $index, $words, $opts=array() )
+相关文档:(官方文档)该函数用来产生文档片段（摘要）。连接到searchd，要求它从指定文档中产生片段（摘要），对命中词高亮，并返回结果。  
+
+$docs为包含各文档内容的数组。必须把需要高亮的文本内容以数组的形式传入到函数中，最后输出的是标">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> coreseek使用手册 | OohCode </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">OohCode</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好奇的码农~</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                coreseek使用手册
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2014-07-05T00:00:00+08:00" content="2014-07-05">
+              2014-07-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coreseek/" itemprop="url" rel="index">
+                    <span itemprop="name">coreseek</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/07/05/coreseek-manual/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/05/coreseek-manual/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="产生文本摘要和高亮">产生文本摘要和高亮</h2><h3 id="函数原型:">函数原型:</h3><p><code>function BuildExcerpts ( $docs, $index, $words, $opts=array() )</code></p>
+<h3 id="相关文档:">相关文档:</h3><p>(<a href="http://www.coreseek.cn/docs/coreseek_4.1-sphinx_2.0.1-beta.html#api-func-buildexcerpts" target="_blank" rel="external">官方文档</a>)<br>该函数用来产生文档片段（摘要）。连接到searchd，要求它从指定文档中产生片段（摘要），对命中词高亮，并返回结果。  </p>
+<ul>
+<li><code>$docs</code>为包含各文档内容的数组。必须把需要高亮的文本内容以数组的形式传入到函数中，最后输出的是标红后的文本摘要数组。</li>
+<li><code>$index</code>为包含索引名字的字符串。给定索引的不同设置（例如字符集、形态学、词形等方面的设置）会被使用。</li>
+<li><code>$words</code>为包含需要高亮的关键字的字符串。它们会按索引的设置被处理。例如，如果英语取词干（stemming）在索引中被设置为允许，那么即使关键词是“shoe”，“shoes”这个词也会被高亮。从版本0.9.9-rc1开始，关键字可以包含通配符，与查询支持的star-syntax类似。</li>
+<li><p><code>$opts</code>为包含其他可选的高亮参数的hash表：</p>
+<ul>
+<li><code>&quot;before_match&quot;</code>:在匹配的关键字前面插入的字符串。从版本 1.10-beta开始，可以在该字符串中使用%PASSAGE_ID%宏。该宏会被替换为当前片段的递增值。递增值的起始值默认为1，但是可以通过</li>
+<li><code>&quot;start_passage_id&quot;</code>设置覆盖。在多文档中调用时，%PASSAGE_ID%会在每篇文档中重新开始。默认为”<b>“。</b></li>
+<li><code>&quot;after_match&quot;</code>:在匹配的关键字后面插入的字符串。从版本1.10-beta开始，可以在该字符串中使用%PASSAGE_ID%宏。默认为 ““。</li>
+<li><code>&quot;chunk_separator&quot;</code>:在摘要块（段落）之间插入的字符串。默认为” … “.</li>
+<li><code>&quot;limit&quot;</code>:摘要最多包含的符号（码点）数。整数，默认为256。</li>
+<li><code>&quot;around&quot;</code>:每个关键词块左右选取的词的数目。整数，默认为 5.</li>
+<li><code>&quot;exact_phrase&quot;</code>:是否仅高亮精确匹配的整个查询词组，而不是单独的关键词。布尔值，默认为false.</li>
+<li><code>&quot;single_passage&quot;</code>:是否仅抽取最佳的一个区块。布尔值，默认为false.</li>
+<li><code>&quot;use_boundaries&quot;</code>:是否跨越由phrase_boundary选项设置的词组边界符。布尔型，默认为false.</li>
+<li><code>&quot;weight_order&quot;</code>:对于抽取出的段落，要么根据相关度排序（权重下降），要么根据出现在文档中的顺序（位置递增）。布尔型，默认是false.</li>
+<li><code>&quot;query_mode&quot;</code>:版本1.10-beta新增。设置将<code>$words</code>当作 扩展查询语法的查询处理，还是当做普通的文本字符串处理（默认行为）。例如，在查询模式时，(“one two” | “three four”)仅高亮和包含每个片段中出现”one two” 或 “three four” 的地方及相邻的部分。而在默认模式时， 每个单独出现”one”, “two”, “three”, 或 “four”的地方都会高亮。布尔型，默认是false。</li>
+<li><code>&quot;force_all_words&quot;</code>:版本1.10-beta新增. 忽略摘要的长度限制直至包含所有的词汇。布尔型，默认为false.</li>
+<li><code>&quot;limit_passages&quot;</code>:版本1.10-beta新增. 限制摘要中可以包含的最大区块数。整数值，默认为 0 (不限制).</li>
+<li><code>&quot;limit_words&quot;</code>:版本1.10-beta新增. 限制摘要中可以包含的最大词汇数。整数值，默认为 0 (不限制).</li>
+<li><code>&quot;start_passage_id&quot;</code>:版本1.10-beta新增. 设置 %PASSAGE_ID% 宏的起始值 (在before_match, after_match 字符串中检查和应用). 整数值，默认为1.</li>
+<li><code>&quot;load_files&quot;</code>:版本1.10-beta新增. 设置是否将$docs作为摘要抽取来源的数据（默认行为），或者将其当做文件名。从版本2.0.1-beta开始，如果该标志启用，每个请求将创建最多dist_threads个工作线程进行并发处理。布尔型，默认为false.</li>
+<li><code>&quot;html_strip_mode&quot;</code>:版本1.10-beta新增. HTML标签剥离模式设置。默认为”index”，表示使用index的设置。可以使用的其他值为”none”和”strip”，用于强制跳过或者应用剥离，而不管索引如何设置的。还可以使用”retain”，表示保留HTMK标签并防止高亮时打断标签。”retain”模式仅用于需要高亮整篇文档，并且不能设置限制片段的大小。字符型，可用值为”none”，”strip”，”index”或者”retain”。</li>
+<li><code>&quot;allow_empty&quot;</code>:版本1.10-beta新增. 允许无法产生摘要时将空字符串作为高亮结果返回 (没有关键字匹配或者不符合片段限制。). 默认情况下，原始文本的开头会被返回而不是空字符串。布尔型，默认为false.</li>
+<li><p><code>&quot;passage_boundary&quot;</code>:版本2.0.1-beta新增. 确保区块不跨越句子，段落或者zone区域（仅当每个索引的设置启用时有效）。字符型，可用值为 “sentence”, “paragraph”, 或者 “zone”.”emit_zones”:版本2.0.1-beta新增. 在每个区块前使用区域对应的HTML标签来封闭区域。布尔型，魔默认为false。</p>
+<p>摘要提取算法倾向于提取更好的片段（与关键词完全匹配），然后是不在摘要中但是包含了关键词的片段。 通常情况下，它会尝试高亮查询的最佳匹配，并且在限制条件下尽可能的高亮查询中的所有关键词。 如果文档没有匹配查询，默认情况下将根据限制条件返回文档的头部。从版本1.10-beta开始，可以通过设置allow_empty属性位true以返回空的片段来替代默认方式。<br>失败时返回false。成功时返回包含有片段（摘要）字符串的数组。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用方法">使用方法</h3><p>代码片段：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;//...&#30053;&#10;include(&#34;SphinxClient.php&#34;);&#10;class test&#123;&#10;&#10;&#10;    protected function make_words_highLight($source,$kw)&#123;&#10;&#10;&#10;        $cll = new SphinxClient ();&#10;        $opts = array&#10;            (&#10;                &#34;before_match&#34;      =&#62; &#34;&#60;span style=&#39;color:red&#39;&#62;&#34;,&#10;                &#34;after_match&#34;          =&#62; &#34;&#60;/span&#62;&#34;,&#10;                &#34;chunk_separator&#34;     =&#62; &#34; ... &#34;,&#10;                &#34;limit&#34;                =&#62; 10,&#10;                &#34;around&#34;               =&#62; 6,&#10;            );&#10;        $index = &#34;test1&#34;;&#10;        return $cll-&#62;BuildExcerpts($source,$index,$kw,$opts);&#10;    &#125;&#10;&#10;&#10;    //test&#10;    public function test()&#123;&#10;        $content = array(&#34;&#21271;&#20140;&#26159;&#20013;&#21326;&#20154;&#27665;&#20849;&#21644;&#22269;&#30340;&#39318;&#37117;&#34;,&#34;&#20013;&#22269;&#30340;&#39318;&#37117;&#26159;&#21271;&#20140;&#65292;2008&#22885;&#36816;&#20250;&#23601;&#22312;&#36825;&#37324;&#20030;&#21150;&#30340;&#34;,&#34;&#20140;&#19996;&#32769;&#26495;&#21016;&#24378;&#19996;&#34;);&#10;        $qsKey = &#34;&#21271;&#20140; &#19996;&#34;;&#10;        $contentArr = $this-&#62;make_words_highLight($content,$qsKey);&#10;        print_r($contentArr);die;&#10;    &#125;&#10;&#125;&#10;&#10;$m = new test();&#10;$m-&#62;test();&#10;&#10;?&#62;&#10;//&#36755;&#20986;&#32467;&#26524;&#10;Array&#10;(&#10;    [0] =&#62; &#60;span style=&#39;color:red&#39;&#62;&#21271;&#20140;&#60;/span&#62;&#26159;&#20013;&#21326;&#20154;&#27665;&#20849;&#21644;&#22269; ... &#10;    [1] =&#62;  ... &#39318;&#37117;&#26159;&#60;span style=&#39;color:red&#39;&#62;&#21271;&#20140;&#60;/span&#62;&#65292;2008 ... &#10;    [2] =&#62; &#20140;&#19996;&#32769;&#26495;&#21016;&#24378;&#60;span style=&#39;color:red&#39;&#62;&#19996;&#60;/span&#62;&#10;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="mmseg_同义词/复合分词处理">mmseg 同义词/复合分词处理</h2><h3 id="文档(官方文档)">文档(<a href="http://www.coreseek.cn/opensource/mmseg/#coreseek_mmseg_complex" target="_blank" rel="external">官方文档</a>)</h3><p>mmseg 3.2.13版本开始，提供了类似复合分词的处理方式，供coreseek进行调用。<br>其基本使用状况为：</p>
+<ul>
+<li>词库包含：<code>南京西路、南京、西路</code>(注意，一定要加入生成uni.lib的词库中)</li>
+<li>索引时：文本中的“南京西路”会被同时索引为以上三者查</li>
+<li>查询时：输入南京西路，可以直接匹配南京西路，而不匹配南京或者西路；输入南京或者西路，也可以搜索到南京西路</li>
+</ul>
+<p>用法：</p>
+<ol>
+<li>处理<code>unigram.txt</code>(在<code>mmseg3/etc</code>目录下)将词库加入，利用命令<code>mmseg -u unigram.txt</code> 生成新的词库<code>unigram.txt.uni</code>,用新的词库替代老词库<code>mv unigram.txt.uni uni.lib</code>(ps:被替换的同义词必须加入词库中，例如想让一个没有的词<code>测试</code>映射同义词<code>南京西路</code>则需要<code>南京西路</code>在词库中,<code>测试</code>不需要加入).</li>
+<li><p>生成同义词库文件mmseg-3.2.13源代码<code>/script/build_thesaurus.py unigram.txt &gt; thesaurus.txt</code>(默认的同义词库，可自己修改).<br><code>thesaurus.txt</code>文件的格式如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#21335;&#20140;&#35199;&#36335;&#10;-&#21335;&#20140;,&#35199;&#36335;,&#10;&#24352;&#19977;&#20016;&#10;-&#22826;&#26497;&#23447;&#24072;,&#27494;&#24403;&#31062;&#24072;,</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成同义词词典:<code>mmseg -t thesaurus.txt</code>. 将<code>thesaurus.lib</code>放到<code>uni.lib</code>同一目录</p>
+</li>
+<li>停止索引服务searchd，重新建立索引，然后启动searchd (ps : 如果只是加入了新的同义词映射，没有修改词表的话不需要重启服务，只需重建索引即可)</li>
+<li>coreseek索引和搜索时，会自动进行复合分词处理。搜索<code>南京</code>，<code>西路</code>时都能将搜索<code>南京西路</code>的结果匹配到</li>
+</ol>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/26/csapp-chapter8/" rel="next" title="csapp chapter8:异常控制流">
+                <i class="fa fa-chevron-left"></i> csapp chapter8:异常控制流
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/07/gdb-manual/" rel="prev" title="GDB使用手册">
+                GDB使用手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/07/05/coreseek-manual/"
+           data-title="coreseek使用手册" data-url="http://oohcode.com/2014/07/05/coreseek-manual/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="sean chen" />
+          <p class="site-author-name" itemprop="name">sean chen</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分類</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">標籤</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://oohcode.com/" target="_blank">OohCode</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#产生文本摘要和高亮"><span class="nav-number">1.</span> <span class="nav-text">产生文本摘要和高亮</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数原型:"><span class="nav-number">1.1.</span> <span class="nav-text">函数原型:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关文档:"><span class="nav-number">1.2.</span> <span class="nav-text">相关文档:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方法"><span class="nav-number">1.3.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmseg_同义词/复合分词处理"><span class="nav-number">2.</span> <span class="nav-text">mmseg 同义词/复合分词处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档(官方文档)"><span class="nav-number">2.1.</span> <span class="nav-text">文档(官方文档)</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sean chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
