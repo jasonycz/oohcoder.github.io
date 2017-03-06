@@ -89,14 +89,14 @@
 
 <meta name="description" content="了解GC的基本算法后，还需要了解各种改进的GC算法，这些算法是在之前的基础上进行扩展和组合的。主要包括GC标记-压缩算法, 保守式GC, 分代垃圾回收， 增量式垃圾回收和RC Immix算法等。
 
-1. GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提">
+GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提到的标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="垃圾回收进阶算法">
 <meta property="og:url" content="http://oohcode.com/2017/02/03/gc-advanced/index.html">
 <meta property="og:site_name" content="OohCode">
 <meta property="og:description" content="了解GC的基本算法后，还需要了解各种改进的GC算法，这些算法是在之前的基础上进行扩展和组合的。主要包括GC标记-压缩算法, 保守式GC, 分代垃圾回收， 增量式垃圾回收和RC Immix算法等。
 
-1. GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提">
+GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提到的标">
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/gc_mc_list2_1.png">
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/gc_mc_list2_2.png">
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/gc_mc_list2_3.png">
@@ -108,12 +108,12 @@
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/gc_handle_1.png">
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/gc_handle_2.png">
 <meta property="og:image" content="http://oohcode.com/assets/img/gc/train_gc_1.png">
-<meta property="og:updated_time" content="2017-03-05T08:25:42.000Z">
+<meta property="og:updated_time" content="2017-03-06T11:11:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="垃圾回收进阶算法">
 <meta name="twitter:description" content="了解GC的基本算法后，还需要了解各种改进的GC算法，这些算法是在之前的基础上进行扩展和组合的。主要包括GC标记-压缩算法, 保守式GC, 分代垃圾回收， 增量式垃圾回收和RC Immix算法等。
 
-1. GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提">
+GC标记-压缩算法GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提到的标">
 
 
 
@@ -361,7 +361,7 @@
         <blockquote>
 <p>了解GC的基本算法后，还需要了解各种改进的GC算法，这些算法是在之前的基础上进行扩展和组合的。主要包括<code>GC标记-压缩算法</code>, <code>保守式GC</code>, <code>分代垃圾回收</code>， <code>增量式垃圾回收</code>和<code>RC Immix算法</code>等。</p>
 </blockquote>
-<h2 id="1-_GC标记-压缩算法">1. GC标记-压缩算法</h2><p>GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提到的标记阶段一样。接下来需要搜索数次的堆来进行压缩。压缩阶段通过数次搜索堆来重新装填活动对象。</p>
+<h2 id="GC标记-压缩算法">GC标记-压缩算法</h2><p>GC标记-压缩算法(Mark Compact GC)是将GC标记-清除算法与GC复制算法相结合的产物。 GC标记-压缩算法由标记阶段和压缩阶段构成。标记阶段和GC标记-清除算法提到的标记阶段一样。接下来需要搜索数次的堆来进行压缩。压缩阶段通过数次搜索堆来重新装填活动对象。</p>
 <h3 id="Lisp2算法">Lisp2算法</h3><p>标记阶段的代码就不重复了，这里主要看压缩阶段的代码，下面可以看出压缩阶段主要分为三个步骤:</p>
 <ol>
 <li>第一步是<code>set_forwarding_ptr</code>, 主要是按顺序遍历堆内的活动对象，每个活动对象的<code>forwarding</code>指针指向的是以后这个活动对象需要移动到的位置。</li>
@@ -401,8 +401,8 @@
 <p>上面的<code>new_address</code>函数比较难理解，就是需要从多个间隙表格中找到活动对象群所对应的，然后利用obj-best_entry.size 就返回节点对应的新地址。</p>
 <p>优点: 首先内存利用率和Two-Finger一样，但是由于是保持了原来的顺序，所以可以利用缓存。<br>缺点: 每次移动都要进行表格的移动和更新，代价比较高。</p>
 <h3 id="ImmixGC_算法">ImmixGC 算法</h3><p>暂略……</p>
-<h2 id="2-_保守式GC">2. 保守式GC</h2><p>前面提到过GC是根据对象的指针指向去搜寻其他对象的。另一方面，GC对非指针不进行任何操作。另外可以认为调用栈、寄存器以及全局变量空间都是根。对于上面存在一个问题就是: <strong>如何识别一个变量是否是指针?</strong> 这里所说的<strong>保守式GC</strong>就是指”不能识别指针和非指针的GC”, 而<strong>准确式GC</strong>指的就是能够正确识别指针和非指针的GC。</p>
-<h3 id="保守式GC">保守式GC</h3><p>之前说的下面这些空间都是根:</p>
+<h2 id="保守式GC">保守式GC</h2><p>前面提到过GC是根据对象的指针指向去搜寻其他对象的。另一方面，GC对非指针不进行任何操作。另外可以认为调用栈、寄存器以及全局变量空间都是根。对于上面存在一个问题就是: <strong>如何识别一个变量是否是指针?</strong> 这里所说的<strong>保守式GC</strong>就是指”不能识别指针和非指针的GC”, 而<strong>准确式GC</strong>指的就是能够正确识别指针和非指针的GC。</p>
+<h3 id="保守式GC-1">保守式GC</h3><p>之前说的下面这些空间都是根:</p>
 <ul>
 <li>寄存器</li>
 <li>调用栈</li>
@@ -446,8 +446,8 @@
 <li>没有子对象的对象</li>
 </ul>
 <p>这样及时错误识别了，对整个堆的影响也不大，把对堆的压迫控制在最低限度。</p>
-<h2 id="3-_分代垃圾回收">3. 分代垃圾回收</h2><p>分代垃圾回收(Generational GC)把对象按“年龄”进行分类，使用不同的GC算法, 提高垃圾回收的效率。<strong>年龄</strong>的概念就是指对象的生存时间，经历一次GC后活下来的对象年龄就是1，依次类推。 新生成的对象和年龄小于一定值得对象都称为<strong>新生代对象</strong>, 年龄大于一定值得对象则称为<strong>老年代对象</strong>, 这就是所谓的分代。新生代对象经历一定GC后会变成老年代对象，这个过程就叫<strong>晋升(promotion)</strong>。</p>
-<h4 id="Ungar_的分代垃圾回收">Ungar 的分代垃圾回收</h4><p>Ungar 的垃圾回收是针对新生代执行GC复制算法，针对老年代执行标记-清除算法。Ungar 将堆结构分为四个部分，分别是生成空间、2个大小相等的幸存空间以及老年代空间，并分别用<code>$new_start</code>、<code>$survivor1_start</code>、<code>$survivor2_start</code>、<code>$old_start</code>这4个变量引用它们的开头。将生成空间和幸存空间合称为新生代空间。<br>当生成空间满了的时候，新生代GC就会启动，将生成空间的所有活动对象复制，这根GC复制算法是一个道理。目标空间是幸存空间中空闲的一个。</p>
+<h2 id="分代垃圾回收">分代垃圾回收</h2><p>分代垃圾回收(Generational GC)把对象按“年龄”进行分类，使用不同的GC算法, 提高垃圾回收的效率。<strong>年龄</strong>的概念就是指对象的生存时间，经历一次GC后活下来的对象年龄就是1，依次类推。 新生成的对象和年龄小于一定值得对象都称为<strong>新生代对象</strong>, 年龄大于一定值得对象则称为<strong>老年代对象</strong>, 这就是所谓的分代。新生代对象经历一定GC后会变成老年代对象，这个过程就叫<strong>晋升(promotion)</strong>。</p>
+<h3 id="Ungar_的分代垃圾回收">Ungar 的分代垃圾回收</h3><p>Ungar 的垃圾回收是针对新生代执行GC复制算法，针对老年代执行标记-清除算法。Ungar 将堆结构分为四个部分，分别是生成空间、2个大小相等的幸存空间以及老年代空间，并分别用<code>$new_start</code>、<code>$survivor1_start</code>、<code>$survivor2_start</code>、<code>$old_start</code>这4个变量引用它们的开头。将生成空间和幸存空间合称为新生代空间。<br>当生成空间满了的时候，新生代GC就会启动，将生成空间的所有活动对象复制，这根GC复制算法是一个道理。目标空间是幸存空间中空闲的一个。</p>
 <pre>
       记 录 集
     +---+---+---+---+
@@ -482,7 +482,7 @@ $rs |   |   |   |   |
 <li>优点: 缩减了老年代GC照成的mutator的最大暂停时间。还能回收循环的大型垃圾。</li>
 <li>缺点: 执行写入屏障的额外负担要比Ungar的分代垃圾回收中执行时所产生的更大，因此吞吐量上要弱一些。</li>
 </ul>
-<h2 id="4-_增量式垃圾回收">4. 增量式垃圾回收</h2><p>增量式垃圾回收(Incremental GC)是一种通过逐渐推进垃圾回收来控制mutator最大暂停时间的方法。之前介绍的GC算法，一旦GC开始执行，mutator就没有办法执行了，像这样的GC叫做听执行GC。为了改变这种方式，想出了一种GC和mutator交替运行的方式，这就是增量垃圾回收。</p>
+<h2 id="增量式垃圾回收">增量式垃圾回收</h2><p>增量式垃圾回收(Incremental GC)是一种通过逐渐推进垃圾回收来控制mutator最大暂停时间的方法。之前介绍的GC算法，一旦GC开始执行，mutator就没有办法执行了，像这样的GC叫做听执行GC。为了改变这种方式，想出了一种GC和mutator交替运行的方式，这就是增量垃圾回收。</p>
 <h3 id="三色标记算法">三色标记算法</h3><p>这个算法将GC中的对象按照各自情况分成三种:</p>
 <ul>
 <li>白色: 还未搜索过的对象</li>
@@ -508,7 +508,7 @@ $rs |   |   |   |   |
 <h3 id="汤浅的算法">汤浅的算法</h3><p>汤浅的算法中标记阶段并没有在搜索根，遵循了”以GC开始时对象间的引用关系为基础执行GC”这项原则。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">incremental_mark_phase() &#123;</span><br><span class="line">    <span class="keyword">for</span>(i : <span class="number">1.</span>.MARK_MAX)</span><br><span class="line">        <span class="keyword">if</span>(is_empty($mark_stack) == FALSE)</span><br><span class="line">            obj = pop($mark_stack)</span><br><span class="line">            <span class="keyword">for</span>(child : children(obj))</span><br><span class="line">                mark(*child)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        $gc_phrase = GC_SWEEP</span><br><span class="line">        $sweeping = $heap_start</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上面通过写入屏障防止产生从黑色对象指向白色对象的指针，而汤浅的算法中却允许黑色对象指向白色对象的指针。汤浅算法是基于在GC开始时保留活动对象这项原则，就没有必要在生成新指针时标记引用对象的目标了。及时出现了从黑色对象指向白色对象的指针，只要保留了GC开始时的指针，作为引用目标的白色对象早晚会被标记。但是在删除指针时无法保留指针，因此写入屏障要进行一些特殊处理:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">write_barrier(obj, field, newobj) &#123;</span><br><span class="line">    oldobj = *field</span><br><span class="line">    <span class="comment">#在标记阶段中如果指针更新前引用的oldobj是白色对象，就将其涂成灰色</span></span><br><span class="line">    <span class="keyword">if</span>(gc_phase == GC_MARK &amp;&amp; oldobj.mark == FALSE)</span><br><span class="line">        oldobj.mark = TRUE</span><br><span class="line">        push(oldobj, $mark_stack)</span><br><span class="line"></span><br><span class="line">    *field = newobj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#分配</span></span><br><span class="line">newobj(size) &#123;</span><br><span class="line">    <span class="keyword">if</span>($free_size &lt; HEAP_SIZE  * GC_THRESHOLD)</span><br><span class="line">        incremental_gc()</span><br><span class="line"></span><br><span class="line">    chunk = pickup_chunk(size, $free_list)</span><br><span class="line">    <span class="keyword">if</span>(chunk != NULL)</span><br><span class="line">        chunk.size = size</span><br><span class="line">        $free_size -= size</span><br><span class="line">        <span class="comment">#这里跟之前不一样，分配后会设置obj为黑色</span></span><br><span class="line">        <span class="keyword">if</span>($gc_phase == GC_MARK)</span><br><span class="line">            chunk.mark = TRUE</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>($gc_phase == GC_SWEEP &amp;&amp; $sweeping &lt;= chunk)</span><br><span class="line">            chunk.mark = TRUE</span><br><span class="line">        <span class="keyword">return</span> chunk</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        allocation_fail()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="5-_RC_Immix算法">5. RC Immix算法</h2>
+<h2 id="RC_Immix算法">RC Immix算法</h2>
       
     </div>
 
@@ -703,7 +703,7 @@ $rs |   |   |   |   |
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_GC标记-压缩算法"><span class="nav-number">1.</span> <span class="nav-text">1. GC标记-压缩算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lisp2算法"><span class="nav-number">1.1.</span> <span class="nav-text">Lisp2算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Finger算法"><span class="nav-number">1.2.</span> <span class="nav-text">Two-Finger算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表格算法"><span class="nav-number">1.3.</span> <span class="nav-text">表格算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ImmixGC_算法"><span class="nav-number">1.4.</span> <span class="nav-text">ImmixGC 算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_保守式GC"><span class="nav-number">2.</span> <span class="nav-text">2. 保守式GC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#保守式GC"><span class="nav-number">2.1.</span> <span class="nav-text">保守式GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准确式GC"><span class="nav-number">2.2.</span> <span class="nav-text">准确式GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#间接引用"><span class="nav-number">2.3.</span> <span class="nav-text">间接引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MostlyCopyingGC"><span class="nav-number">2.4.</span> <span class="nav-text">MostlyCopyingGC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#黑名单"><span class="nav-number">2.5.</span> <span class="nav-text">黑名单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_分代垃圾回收"><span class="nav-number">3.</span> <span class="nav-text">3. 分代垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ungar_的分代垃圾回收"><span class="nav-number">3.0.1.</span> <span class="nav-text">Ungar 的分代垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录各代之间的引用的方法"><span class="nav-number">3.1.</span> <span class="nav-text">记录各代之间的引用的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多代垃圾回收"><span class="nav-number">3.2.</span> <span class="nav-text">多代垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列车垃圾回收"><span class="nav-number">3.3.</span> <span class="nav-text">列车垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_增量式垃圾回收"><span class="nav-number">4.</span> <span class="nav-text">4. 增量式垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三色标记算法"><span class="nav-number">4.1.</span> <span class="nav-text">三色标记算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Steele的算法"><span class="nav-number">4.2.</span> <span class="nav-text">Steele的算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汤浅的算法"><span class="nav-number">4.3.</span> <span class="nav-text">汤浅的算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_RC_Immix算法"><span class="nav-number">5.</span> <span class="nav-text">5. RC Immix算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC标记-压缩算法"><span class="nav-number">1.</span> <span class="nav-text">GC标记-压缩算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lisp2算法"><span class="nav-number">1.1.</span> <span class="nav-text">Lisp2算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Finger算法"><span class="nav-number">1.2.</span> <span class="nav-text">Two-Finger算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表格算法"><span class="nav-number">1.3.</span> <span class="nav-text">表格算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ImmixGC_算法"><span class="nav-number">1.4.</span> <span class="nav-text">ImmixGC 算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保守式GC"><span class="nav-number">2.</span> <span class="nav-text">保守式GC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#保守式GC-1"><span class="nav-number">2.1.</span> <span class="nav-text">保守式GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准确式GC"><span class="nav-number">2.2.</span> <span class="nav-text">准确式GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#间接引用"><span class="nav-number">2.3.</span> <span class="nav-text">间接引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MostlyCopyingGC"><span class="nav-number">2.4.</span> <span class="nav-text">MostlyCopyingGC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#黑名单"><span class="nav-number">2.5.</span> <span class="nav-text">黑名单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分代垃圾回收"><span class="nav-number">3.</span> <span class="nav-text">分代垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ungar_的分代垃圾回收"><span class="nav-number">3.1.</span> <span class="nav-text">Ungar 的分代垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录各代之间的引用的方法"><span class="nav-number">3.2.</span> <span class="nav-text">记录各代之间的引用的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多代垃圾回收"><span class="nav-number">3.3.</span> <span class="nav-text">多代垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列车垃圾回收"><span class="nav-number">3.4.</span> <span class="nav-text">列车垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增量式垃圾回收"><span class="nav-number">4.</span> <span class="nav-text">增量式垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三色标记算法"><span class="nav-number">4.1.</span> <span class="nav-text">三色标记算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Steele的算法"><span class="nav-number">4.2.</span> <span class="nav-text">Steele的算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汤浅的算法"><span class="nav-number">4.3.</span> <span class="nav-text">汤浅的算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RC_Immix算法"><span class="nav-number">5.</span> <span class="nav-text">RC Immix算法</span></a></li></ol></div>
             
 
           </div>
