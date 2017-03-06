@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="数据库一个Redis Server可以有多个Redis数据库，这点类似于MySQL, 从Redis Server的源代码中可以看到,redisDb是Server数据库的指针，指向一个数据库组成的数组，而数据库的数量则由dbnum属性来表示。客户端可以通过SELECT命令选择当前要操作的数据库。123456789101112struct redisServer &amp;#123;    // ...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis设计与实现总结——单机数据库的实现">
+<meta property="og:url" content="http://oohcode.com/2017/03/05/The-Design-and-Implementation-of-Redis-2/index.html">
+<meta property="og:site_name" content="OohCode">
+<meta property="og:description" content="数据库一个Redis Server可以有多个Redis数据库，这点类似于MySQL, 从Redis Server的源代码中可以看到,redisDb是Server数据库的指针，指向一个数据库组成的数组，而数据库的数量则由dbnum属性来表示。客户端可以通过SELECT命令选择当前要操作的数据库。123456789101112struct redisServer &amp;#123;    // ...">
+<meta property="og:image" content="http://oohcode.com/assets/img/redis/redis_db.png">
+<meta property="og:image" content="http://oohcode.com/assets/img/redis/redis_fileevent.png">
+<meta property="og:updated_time" content="2017-03-06T02:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis设计与实现总结——单机数据库的实现">
+<meta name="twitter:description" content="数据库一个Redis Server可以有多个Redis数据库，这点类似于MySQL, 从Redis Server的源代码中可以看到,redisDb是Server数据库的指针，指向一个数据库组成的数组，而数据库的数量则由dbnum属性来表示。客户端可以通过SELECT命令选择当前要操作的数据库。123456789101112struct redisServer &amp;#123;    // ...">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://oohcode.com/2017/03/05/The-Design-and-Implementation-of-Redis-2/"/>
+
+
+
+
+
+  <title> Redis设计与实现总结——单机数据库的实现 | OohCode </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ff57a54669822e272487fab2dbca85ef";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OohCode</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好奇的码农~</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://oohcode.com/2017/03/05/The-Design-and-Implementation-of-Redis-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sean chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OohCode">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis设计与实现总结——单机数据库的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-05T19:02:37+08:00">
+                2017-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/05/The-Design-and-Implementation-of-Redis-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/05/The-Design-and-Implementation-of-Redis-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="数据库">数据库</h2><p>一个Redis Server可以有多个Redis数据库，这点类似于MySQL, 从Redis Server的源代码中可以看到,<code>redisDb</code>是Server数据库的指针，指向一个数据库组成的数组，而数据库的数量则由<code>dbnum</code>属性来表示。客户端可以通过<code>SELECT</code>命令选择当前要操作的数据库。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> redisServer &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数据库数组指针</span></span><br><span class="line">    redisDb *db;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 服务器的数据库数量</span></span><br><span class="line">    <span class="keyword">int</span> dbnum;                      </span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>数据库的定义在<code>redis.h/redisDb</code>中，定义如下:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> redisDb &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数据库键空间，保存着数据库中的所有键值对</span></span><br><span class="line">    dict *dict;                 <span class="comment">/* The keyspace for this DB */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 键的过期时间，字典的键为键，字典的值为过期事件 UNIX 时间戳</span></span><br><span class="line">    dict *expires;              <span class="comment">/* Timeout of keys with a timeout set */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正处于阻塞状态的键</span></span><br><span class="line">    dict *blocking_keys;        <span class="comment">/* Keys with clients waiting for data (BLPOP) */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以解除阻塞的键</span></span><br><span class="line">    dict *ready_keys;           <span class="comment">/* Blocked keys that received a PUSH */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正在被 WATCH 命令监视的键</span></span><br><span class="line">    dict *watched_keys;         <span class="comment">/* WATCHED keys for MULTI/EXEC CAS */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> evictionPoolEntry *eviction_pool;    <span class="comment">/* Eviction pool of keys */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数据库号码</span></span><br><span class="line">    <span class="keyword">int</span> id;                     <span class="comment">/* Database ID */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数据库的键的平均 TTL ，统计信息</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> avg_ttl;          <span class="comment">/* Average TTL, just for stats */</span></span><br><span class="line"></span><br><span class="line">&#125; redisDb;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>dict</code>: 是一个字典，保存了数据库中的所有键值对，我们将这个字典称为键空间(key space)。</li>
+<li><code>expires</code>: 也是一个字典，保存的是键值与这个键值过期时间的键值对。</li>
+</ul>
+<p>一个简化的结构图如下:<br><img src="/assets/img/redis/redis_db.png" alt="db结构"><br>设置生存时间和过期时间时，最终都是计算出最后生存时间，然后把这个值存入<code>expires</code>字典中。过期字典中找不到证明没有设置过期时间。过期删除策略Redis主要是使用惰性删除策略与定期删除两种策略。所谓惰性删除策略就是当用户获取键时，先判断其是否过期，如果过期则删除键，返回失败，如果没过期则正常返回。定期删除策略是Redis会周期行的从过期字典中随机出一部分键值，如果过期则删除键，否则保留。</p>
+<h2 id="持久化">持久化</h2><h3 id="RDB持久化">RDB持久化</h3><p>RDB(redis database)持久化既可以手动执行，也可以根据服务器配置选项定期执行，该功能可以将某个时间点上的数据库状态保存到一个RDB文件中(RDB文件默认的文件名为<code>dump.rdb</code>)。RDB持久化功能锁生成的RDB文件是一个经过压缩的二进制文件，通过该文件还可以还原生成RDB文件时的数据库状态。<br>有两个Redis命令可以用于生成RDB文件，一个是<code>SAVE</code>, 另一个是<code>BGSAVE</code>。<code>SAVE</code>会阻塞Redis服务进程，知道RDB文件创建完毕为止，在服务器进程阻塞期间，服务器不能处理任何请求。<code>BGSAVE</code>命令会派生出一个子进程,然后由子进程负责创建RDB文件，服务器进程(父进程)继续处理命令请求。<br>RDB文件是在服务器启动时自动执行的，只要Redis服务器启动时检测到RDB文件存在，它就会自动载入RDB文件。但是如果服务器开启了AOF持久化功能，就会优先使用AOF文件。因为AOF文件的更新频率通常比RDB文件高，所以数据是最新的可能性高。<br>用户可以通过save选项设置多个保存条件，但只要其中任意一条被满足，服务器就会执行<code>BGSAVE</code>命令。例如配置为下面三个:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">save 900 1&#10;save 300 10&#10;save 60 10000</span><br></pre></td></tr></table></figure></p>
+<p>只要满足900s内至少一次修改，或300s内至少10次修改，或60s内10000次修改就会自动执行<code>BGSAVE</code>命令。<br>服务器维护一个<code>dirty</code>计数器，用于记录距离上次成功执行<code>SAVE</code>或<code>BGSAVE</code>命令之后，服务器对数据库状态进行了多少次修改(包括写入，删除，更新等操作)。<br>服务器还维护一个<code>lastsave</code>属性，记录服务器上一次成功执行<code>SAVE</code>或<code>BGSAVE</code>命令的时间。<br>RDB文件结构:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+-----+----------+---------+---+---------+&#10;|     |          |         |   |         |&#10;|REDIS|db_version|databases|EOF|check_sum|&#10;|     |          |         |   |         |&#10;+-----+----------+---------+---+---------+</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>REDIS</code>: RDB文件开头是REDIS部分，这个部分长度为5字节,保存着”REDIS”五个字符。通过五个字符，快速检测是否为RDB文件。</li>
+<li><code>db_version</code>: 长度为4字节，它的值是一个字符串表示的整数，记录了RDB文件的版本号。</li>
+<li><code>databases</code>: 包含着零个或任意多个数据库，以及各个数据库中的键值对数据。</li>
+<li><code>EOF</code>: 长度为1字节，这个常量标志着RDB文件正文内容的结束，当读入程序遇到这个值的时候，它知道所有数据库的所有键值对都已经载入完毕。</li>
+<li><code>check_sum</code>: 8字节长的无符号整数，保存着一个校验和，这个校验和是程序通过对前面四部分的内容计算得出的。服务器载入RDB文件时，会将载入数据所计算出的校验和与<code>check_sum</code>所记录的检验和进行对比，以此来检查RDB文件是否出错或者有损坏的情况。<br>可以使用<code>od -c dump.rdb</code>或<code>od -cx dump.rdb</code>命令来对RDB文件内容进行分析。</li>
+</ul>
+<h3 id="AOF持久化">AOF持久化</h3><p>AOF(Append Only File)持久化功能是通过保存Redis服务器所执行的写命令来记录数据库状态的。AOF持久化功能的实现可以分为命令追加(append), 文件写入，文件同步(sync)三个步骤:</p>
+<ul>
+<li>命令追加: 服务器执行完一个写命令后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区的末尾。</li>
+<li>AOF文件的写入与同步: 服务器的每次时间循环结束之前，都会调用<code>flushAppendOnlyFile</code>函数，考虑是否需要将aof_buf缓冲区中的内容写入和保存到AOF文件里。<br><code>flushAppendOnlyFile</code>函数的行为由服务器配置的<code>appendfsync</code>选项的值来决定:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>appendfsync选项的值</th>
+<th>flushAppendOnlyFile函数的行为</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>always</td>
+<td>将aof_buf缓冲区中的所有内容写入并同步到AOF文件</td>
+<td>性能最低，但是安全性最高，发生故障停机最多丢失一个循环事件所产生的在缓冲区中的命令</td>
+</tr>
+<tr>
+<td>everysec(默认值)</td>
+<td>将aof_buf缓冲区中的所有内容写入到AOF文件，如果上次同步AOF文件的时间距离现在超过1s,那么再次对AOF文件进行同步，并且这个同步操作是由一个线程专门负责执行的</td>
+<td>性能足够快，并且出现故障停机，最多丢失一秒钟的命令数据</td>
+</tr>
+<tr>
+<td>no</td>
+<td>将aof_buf缓冲区中的所有内容写入到AOF文件，但并不对AOF文件进行同步，何时同步由操作系统决定</td>
+<td>性能最好，写入AOF速度最快，但是单次同步时间最长，出现故障丢失的命令最多</td>
+</tr>
+</tbody>
+</table>
+<p>由于AOF文件记录了重建数据库所需的所有写命令，所以服务器只要读入并执行一遍AOF文件里么保持的写命令，就可以还原服务器关闭之前的状态。<br>由于AOF持久化是通过保存被执行的写命令来记录数据库状态的，随着时间的推移，写命令越来越多，这时候就需要<code>AOF重写</code>来减轻文件体积的膨胀。<br><code>AOF重写</code>首先从数据库中读取键现在的值，然后用一条命令去记录键值对，代替之前记录的这个键值对的多条命令。但是在重写列表，哈希表，集合，有序集合等多个元素的键时，如果元素的数量超过了<code>redis/REDIS_AOF_REWRITE_ITEMS_PER_CMD</code>常量的值，会通过多条命令来记录键的值。<br>一个问题是在AOF重写期间，服务器还需要处理命令请求，而新的命令可能会对现有的数据库状态进行修改，从而使得服务器当前的数据库状态和重写后的AOF文件所保存的数据库状态不一致。为了解决这个问题，Redis服务器设置了一个<code>AOF重写缓冲区</code>，这个缓冲区在服务器创建子进程进行重写是开始使用,当Redis服务器执行完一个写命令后，它会同事将这个命令发送给AOF缓冲区和<code>AOF重写缓冲区</code>。当AOF重写工作完成后，向父进程发送信号，父进程就会将<code>AOF重写缓冲区</code>中的所有内容写到新的AOF文件中，对新的AOF文件进行改名，原子地 （atomic)覆盖现有的AOF文件，完成新旧两个AOF文件的替换。</p>
+<h2 id="事件">事件</h2><h3 id="文件事件">文件事件</h3><p>文件事件(file event): Redis服务器通过套接字与客户端(或其他Redis服务器)进行连接，而文件事件就是服务器对套接字操作的抽象。服务器与客户端（或其他服务器)的通信会产生相应的文件事件，而服务器则通过监听并处理这些事件来完成一系列网络通信操作。<br>下图是Redis自己实现的文件事件处理器的四个组成部分:<br><img src="/assets/img/redis/redis_fileevent.png" alt="db结构"></p>
+<ul>
+<li>文件事件处理器使用I/O多路复用(multiplexing)程序来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同的事件处理器。</li>
+<li>当被监听的套接字准备好执行连接应答(accept),读取(read),写入(write)，关闭(close)等操作时，与操作相对应的文件事件就会产生，这时文件事件处理器就会调用套接字之前关联好的事件处理器来处理这些事件。</li>
+</ul>
+<p>虽然文件事件处理器以单线程方式运行，但通过使用I/O多路复用程序来监听多个套接字，文件事件处理器既实现了高性能的网络通信模型，又可以很好地与Redis服务器中其他同样以单线程方式运行的模块进行对接，着保持了Redis内部单线程设计的简单性。<br>尽管多个文件事件可能会并发地出现，但I/O多路复用程序总会将所有产生事件的套接字都放在一个队列里，然后通过这个队列，以有序(sequentially),同步(synchronously)，每次一个套接字的方式向文件事件分派器传送套接字。<br>Redis的I/O多路复用程序的所有功能都是通过包装常见的<code>select</code>,<code>epoll</code>,<code>evport</code>和<code>kqueue</code>这些I/O多路复用函数库来实现的，编译时会自动选择性能高最高的I/O多路复用函数库来作为Redis的I/O多路复用程序的底层实现。</p>
+<h3 id="时间事件">时间事件</h3><p>时间事件(time event): Redis服务器中的一些操作(如<code>serverCron</code>函数)需要在给定的时间点执行，而时间事件就是服务器对这类定时操作的抽象。<br>Redis的时间事件分为两类:</p>
+<ul>
+<li>定时事件: 让程序在指定的时间之后执行一次。</li>
+<li>周期性事件: 让一端程序每隔指定的时间就执行一次。</li>
+</ul>
+<p>一个时间事件主要由以下三个属性:</p>
+<ul>
+<li>id: 服务器为时间事件创建的全局唯一ID(标识号)。ID号按从小到大的顺序递增，新事件的ID号比旧事件的ID号要大。</li>
+<li>when: 毫秒精度的UNIX时间戳，记录了时间事件的到达(arrive)时间。</li>
+<li>timeProc: 时间事件处理器，一个函数。当时间事件到达时，服务器就会调用响应的处理器来处理事件。</li>
+</ul>
+<p>一个时间事件是定时事件还是周期性事件取决于时间事件处理器的返回值:</p>
+<ul>
+<li>如果事件处理器返回<code>ae.h/AE_NOMORE</code>，那么这个事件为定时事件:该事件在达到一次之后就会被删除，之后不再到达。</li>
+<li>如果事件处理器返回一个非<code>AE_NOMORE</code>的整数值，那么这个事件为周期性时间:当一个时间事件到达之后，服务器会根据事件处理器返回的值，对时间事件的when属性进行更新，让这个事件在一段时间后再次到达，并以这种方式一直更新运行下去。</li>
+</ul>
+<p>服务器将所有时间事件都放在一个无序链表中，每当时间事件执行器运行时，它就遍历整个链表，查找所有已到达的时间事件，并调用相应的事件处理器。</p>
+<h3 id="事件的调度与执行">事件的调度与执行</h3><p>事件的调度和执行由<code>ae.c/aeProcessEvents</code>函数负责,下面是这个函数的伪代码:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aeProcessEvents</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    // 获取到达时间离当前最接近的时间事件</span><br><span class="line">    time_event = aeSearchNearestTimer()</span><br><span class="line">    </span><br><span class="line">    // 计算最接近的时间事件距离到达还有多少毫秒</span><br><span class="line">    remaind_ms = time_event.when - unix_ts_now()</span><br><span class="line">    </span><br><span class="line">    // 如果事件已到达，那么remaind_ms的值就可能为负数，将它设定为<span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> remaind_ms &lt; <span class="number">0</span>:</span><br><span class="line">        remaind_ms = <span class="number">0</span> </span><br><span class="line">    </span><br><span class="line">    // 根据remaind_ms的值，创建timeval结构</span><br><span class="line">    timeval = create_timeval_with_ms(remaind_ms)</span><br><span class="line">    </span><br><span class="line">    // 阻塞并等待文件事件产生，最大阻塞时间由传入的timeval结构决定</span><br><span class="line">    // 如果remaind_ms的值为<span class="number">0</span>，那么aeApiPoll调用之后马上返回，不阻塞</span><br><span class="line">    aeApiPoll(timeval)</span><br><span class="line">   </span><br><span class="line">    // 处理所有已产生的文件事件 </span><br><span class="line">    processFileEvents()</span><br><span class="line">    </span><br><span class="line">    // 处理所有已到达的时间事件</span><br><span class="line">    processTimeEvents()</span><br></pre></td></tr></table></figure></p>
+<p>事件的调度和执行规则:</p>
+<ol>
+<li>aeApiPoll函数的最大阻塞时间由到达时间最接近的当前时间的时间事件决定，这个方法既可以避免服务器对时间事件并行频繁的轮询，可以确保aeApiPoll函数不会阻塞时间过长。</li>
+<li>因为文件事件是随机出现的，如果处理完文件事件后时间事件仍未到达，继续等待并处理下一个文件事件。</li>
+<li>对文件事件和时间事件的处理都是同步，有序，原子地执行的，服务器不会中途中断事件处理，也不会对事件进行抢占。因此耗时的事件会影响整个服务的性能。</li>
+<li>因为时间事件是在文件事件之后执行，并且事件之间不会抢占，所以时间事件的实际处理时间通常回避时间事件设定的到达时间稍微晚一些。</li>
+</ol>
+<h2 id="客户端">客户端</h2><h2 id="服务器">服务器</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/04/The-Design-and-Implementation-of-Redis-1/" rel="next" title="Redis设计与实现总结——数据结构与对象">
+                <i class="fa fa-chevron-left"></i> Redis设计与实现总结——数据结构与对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/05/The-Design-and-Implementation-of-Redis-2/"
+           data-title="Redis设计与实现总结——单机数据库的实现" data-url="http://oohcode.com/2017/03/05/The-Design-and-Implementation-of-Redis-2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="sean chen" />
+          <p class="site-author-name" itemprop="name">sean chen</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://oohcode.com/" title="OohCode" target="_blank">OohCode</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">1.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化"><span class="nav-number">2.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB持久化"><span class="nav-number">2.1.</span> <span class="nav-text">RDB持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF持久化"><span class="nav-number">2.2.</span> <span class="nav-text">AOF持久化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件"><span class="nav-number">3.</span> <span class="nav-text">事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件事件"><span class="nav-number">3.1.</span> <span class="nav-text">文件事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间事件"><span class="nav-number">3.2.</span> <span class="nav-text">时间事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件的调度与执行"><span class="nav-number">3.3.</span> <span class="nav-text">事件的调度与执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">4.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器"><span class="nav-number">5.</span> <span class="nav-text">服务器</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sean chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"oohcode"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
