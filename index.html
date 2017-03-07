@@ -260,6 +260,149 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://oohcode.com/2017/03/06/The-Design-and-Implementation-of-Redis-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sean chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OohCode">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/06/The-Design-and-Implementation-of-Redis-3/" itemprop="url">
+                  Redis设计与实现总结——多机数据库的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-06T19:19:41+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/06/The-Design-and-Implementation-of-Redis-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/The-Design-and-Implementation-of-Redis-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          复制在Redis中用户可以通过执行SLAVEOF命令或者设置slaveof选项，让一个服务器去复制(repliacte)另一个服务器，被复制的服务器称为主服务器(master),而对服务器进行复制的服务器被称为从服务器(salve)。复制功能分为同步(sync)和命令传播(command propagate)两个操作:
+
+同步操作用于将从服务器的数据库状态更新至主服务器当前所处的数据库状态。(从服务器主动向主服务器请求数据)
+命令传播操作用于在主服务器的数据库状态被修改，导致主从服务器数据库状态出现不一致时，让主服务器的数据库重新回到一致状态。
+
+
+
+同步过程:
+主服务器接收到从服务器发来的SYNC命令,执行BGSAVE命令,创建RDB文件,并使用缓冲区记录接下来执行的所有写命令。
+从服务器
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/06/The-Design-and-Implementation-of-Redis-3/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://oohcode.com/2017/03/05/The-Design-and-Implementation-of-Redis-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -816,149 +959,6 @@ GC标记-清除法基本方法所谓的标记-清除法，依据其字面意思�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://oohcode.com/2017/01/22/gc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="sean chen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OohCode">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/22/gc/" itemprop="url">
-                  垃圾回收算法总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-22T14:56:28+08:00">
-                2017-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/22/gc/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/22/gc/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-最近研读了《垃圾回收的算法与实现》这本书， 对来垃圾回收(GC)的来龙去脉及理论和实践有了一个概括性，深入性的了解，这里分多篇进行总结。首先本文先对GC的理论来一个总览性的回顾.
-
-什么是垃圾回收我们知道一台服务器的内存是有限的，而程序的运行需要占用内存空间，一个程序内部可能有些内存空间使用后不再使用，这部分不再使用的内从空间就被视为垃圾。而GC就是要
-
-找到内存空间里的垃圾
-回收垃圾，让程序员能够再次利用这部分空间
-
-如果没有GC的情况下需要程序员自己手动管理内存，例如C/C++等程序。这个过程将会非常麻烦，如果管理不当就会照成内存泄露引起系统崩溃，引发各种恶性bug和安全问题。有了GC就会省去很大一部分精力，降低了开发的难度。
-垃圾回收基本概念要深入了解垃圾回收的理论知识，下面这些关键
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/22/gc/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1008,7 +1008,7 @@ GC标记-清除法基本方法所谓的标记-清除法，依据其字面意思�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
